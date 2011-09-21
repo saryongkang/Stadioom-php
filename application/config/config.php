@@ -26,7 +26,7 @@ $config['base_url']	= 'http://stadioom:8080';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

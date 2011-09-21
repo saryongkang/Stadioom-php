@@ -1,1 +1,7 @@
 Deny from all
+
+# jedd 2009-02 - obviates requirement for index.php in URLs
+RewriteEngine on
+RewriteEngine on
+RewriteCond $1 !^(index\.php|files|assets|robots\.txt)
+RewriteRule ^(.*)$ ./index.php/$1 [L] 
