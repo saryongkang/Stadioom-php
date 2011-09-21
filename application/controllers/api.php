@@ -3,80 +3,59 @@
 require(APPPATH . '/libraries/REST_Controller.php');
 
 class Api extends REST_Controller {
-	function user_get()
-    {
-        if(!$this->get('id'))
-        {
-        	$this->response(NULL, 400);
-        }
 
-        // $user = $this->some_model->getSomething( $this->get('id') );
-    	$users = array(
-			1 => array('id' => 1, 'name' => 'Some Guy', 'email' => 'example1@example.com', 'fact' => 'Loves swimming'),
-			2 => array('id' => 2, 'name' => 'Person Face', 'email' => 'example2@example.com', 'fact' => 'Has a huge face'),
-			3 => array('id' => 3, 'name' => 'Scotty', 'email' => 'example3@example.com', 'fact' => 'Is a Scott!', array('hobbies' => array('fartings', 'bikes'))),
-		);
-		
-    	$user = @$users[$this->get('id')];
-    	
-        if($user)
-        {
-            $this->response($user, 200); // 200 being the HTTP response code
-        }
+    function userPost_get() {
+        // create a new user object
+        $user = new Entities\User;
+        $user->setFbId($this->get('fbId'));
+        $user->setPassword(md5($this->get('password')));
+        $user->setName($this->get('name'));
+        $user->setEmail($this->get('email'));
+        $user->setGender($this->get('gender'));
+        $dob = new DateTime();
+        $dob->setTimestamp($this->get('dob'));
+        $user->setDob($dob);
+        $user->setCreated(new DateTime());
 
-        else
-        {
-            $this->response(array('error' => 'User could not be found'), 404);
-        }
-    }
-    
-    function user_post()
-    {
-        //$this->some_model->updateUser( $this->get('id') );
-        $message = array('id' => $this->get('id'), 'name' => $this->post('name'), 'email' => $this->post('email'), 'message' => 'ADDED!');
-        
+        $this->doctrine->em->persist($user);
+        $this->doctrine->em->flush();
+
+        $message = array('fbId' => $user->getFbId(), 'name' => $user->getName(), 'email' => $user->getEmail(), 'message' => 'ADDED!');
+
         $this->response($message, 200); // 200 being the HTTP response code
     }
-    
-    function user_delete()
-    {
-    	//$this->some_model->deletesomething( $this->get('id') );
-        $message = array('id' => $this->get('id'), 'message' => 'DELETED!');
-        
+
+    // REMIND (Wegra) it's a temporal API for assisting test.
+    function user_post() {
+        // create a new user object
+        $user = new Entities\User;
+        $user->setFbId($this->post('fbId'));
+        $user->setPassword(md5($this->post('password')));
+        $user->setName($this->post('name'));
+        $user->setEmail($this->post('email'));
+        $user->setGender($this->post('gender'));
+        $dob = new DateTime();
+        $dob->setTimestamp($this->get('dob'));
+        $user->setDob($dob);
+        $user->setCreated(new DateTime());
+
+        $this->doctrine->em->persist($user);
+        $this->doctrine->em->flush();
+
+
+        $message = array('fbId' => $user->getFbId(), 'name' => $user->getName(), 'email' => $user->getEmail(), 'message' => 'ADDED!');
+
         $this->response($message, 200); // 200 being the HTTP response code
     }
-    
-    function users_get()
-    {
-        //$users = $this->some_model->getSomething( $this->get('limit') );
-        $users = array(
-			array('id' => 1, 'name' => 'Some Guy', 'email' => 'example1@example.com'),
-			array('id' => 2, 'name' => 'Person Face', 'email' => 'example2@example.com'),
-			3 => array('id' => 3, 'name' => 'Scotty', 'email' => 'example3@example.com', 'fact' => array('hobbies' => array('fartings', 'bikes'))),
-		);
-        
-        if($users)
-        {
-            $this->response($users, 200); // 200 being the HTTP response code
-        }
 
-        else
-        {
-            $this->response(array('error' => 'Couldn\'t find any users!'), 404);
-        }
+    public function send_post() {
+        var_dump($this->request->body);
     }
 
+    public function send_put() {
+        var_dump($this->put('foo'));
+    }
 
-	public function send_post()
-	{
-		var_dump($this->request->body);
-	}
-
-
-	public function send_put()
-	{
-		var_dump($this->put('foo'));
-	}
 }
 
 ?>

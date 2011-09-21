@@ -27,6 +27,12 @@ Entities\User:
       type: string
       length: 255
       nullable: false
+    gender:
+      type: integer
+      nullable: false
+    dob:
+      type: datetime
+      nullable: false
     created:
       type: datetime
       nullable: false

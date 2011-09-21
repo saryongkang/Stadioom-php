@@ -33,6 +33,16 @@ class User
     private $email;
 
     /**
+     * @var integer $gender
+     */
+    private $gender;
+
+    /**
+     * @var datetime $dob
+     */
+    private $dob;
+
+    /**
      * @var datetime $created
      */
     private $created;
@@ -126,6 +136,46 @@ class User
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param integer $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return integer $gender
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set dob
+     *
+     * @param datetime $dob
+     */
+    public function setDob($dob)
+    {
+        $this->dob = $dob;
+    }
+
+    /**
+     * Get dob
+     *
+     * @return datetime $dob
+     */
+    public function getDob()
+    {
+        return $this->dob;
     }
 
     /**

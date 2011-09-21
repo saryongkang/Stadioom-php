@@ -90,6 +90,30 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::getEmail();
     }
 
+    public function setGender($gender)
+    {
+        $this->__load();
+        return parent::setGender($gender);
+    }
+
+    public function getGender()
+    {
+        $this->__load();
+        return parent::getGender();
+    }
+
+    public function setDob($dob)
+    {
+        $this->__load();
+        return parent::setDob($dob);
+    }
+
+    public function getDob()
+    {
+        $this->__load();
+        return parent::getDob();
+    }
+
     public function setCreated($created)
     {
         $this->__load();
@@ -105,7 +129,7 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'fbId', 'password', 'name', 'email', 'created');
+        return array('__isInitialized__', 'id', 'fbId', 'password', 'name', 'email', 'gender', 'dob', 'created');
     }
 
     public function __clone()
