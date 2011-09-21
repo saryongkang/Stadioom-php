@@ -17,10 +17,25 @@ class Welcome extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index()
-	{
-		$this->load->view('welcome_message');
-	}
+         
+//	public function index()
+//	{
+//		$this->load->view('welcome_message');
+//	}
+    
+    function __construct(){
+        parent::__construct();
+    }
+
+    function index() {
+        $data = array('some_variable' => 'some_data');
+
+        $this->template->add_message('success', 'You are using duellsys template library');
+        $this->template->add_message('info', 'Awesome!');
+
+        $this->template->set_content('example', $data);
+        $this->template->build();
+    }
 }
 
 /* End of file welcome.php */
