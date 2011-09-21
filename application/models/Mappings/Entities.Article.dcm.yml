@@ -1,0 +1,25 @@
+Entities\Article:
+  type: entity
+  table: articles
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    title:
+      type: string
+      length: 255
+      nullable: false
+    content:
+      type: text
+      nullable: false
+    created:
+      type: datetime
+      nullable: false
+  manyToOne:
+    user:
+      targetEntity: User
+      joinColumns:
+        user_id:
+          referencedColumnName: id

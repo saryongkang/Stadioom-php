@@ -1,0 +1,38 @@
+Entities\User:
+  type: entity
+  table: users
+  uniqueConstraints:
+    email_index:
+      columns:
+       - email
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    password:
+      type: string
+      length: 32
+      nullable: false
+    firstName:
+      type: string
+      length: 255
+      nullable: false
+      column: first_name
+    lastName:
+      type: string
+      length: 255
+      nullable: false
+      column: last_name
+    email:
+      type: string
+      length: 255
+      nullable: false
+    website:
+      type: string
+      length: 255
+      nullable: true
+    created:
+      type: datetime
+      nullable: false
