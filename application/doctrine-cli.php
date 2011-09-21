@@ -1,7 +1,7 @@
 <?php
 
 // trailing slash is important!
-define('APPPATH', '/Applications/MAMP/htdocs/Stadioom/application/');
+define('APPPATH', '/Applications/MAMP/htdocs/Stadioom-php/application/');
 define('BASEPATH', APPPATH);
 define('ENVIRONMENT', 'development');
 

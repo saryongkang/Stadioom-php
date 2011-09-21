@@ -42,6 +42,18 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::getId();
     }
 
+    public function setFbId($fbId)
+    {
+        $this->__load();
+        return parent::setFbId($fbId);
+    }
+
+    public function getFbId()
+    {
+        $this->__load();
+        return parent::getFbId();
+    }
+
     public function setPassword($password)
     {
         $this->__load();
@@ -54,28 +66,16 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::getPassword();
     }
 
-    public function setFirstName($firstName)
+    public function setName($name)
     {
         $this->__load();
-        return parent::setFirstName($firstName);
+        return parent::setName($name);
     }
 
-    public function getFirstName()
+    public function getName()
     {
         $this->__load();
-        return parent::getFirstName();
-    }
-
-    public function setLastName($lastName)
-    {
-        $this->__load();
-        return parent::setLastName($lastName);
-    }
-
-    public function getLastName()
-    {
-        $this->__load();
-        return parent::getLastName();
+        return parent::getName();
     }
 
     public function setEmail($email)
@@ -88,18 +88,6 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
     {
         $this->__load();
         return parent::getEmail();
-    }
-
-    public function setWebsite($website)
-    {
-        $this->__load();
-        return parent::setWebsite($website);
-    }
-
-    public function getWebsite()
-    {
-        $this->__load();
-        return parent::getWebsite();
     }
 
     public function setCreated($created)
@@ -117,7 +105,7 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'password', 'firstName', 'lastName', 'email', 'website', 'created');
+        return array('__isInitialized__', 'id', 'fbId', 'password', 'name', 'email', 'created');
     }
 
     public function __clone()

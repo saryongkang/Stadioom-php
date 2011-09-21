@@ -47,9 +47,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = 'root';
+$db['default']['hostname'] = '107.20.213.215';
+$db['default']['username'] = 'matchadmin';
+$db['default']['password'] = 'seedshock~!@';
 $db['default']['database'] = 'Stadioom';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';

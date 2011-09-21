@@ -11,28 +11,23 @@ Entities\User:
       id: true
       generator:
         strategy: AUTO
+    fbId:
+      type: string
+      length: 32
+      nullable: true
     password:
       type: string
       length: 32
-      nullable: false
-    firstName:
+      nullable: true
+    name:
       type: string
-      length: 255
+      length: 50
       nullable: false
-      column: first_name
-    lastName:
-      type: string
-      length: 255
-      nullable: false
-      column: last_name
     email:
       type: string
       length: 255
       nullable: false
-    website:
-      type: string
-      length: 255
-      nullable: true
     created:
       type: datetime
       nullable: false
+      

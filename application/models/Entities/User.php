@@ -13,29 +13,24 @@ class User
     private $id;
 
     /**
+     * @var string $fbId
+     */
+    private $fbId;
+
+    /**
      * @var string $password
      */
     private $password;
 
     /**
-     * @var string $firstName
+     * @var string $name
      */
-    private $firstName;
-
-    /**
-     * @var string $lastName
-     */
-    private $lastName;
+    private $name;
 
     /**
      * @var string $email
      */
     private $email;
-
-    /**
-     * @var string $website
-     */
-    private $website;
 
     /**
      * @var datetime $created
@@ -51,6 +46,26 @@ class User
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set fbId
+     *
+     * @param string $fbId
+     */
+    public function setFbId($fbId)
+    {
+        $this->fbId = $fbId;
+    }
+
+    /**
+     * Get fbId
+     *
+     * @return string $fbId
+     */
+    public function getFbId()
+    {
+        return $this->fbId;
     }
 
     /**
@@ -74,43 +89,23 @@ class User
     }
 
     /**
-     * Set firstName
+     * Set name
      *
-     * @param string $firstName
+     * @param string $name
      */
-    public function setFirstName($firstName)
+    public function setName($name)
     {
-        $this->firstName = $firstName;
+        $this->name = $name;
     }
 
     /**
-     * Get firstName
+     * Get name
      *
-     * @return string $firstName
+     * @return string $name
      */
-    public function getFirstName()
+    public function getName()
     {
-        return $this->firstName;
-    }
-
-    /**
-     * Set lastName
-     *
-     * @param string $lastName
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-    }
-
-    /**
-     * Get lastName
-     *
-     * @return string $lastName
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
+        return $this->name;
     }
 
     /**
@@ -131,26 +126,6 @@ class User
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set website
-     *
-     * @param string $website
-     */
-    public function setWebsite($website)
-    {
-        $this->website = $website;
-    }
-
-    /**
-     * Get website
-     *
-     * @return string $website
-     */
-    public function getWebsite()
-    {
-        return $this->website;
     }
 
     /**
