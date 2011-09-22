@@ -1,0 +1,32 @@
+/* 
+    Document   : home
+    Created on : Sep 22, 2011, 5:52:22 PM
+    Author     : noru
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+body {
+    padding-top: 60px;
+}
+
+.signup-unit {
+  background-color: #f5f5f5;
+  margin-bottom: 30px;
+  padding-top: 50px;
+  padding-left: 70px;
+  padding-right: 10px;
+  padding-bottom: 50px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.rightAlign{
+    align: right;
+}
+
