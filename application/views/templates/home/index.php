@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
 	<meta charset="utf-8">
 	<title><?php echo $site_title?> - <?php echo $site_name?></title>
