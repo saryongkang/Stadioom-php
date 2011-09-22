@@ -147,13 +147,13 @@ class Template
 		
 		if($load){
 			
-			$this->css_load .= '<link href="'.$this->CI->config->item('base_url') . $this->data['assets_dir'] . 'css/' . $css . '.css?'
+			$this->css_load .= '<link href="'.$this->CI->config->item('base_url') .'/'. $this->data['assets_dir'] . 'css/' . $css . '.css?'
 				.filemtime($this->data['assets_dir'] . 'css/' . $css . '.css')
 				.'" media="screen" rel="stylesheet" type="text/css" />';
 		
 		} else {
 
-			$css_contents = @implode(file($this->CI->config->item('base_url') . $this->data['assets_dir'] . 'css/' . $css . '.css', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+			$css_contents = @implode(file($this->CI->config->item('base_url') .'/' .$this->data['assets_dir'] . 'css/' . $css . '.css', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 		
 			$this->css_raw .= $css_contents;
 
@@ -330,13 +330,19 @@ class Template
 	/**
 	 * Send the data compiled data to the screen
 	 */
-	function build(){
-	
-		$this->prepare_jcss();
-		$this->prepare_messages();
-		$this->build_http_header();
+	function build($templateType = 'default'){
+            $this->prepare_jcss();
+            $this->prepare_messages();
+            $this->build_http_header();
 		
-		$this->CI->load->view('templates/'.$this->data['template'].'/index.php', $this->data);
+            if($templateType == 'default'){
+                $this->CI->load->view('templates/'.$this->data['template'].'/index.php', $this->data);
+            }else{
+                $this->CI->load->view('templates/'.$templateType.'/index.php', $this->data);
+            }
+		
+		
 		
 	}
+        
 }

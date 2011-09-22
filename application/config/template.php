@@ -3,8 +3,9 @@
 
 $template_conf = array(
 	'template' => 'default',
-	'site_name' => 'Site Name',
-	'site_title' => 'Some slonag here',
+	'site_name' => 'Stadioom',
+        'company_name'=> 'SeedShock',
+	'site_title' => 'Where everyone is playing at',
 	'devmode' => true,
 	'content' => '',
 	'css' => '',
@@ -23,5 +24,17 @@ $template_head = array(
 					<script type="text/javascript">
 					google.load("jquery", "1.6.0");
 					</script>',
-	'bootstrap' => '<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">'
+    
+        'google-analytics'  => "<!-- Google Analytics -->
+      <script type='text/javascript'>
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-25850852-1']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+      </script>"
 );
