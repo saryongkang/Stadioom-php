@@ -30,43 +30,27 @@ class Auth extends REST_Controller {
         if ($grantType != "authorization_code") {
             $this->response(array('code' => 501, 'message' => "Not Implemented"), 501);
         }
-
-        $this->load->library('encrypt');
-        $decryptedString = $this->encrypt->decode($code);
-        parse_str($decryptedString, $userInfo);
-
-        if ($userInfo['id'] == null || $userInfo['pwd'] == null) {
+        
+        $decodedCode = base64_decode($code);
+        $colonPosition = strpos($decodedCode, ":");
+        if ($colonPosition == FALSE) {
+            $this->response(array('code' => 400, 'message' => "Invalid Format"), 400);
+        }
+        
+        $id = substr($decodedCode, 0, $colonPosition);
+        $pwd = substr($decodedCode, $colonPosition + 1);
+        
+        if ($id == null || $pwd == null) {
             $this->response(array('code' => 400, 'message' => "Invalid Format"), 400);
         }
 
         $user = new Entities\User();
 
-        $user->setEmail($userInfo['id']);
-        $user->setPassword($userInfo['pwd']);
+        $user->setEmail($id);
+        $user->setPassword($pwd);
 
         return $user;
     }
-
-//    private function _signIn(&$grantType, &$code) {
-//        if ($grantType != "authorization_code") {
-//            $this->response(array('code' => 501, 'message' => "Not Implemented"), 501);
-//        }
-//
-//        $this->load->library('encrypt');
-//        $decryptedString = $this->encrypt->decode($code);
-//        parse_str($decryptedString, $userInfo);
-//
-//        if ($userInfo['id'] == null || $userInfo['pwd'] == null) {
-//            $this->response(array('code' => 400, 'message' => "Invalid Format"), 400);
-//        }
-//
-//        $user = new Entities\User();
-//
-//        $user->setEmail($userInfo['id']);
-//        $user->setPassword($userInfo['pwd']);
-//
-//        $this->_signIn2($user);
-//    }
 
     private function _signIn(&$user) {
         $resMessage = "OK";
@@ -90,7 +74,7 @@ class Auth extends REST_Controller {
             $this->response(array('code' => $resCode, 'message' => $resMessage), $resCode);
         }
 
-        $this->response(array('code' => $resCode, 'accessToken' => "temporal_access_token", 'message' => $resMessage), $resCode);
+        $this->response(array('accessToken' => "temporal_access_token"), $resCode);
     }
 
     private function _signUp(&$user) {
@@ -119,7 +103,7 @@ class Auth extends REST_Controller {
             $this->response(array('code' => $resCode, 'message' => $resMessage), $resCode);
         }
 
-        $this->response(array('code' => $resCode, 'accessToken' => "temporal_access_token", 'message' => $resMessage), $resCode);
+        $this->response(array('accessToken' => "temporal_access_token"), $resCode);
     }
 
     private function _checkEmail(&$email) {
@@ -200,14 +184,10 @@ class Auth extends REST_Controller {
     }
 
     public function encode_get() {
-        $msg = "id=" . $this->get('email') . "&pwd=" . $this->get('password');
+        $msg = $this->get('email') . ":" . $this->get('password');
+        
+        $this->response(base64_encode($msg), 200);
 
-        $this->load->library('encrypt');
-
-        $code = $this->encrypt->encode($msg);
-        $decryptedString = $this->encrypt->decode($code);
-
-        $this->response($this->encrypt->encode($msg), 200);
     }
 
 //    public function signUpFB_post() {
