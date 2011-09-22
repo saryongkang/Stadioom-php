@@ -4,35 +4,9 @@
       
     </head>
     <body>
-      <div id="fb-root"></div>
-      <script src="http://connect.facebook.net/en_US/all.js"></script>
-      
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=194277843976863&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-
-<!-- Place this render call where appropriate -->
-<script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
-
 <div id="home-header">
     <div id="stadioom-title"><h1>Stadioom</h1> </div>
-    <div id="social-buttons">
-        <fb:like href="http://stadioom.com" send="false" layout="button_count" width="30" show_faces="true" font="lucida grande"></fb:like> <!-- Place this tag where you want the +1 button to render -->
-        <g:plusone size="medium"></g:plusone>
-    </div>
+    
 </div>
       <h2>Powering up sports</h2>
       <div id='homeSignup-text'> Bla bla bla bla bla </div>
