@@ -205,21 +205,4 @@ class User
      * @return boolean
      */
     
-    public function checkDuplicateEmail($email)
-    {
-        $QueryBuilder =  $this->doctrine->em->createQueryBuilder();
-        $q = $QueryBuilder
-            ->select('u.email')
-            ->from('User u')
-            ->where('u.email = ?', 'email');
-
-        if($q->num_rows()>0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }
