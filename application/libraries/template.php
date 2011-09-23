@@ -184,13 +184,13 @@ class Template
 		
 		if($load){
 		
-			$this->js_load .= '<script src="'.$this->CI->config->item('base_url') . $this->data['assets_dir'] . 'js/' . $js . '.js?'
+			$this->js_load .= '<script src="'.$this->CI->config->item('base_url') .'/'. $this->data['assets_dir'] . 'js/' . $js . '.js?'
 				.filemtime($this->data['assets_dir'] . 'js/' . $js . '.js')
 				.'" type="text/javascript"></script>';
 
 		} else {
 		
-			$js_contents = @implode(file($this->CI->config->item('base_url') . $this->data['assets_dir'] . 'js/' . $js . '.js', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+			$js_contents = @implode(file($this->CI->config->item('base_url') .'/'. $this->data['assets_dir'] . 'js/' . $js . '.js', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 
 			$this->js_raw = $js_contents;
 		
@@ -316,12 +316,14 @@ class Template
 		}
 	
 		// combine the raw and loaded css
+        if(strlen($this->js_load)){
+			$this->data['js'] .= $this->js_load;
+		}
+        
 		if(strlen($this->js_raw)){
 			$this->data['js'] .= '<script lang="text/javascript">' . $this->js_raw . '</script>';
 		}
-		if(strlen($this->js_load)){
-			$this->data['js'] .= $this->js_load;
-		}
+		
 			
 	}
 	

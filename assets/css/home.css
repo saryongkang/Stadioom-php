@@ -50,7 +50,16 @@ body {
     color: #FFF;
 }
 
-.rightAlign{
-    align: right;
+.right{
+    text-align: right;
 }
 
+.center{
+    text-align: center;
+}
+
+
+.miniseedshock-logo{
+    width: 30px;
+    height: 30px;
+}

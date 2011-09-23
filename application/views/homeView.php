@@ -9,22 +9,32 @@
       </div>
       <div class="span8 showgrid">
           <div class="signup-unit">
-            <form id="signup-form" class="form-stacked" action="#">
+              
+            <?php
+            $formAttributes = array('class' => 'form-stacked', 'id' => 'signup-form');
+
+            echo form_open('home', $formAttributes);
+            
+            echo validation_errors();
+            ?>
+              
             <fieldset>
               <legend>Register for the closed beta!</legend>
               <div class="clearfix">
                 <div class="input">
-                  <input class="xlarge" id="fullName-signUp" name="fullName" size="30" type="text" placeholder="Full Name"/>
+                  <input class="xlarge" id="signup-fullName" name="fullName" value="<?php echo set_value('fullName'); ?>" size="30" type="text" placeholder="Full Name"/>
+                  
                 </div>
               </div><!-- /clearfix -->
               <div class="clearfix">
                 <div class="input">
-                  <input class="xlarge" id="email-signUp" name="fullName" size="30" type="text" placeholder="e-mail"/>
+                  <input class="xlarge" id="signup-email" name="email" value="<?php echo set_value('email'); ?>" size="30" type="text" placeholder="e-mail"/>
+                  <span id="email_verify" class="verify"></span>
                 </div>
               </div><!-- /clearfix -->
               <div class="clearfix">
                 <div class="input">
-                  <input class="xlarge" id="password-signUp" name="fullName" size="30" type="text" placeholder="Password"/>
+                  <input class="xlarge" id="signup-password" name="password" size="30" type="password" placeholder="Password"/>
                 </div>
               </div><!-- /clearfix -->
               <div class="clearfix">
@@ -67,8 +77,10 @@
           
         <div id="social-buttons">
             <div class="span1">
-                <fb:like href="http://www.facebook.com/apps/application.php?id=200987663288876" send="false" layout="box_count" width="20" show_faces="true"></fb:like> <!-- Place this tag where you want the +1 button to render -->
+                <fb:like href="http://www.stadioom.com" send="false" layout="box_count" width="20" show_faces="true"></fb:like> <!-- Place this tag where you want the +1 button to render -->
             </div>
+            
+            <!-- http://www.seedshock.com/fb/login -->
 
             <div class="span1">
                 <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>

@@ -47,9 +47,9 @@
 
 
 	<section id="footer">
-		<div class="container">
+		<div class="container center">
                     <footer>
-                        <p>&copy;<?php echo $site_name ?> by <?php echo $company_name ?> 2011</p>
+                        <p>&copy;<?php echo $site_name ?> by  <img class="miniseedshock-logo" src="assets/images/SeedShock_log0_mini.jpg" />  <?php echo $company_name ?> 2011</p>
                     </footer>
 		</div>
 		

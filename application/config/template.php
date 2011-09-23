@@ -17,7 +17,7 @@ $template_conf = array(
 
 $template_css = array('base');
 
-$template_js = array();
+$template_js = array('jquery-1.6.4.min');
 
 $template_head = array(
 	'jquery' => '<script type="text/javascript" src="http://www.google.com/jsapi"></script>
