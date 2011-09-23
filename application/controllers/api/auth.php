@@ -74,7 +74,7 @@ class Auth extends REST_Controller {
             $this->response(array('code' => $resCode, 'message' => $resMessage), $resCode);
         }
 
-        $this->response(array('accessToken' => "temporal_access_token"), $resCode);
+        $this->response(array('accessToken' => base64_encode($user->getEmail())), $resCode);
     }
 
     private function _signUp(&$user) {
