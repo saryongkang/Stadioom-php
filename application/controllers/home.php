@@ -36,10 +36,10 @@ class Home extends CI_Controller {
 	}
     
     function checkEmail() {
-        $this->load->model('members_model');
+        $this->load->model('dao/UserDao');
         $email = $this->input->post('email');
 
-        if($this->members_model->checkDuplicate($email)) {
+        if($this->UserDao->checkDuplicate($email)) {
             echo 'true';
         } else {
             echo 'false';

@@ -1,9 +1,13 @@
 <?php
 class UserDao extends CI_Model {
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('doctrine');
+    }
+    
     public function signIn(&$user) {
         $resMessage = "OK";
         $resCode = 200;
-        $this->load->library('doctrine');
 
         $this->_checkEmail($user->getEmail());
         $this->_checkPassword($user->getPassword());
@@ -48,6 +52,23 @@ class UserDao extends CI_Model {
             $resMessage = "Name should be longer than 3.";
             $resCode = 400;
             $this->response($resMessage, $resCode);
+        }
+    }
+    
+    public function checkDuplicateEmail($email)
+    {
+        $q = $this->doctrine->em->createQueryBuilder()
+            ->select('u.email')
+            ->from('User u')
+            ->where('u.email = ?', 'email');
+
+        if($q->num_rows()>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
