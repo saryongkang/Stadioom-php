@@ -8,10 +8,10 @@ class Check extends CI_Controller {
 	}
     
     function duplicateEmail() {
-        $user = new Entities\User;
+        $this->load->model('user');
         $email = $this->input->post('email');
 
-        if($user->checkDuplicateEmail($email)) {
+        if($this->members_model->checkDuplicateEmail($email)) {
             echo 'true';
         } else {
             echo 'false';

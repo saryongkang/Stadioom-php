@@ -10,11 +10,7 @@ class Send extends CI_Controller {
 
 		if ($this->form_validation->run() == FALSE)
 		{
-            $this->template->add_css('bootstrap.min');
-            $this->template->add_css('home');
-
-            $this->template->set_content('homeView', $data);
-            $this->template->build('home');
+            $this->load->view('homeSignUpView');
 		}
 		else
 		{
