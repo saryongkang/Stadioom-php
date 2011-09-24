@@ -8,10 +8,10 @@ class Check extends CI_Controller {
 	}
     
     function duplicateEmail() {
-        $this->load->model('user');
+        $this->load->model('dao/UserDao');
         $email = $this->input->post('email');
 
-        if($this->members_model->checkDuplicateEmail($email)) {
+        if($this->UserDao->checkDuplicateEmail($email)) {
             echo 'true';
         } else {
             echo 'false';

@@ -55,14 +55,20 @@ class UserDao extends CI_Model {
         }
     }
     
+    /**
+     * Check if the email exists already in the DB
+     * Used for ajax check from the frontend and maybe other clients
+     *
+     * @return boolean
+     */
+    
     public function checkDuplicateEmail($email)
     {
-        $q = $this->doctrine->em->createQueryBuilder()
-            ->select('u.email')
-            ->from('User u')
-            ->where('u.email = ?', 'email');
-
-        if($q->num_rows()>0)
+        $q = $this->doctrine->em->createQuery('select u.email from Entities\User u where u.email = :email' );
+        $q->setParameter('email', $email);
+        $result = $q->getResult();
+        
+        if(count($result)>0)
         {
             return true;
         }

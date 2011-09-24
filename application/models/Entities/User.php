@@ -198,11 +198,5 @@ class User
         return $this->created;
     }
     
-    /**
-     * Check if the email exists already in the DB
-     * Used for ajax check from the frontend and maybe other clients
-     *
-     * @return boolean
-     */
     
 }
