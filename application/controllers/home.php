@@ -30,8 +30,7 @@ class Home extends CI_Controller {
 		}
 		else
 		{
-            curl('auth/signUp_post');
-			$this->load->view('formSuccessView');
+			//redirect('/signup/send', 'refresh');
 		}
 	}
     
