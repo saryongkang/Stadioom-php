@@ -11,9 +11,9 @@ class Home extends CI_Controller {
         //form validation
 		$this->load->library('form_validation');
         
-        $this->form_validation->set_rules('fullName', 'Full Name', 'trim|required|min_length[5]|max_length[20]|xss_clean');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[5]|md5');
-		$this->form_validation->set_rules('email', 'E-mail', 'trim|required|valid_email');
+        $this->form_validation->set_rules('user[fullName]', 'Full Name', 'trim|required|min_length[5]|max_length[20]|xss_clean');
+		$this->form_validation->set_rules('user[password]', 'Password', 'trim|required|min_length[5]|md5');
+		$this->form_validation->set_rules('user[email]', 'E-mail', 'trim|required|valid_email');
     
         
         

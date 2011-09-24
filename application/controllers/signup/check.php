@@ -11,7 +11,7 @@ class Check extends CI_Controller {
         $this->load->model('dao/UserDao');
         $email = $this->input->post('email');
 
-        if($this->UserDao->checkDuplicateEmail($email)) {
+        if($this->UserDao->isDuplicateEmail($email)) {
             echo 'true';
         } else {
             echo 'false';

@@ -14,27 +14,26 @@
             $formAttributes = array('class' => 'form-stacked', 'id' => 'signup-form');
 
             echo form_open('home', $formAttributes);
-            
-            echo validation_errors();
             ?>
               
             <fieldset>
               <legend>Register for the closed beta!</legend>
-              <div class="clearfix">
+              <div class="clearfix <?php if (form_error('user[fullName]')) echo 'error'; ?>"  id="clearfix-fullName">
                 <div class="input">
-                  <input class="xlarge" id="signup-fullName" name="fullName" value="<?php echo set_value('fullName'); ?>" size="30" type="text" placeholder="Full Name"/>
-                  
+                  <input class="xlarge" id="signup-fullName" name="user[fullName]" value="<?php echo set_value('user[fullName]'); ?>" size="30" type="text" placeholder="Full Name"/>
+                  <span class="help-inline" id="help-fullName"> <?php echo form_error('user[fullName]'); ?> </span>
                 </div>
               </div><!-- /clearfix -->
-              <div class="clearfix">
+              <div class="clearfix <?php if (form_error('user[fullName]')) echo 'error'; ?>" id="clearfix-email">
                 <div class="input">
-                  <input class="xlarge" id="signup-email" name="email" value="<?php echo set_value('email'); ?>" size="30" type="text" placeholder="e-mail"/>
-                  <span id="email_verify" class="verify"></span>
+                  <input class="xlarge" id="signup-email" name="user[email]" value="<?php echo set_value('user[email]'); ?>" size="30" type="text" placeholder="e-mail"/>
+                  <span class="help-inline" id="help-email"> <?php echo form_error('user[email]'); ?> </span>
                 </div>
               </div><!-- /clearfix -->
-              <div class="clearfix">
+              <div class="clearfix <?php if (form_error('user[fullName]')) echo 'error'; ?>" id="clearfix-password">
                 <div class="input">
-                  <input class="xlarge" id="signup-password" name="password" size="30" type="password" placeholder="Password"/>
+                  <input class="xlarge" id="signup-password" name="user[password]" size="30" type="password" placeholder="Password"/>
+                  <span class="help-inline" id="help-password"> <?php echo form_error('user[password]'); ?> </span>
                 </div>
               </div><!-- /clearfix -->
               <div class="clearfix">

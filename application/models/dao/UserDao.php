@@ -75,7 +75,8 @@ class UserDao extends CI_Model {
      *
      * @return boolean
      */
-    public function checkDuplicateEmail($email)
+
+    public function isDuplicateEmail($email)
     {
         $q = $this->doctrine->em->createQuery('select u.email from Entities\User u where u.email = :email' );
         $q->setParameter('email', $email);
