@@ -18,7 +18,7 @@ class Auth extends Stadioom_REST_Controller {
      * @throws Exception 400 - if the code format is invalid.
      * @throws Exception 400 - if email or password is invalid.
      * @throws Exception 403 - if password is wrong.
-     * @throws Exception 404 - if the user could not be found. 
+     * @throws Exception 404 - if the user could not be found.
      */
     public function signIn_post() {
         $grantType = $this->post('grantType');
@@ -26,11 +26,10 @@ class Auth extends Stadioom_REST_Controller {
 
         try {
             $accessToken = $this->UserDao->signIn($this->toUser($grantType, $code));
+            $this->responseOk(array('accessToken' => $accessToken));
         } catch (Exception $e) {
             $this->responseError($e);
         }
-
-        $this->responseOk($accessToken);
     }
 
     /**
@@ -44,7 +43,7 @@ class Auth extends Stadioom_REST_Controller {
         $grantType = $this->post('grantType');
         $code = $this->post('code');
 
-        $user = $this->_getUser($grantType, $code);
+        $user = $this->toUser($grantType, $code);
         $user->setName($this->post('name'));
         $user->setGender($this->post('gender'));
         $dob = new DateTime();
@@ -58,6 +57,26 @@ class Auth extends Stadioom_REST_Controller {
         }
 
         $this->responseOk();
+    }
+
+    /**
+     * Verify user.
+     * 
+     * @throws Exception 404 - if failed to verify by any reason.
+     */
+    public function verify_get() {
+        $code = $this->get('code');
+        $email = $this->get('email');
+
+        // TODO (high):  MUST show result page instead of code.
+        try {
+            if ($this->UserDao->verifyUser($email, $code)) {
+                $this->responseOk();
+            }
+            $this->response("Not Found.", 404);
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
     }
 
     /**

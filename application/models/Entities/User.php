@@ -43,6 +43,11 @@ class User
     private $dob;
 
     /**
+     * @var boolean $verified
+     */
+    private $verified;
+
+    /**
      * @var datetime $created
      */
     private $created;
@@ -179,6 +184,26 @@ class User
     }
 
     /**
+     * Set verified
+     *
+     * @param boolean $verified
+     */
+    public function setVerified($verified)
+    {
+        $this->verified = $verified;
+    }
+
+    /**
+     * Get verified
+     *
+     * @return boolean $verified
+     */
+    public function getVerified()
+    {
+        return $this->verified;
+    }
+
+    /**
      * Set created
      *
      * @param datetime $created
@@ -197,6 +222,4 @@ class User
     {
         return $this->created;
     }
-    
-    
 }

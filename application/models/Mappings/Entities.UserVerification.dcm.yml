@@ -1,0 +1,16 @@
+Entities\UserVerification:
+  type: entity
+  fields:
+    email:
+      type: string
+      id: true
+      length: 255
+      nullable: false
+    code:
+      type: string
+      length: 200
+      nullable: false
+    issuedDate:
+      type: datetime
+      nullable: false
+      

@@ -1,6 +1,5 @@
 Entities\User:
   type: entity
-  table: users
   uniqueConstraints:
     email_index:
       columns:
@@ -33,7 +32,8 @@ Entities\User:
     dob:
       type: datetime
       nullable: false
+    verified:
+      type: boolean
     created:
       type: datetime
       nullable: false
-      
