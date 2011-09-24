@@ -5,7 +5,7 @@ class UserDao extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->library('doctrine');
-    }
+    } 
 
     /**
      * Check if the email is valid or not.
