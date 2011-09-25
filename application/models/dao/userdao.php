@@ -74,19 +74,22 @@ class UserDao extends CI_Model {
             $this->doctrine->em->persist($user);
             $this->doctrine->em->flush();
 
-            // generate verification code.
-            $code = $this->generateVerificationCode($user->getEmail());
-            // store verification info.
-            $userVerification = new Entities\UserVerification();
-            $userVerification->setEmail($user->getEmail());
-            $userVerification->setCode($code);
-            $userVerification->setIssuedDate(new DateTime());
+            if ($this->config->item('user_verification_enabled')) {
+                // generate verification code.
+                $code = $this->generateVerificationCode($user->getEmail());
 
-            $this->doctrine->em->persist($userVerification);
-            $this->doctrine->em->flush();
+                // store verification info.
+                $userVerification = new Entities\UserVerification();
+                $userVerification->setEmail($user->getEmail());
+                $userVerification->setCode($code);
+                $userVerification->setIssuedDate(new DateTime());
 
-            // send verifiation email.
-            $this->sendVerificationEmail($user->getEmail(), $code);
+                $this->doctrine->em->persist($userVerification);
+                $this->doctrine->em->flush();
+
+                // send verifiation email.
+                $this->sendVerificationEmail($user->getEmail(), $code);
+            }
         } else {
             throw new Exception("User already exist.", 406);
         }

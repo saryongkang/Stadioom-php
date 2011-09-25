@@ -30,7 +30,7 @@ class Test extends Stadioom_REST_Controller {
     }
 
     public function getConfig_get() {
-        $this->response($this->config->item('base_url'), 200);
+        $this->response(array('base_url' => $this->config->item('base_url'), 'user_verification_enabled' => $this->config->item('user_verification_enabled')), 200);
     }
 
 }
