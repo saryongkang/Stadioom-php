@@ -41,8 +41,7 @@ class UserDao extends CI_Model {
             throw new Exception("Unregistered account.", 404);
         }
 
-        // TODO (high): reimplement generating access token mechanism.
-        return base64_encode($prevUser->getEmail());
+        return $this->generateAccessToken($prevUser);
     }
 
     /**
@@ -91,18 +90,17 @@ class UserDao extends CI_Model {
             $this->doctrine->em->persist($userFb);
             $this->doctrine->em->flush();
 
-            $result['accessToken'] = $fbMe['email'];
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
             // check whether the same email is already in User table.
-            $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
+            $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
 
-            if ($userWithSameEmail != NULL) {
+            if ($user != NULL) {
                 // update User table.
-                $userWithSameEmail->setFbId($fbInfo['fbId']);
-                $userWithSameEmail->setFbLinked(TRUE);
-                $userWithSameEmail->setFbAuthorized(TRUE);
+                $user->setFbId($fbInfo['fbId']);
+                $user->setFbLinked(TRUE);
+                $user->setFbAuthorized(TRUE);
 
-                $this->doctrine->em->persist($userWithSameEmail);
+                $this->doctrine->em->persist($user);
                 $this->doctrine->em->flush();
             } else {
                 // create user account.
@@ -140,7 +138,6 @@ class UserDao extends CI_Model {
         } else {
             // already registered
             $result['id'] = $user->getId();
-            $result['accessToken'] = $user->getEmail();
             $result['fullName'] = $user->getName();
             if (!$user->getFbAuthorized()) {
                 $user->setFbAuthorized(TRUE);
@@ -153,10 +150,8 @@ class UserDao extends CI_Model {
 //            $this->doctrine->em->rollback();
 //        }
 //        $this->doctrine->em->commit();
-//        $this->doctrine->em->flush();
-//        $this->doctrine->em->commit();
-        // TODO (high): reimplement generating access token mechanism.
-        $result['accessToken'] = base64_encode($result['accessToken']);
+
+        $result['accessToken'] = $this->generateAccessToken($user);
         return $result;
     }
 
@@ -167,7 +162,7 @@ class UserDao extends CI_Model {
      * @return Exception 400 - if the given fbId is invalid.
      * @return Exception 404 - if the given fbId could not be found.
      */
-    public function fbDeauthorized($fbId) {
+    public function fbDeauthorize($fbId) {
         if ($fbId == NULL) {
             throw new Exception("Invalid FB ID.", 400);
         }
@@ -245,6 +240,20 @@ class UserDao extends CI_Model {
         $code = substr(md5($secret), 3, 10);
 
         return $code;
+    }
+
+    /**
+     * Generates a access token.
+     * 
+     * @param type $email The seed email.
+     * @return string The verification code.
+     */
+    private function generateAccessToken($user) {
+        $this->load->library('encrypt');
+        $expired = 0;   // forever.
+        $msg = "SeedShock:" . $user->getId() . ':' . $expired;
+
+        return $this->encrypt->encode($msg);
     }
 
     /**

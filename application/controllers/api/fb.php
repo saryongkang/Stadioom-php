@@ -14,7 +14,7 @@ class Fb extends Stadioom_REST_Controller {
         $fbId = $this->post('fbId');
         $fbAccessToken = $this->post('fbAccessToken');
         $fbExpires = $this->post('fbExpires');
-        
+
         $fbInfo = array('fbId' => $this->post('fbId'), 'fbAccessToken' => $this->post('fbAccessToken'), 'fbExpires' => $this->post('fbExpires'));
 
         try {
@@ -28,14 +28,35 @@ class Fb extends Stadioom_REST_Controller {
     public function deauthorize_post() {
         $accessToken = $this->post('accessToken');
 
-        // TODO: validate access token.
-
         try {
-            $this->UserDao->fbDeauthorized($this->post('fbId'));
+            $this->verifyToken($accessToken);
+
+            $this->UserDao->fbDeauthorize($this->post('fbId'));
         } catch (Exception $e) {
             $this->responseError($e);
         }
         $this->responseOk();
+    }
+
+    private function verifyToken($accessToken) {
+        if ($accessToken == NULL) {
+            throw new Exception("Invalid access token.", 400);
+        }
+        $this->load->library('encrypt');
+        $decodedToken = $this->encrypt->decode($accessToken);
+        $magicCode = strtok($decodedToken, ":");
+        $userId = strtok($decodedToken, ":");
+        $expired = strtok($decodedToken, ":");
+
+        if ($magicCode != "SeedShock" || $userId > 0) {
+            throw new Exception("Invaild access token.", 400);
+        }
+        
+        $curDate = new DateTime();
+        $curDate = $curDate->getTimestamp();
+        if ($expired != 0 && $expired < $curDate) {
+            throw new Exception("Token expired.", 406);
+        }
     }
 
 }
