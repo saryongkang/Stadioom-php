@@ -7,9 +7,9 @@ class Session extends CI_Controller {
         echo "Unaccessible";
     }
     
-    function login($accessToken, $fbuid){
+    function login($fbAccessToken, $fbId){
         $data['accessToken'] = $accessToken;
-        $data['fbuid'] = $fbuid;
+        $data['fbid'] = $fbuid;
         
         print_r($data);
         
