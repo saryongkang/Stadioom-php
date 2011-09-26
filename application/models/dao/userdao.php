@@ -64,7 +64,7 @@ class UserDao extends CI_Model {
         }
 
         $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbInfo['fbId']));
-        $result = array('id' => NULL, 'accessToken' => NULL);
+        $result = array('id' => NULL, 'fullName' => NULL, 'accessToken' => NULL);
 
         if ($user == null) {
             // get user data from FB.
@@ -84,6 +84,7 @@ class UserDao extends CI_Model {
             $this->doctrine->em->flush();
 
             $result['accessToken'] = $fbMe['email'];
+            $result['fullName'] = $fbMe['firstName'] . ' ' . $fbMe['lastName'];
             // check whether the same email is already in User table.
             $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
 
@@ -102,7 +103,7 @@ class UserDao extends CI_Model {
                 $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
-                $user->setName($fbMe['first_name'] . ' ' . $fbMe['last_name']);
+                $user->setName($result['fullName']);
                 $user->setEmail($fbMe['email']);
                 $user->setGender($fbMe['gender']);
                 $user->setDob(new DateTime($fbMe['birthday']));
@@ -133,8 +134,9 @@ class UserDao extends CI_Model {
             // already registered
             $result['id'] = $user->getId();
             $result['accessToken'] = $user->getEmail();
+            $result['fullName'] = $user->getName();
             if (!$user->getFbAuthorized()) {
-                $user->setFbAuthroized(TRUE);
+                $user->setFbAuthorized(TRUE);
 
                 $this->doctrine->em->persist($user);
                 $this->doctrine->em->flush();
