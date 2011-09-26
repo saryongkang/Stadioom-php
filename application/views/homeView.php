@@ -43,8 +43,8 @@
           </div>
           
           <div id="fb-connect">
-            <fb:login-button size="large"  scope="email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream" redirect-uri="http://www.stadioom.com/fb/login">
-              Connect with Facebook
+              <fb:login-button id="fb-auth" size="large">
+                  Connect with Facebook
             </fb:login-button>
 
           </div>
@@ -64,8 +64,32 @@
             cookie: true,
             xfbml: true,
             oauth: true});
+        
+        button = document.getElementById('fb-auth');
+        
+        button.onclick = function() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    FB.api('/me', function(info) {
+                        fbHandler(response, info);
+                    });	   
+                } else {
+                    //user cancelled login or did not grant authorization
+                }
+            }, {scope:'email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream'});  	
+        }
     };
+    
+    function fbHandler(response, info){
+        
+        if (response.authResponse) {
+            var accessToken =   response.authResponse.accessToken;
+            location.href = 'fb/session/login/'+accessToken+'/'+info['id'];
+            
+        }
+	}  
 
+	 
     (function() {
         var e = document.createElement('script'); e.async = true;
         e.src = document.location.protocol
@@ -79,7 +103,7 @@
           
         <div id="social-buttons">
             <div class="span1">
-                <fb:like href="http://www.facebook.com/pages/Stadioom/168539803210962" send="false" layout="box_count" width="20" show_faces="true"></fb:like>
+                <fb:like href="http://www.facebook.com/pages/Stadioom/168539803210962" send="false" layout="box_count" width="20" show_faces="true"></fb:like> 
             </div>
             
             <!-- http://www.seedshock.com/fb/login -->
