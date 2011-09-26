@@ -11,12 +11,13 @@ class Session extends CI_Controller {
         $data['fbAccessToken'] = $fbAccessToken;
         $data['fbId'] = $fbId;
         $data['fbExpires'] = $expires;
+        //print_r($data);
    
         //Logic to call update in database
         $this->load->model('dao/UserDao');
         if ($userData = $this->UserDao->fbConnect($data)){
         
-            echo('\n FB User Succesfuly Connectedd \n');
+            echo('<br /> FB User Succesfuly Connectedd <br />');
 
             //Create session
             $this->load->library('session');
@@ -34,7 +35,7 @@ class Session extends CI_Controller {
             );
 
             $this->session->set_userdata($userSession);
-
+            print_r($userSession);
             //Load some php page just to redirect to the real system
         }else{
             echo "Oops! There was an error logging you in!";
@@ -42,7 +43,7 @@ class Session extends CI_Controller {
     }
     
     function logout(){
-        echo "Bye bye ". $this->session->userdata('uid');
+        echo "Bye bye ". $this->session->userdata('fullName');
         $this->load->library('session');
         $this->session->sess_destroy();
     }
