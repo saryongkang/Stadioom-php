@@ -83,8 +83,7 @@
     function fbHandler(response, info){
         
         if (response.authResponse) {
-            var accessToken =   response.authResponse.accessToken;
-            location.href = 'fb/session/login/'+accessToken+'/'+info['id'];
+            location.href = 'fb/session/login/'+info['id']+'/'+response.authResponse.accessToken+'/'+response.authResponse.expires;
             
         }
 	}  
