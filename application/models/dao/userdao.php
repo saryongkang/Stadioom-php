@@ -66,6 +66,8 @@ class UserDao extends CI_Model {
         $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbInfo['fbId']));
         $result = array('id' => NULL, 'fullName' => NULL, 'accessToken' => NULL);
 
+//        $this->doctrine->em->beginTransaction();
+//        try {
         if ($user == null) {
             // get user data from FB.
             $this->load->library('fb_connect');
@@ -82,13 +84,15 @@ class UserDao extends CI_Model {
             // TODO: deside what info should be included.
             $userFb->setFbId($fbInfo['fbId']);
             $userFb->setFbAccessToken($fbInfo['fbAccessToken']);
-            $userFb->setFbExpires(new DateTime($fbInfo['fbExpires']));
+            $currentDate = new DateTime();
+            $fbExpires = $currentDate->getTimeStamp() + $fbInfo['fbExpires'];
+            $userFb->setFbExpires($fbExpires);
 
             $this->doctrine->em->persist($userFb);
             $this->doctrine->em->flush();
 
             $result['accessToken'] = $fbMe['email'];
-            $result['fullName'] = $fbMe['firstName'] . ' ' . $fbMe['lastName'];
+            $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
             // check whether the same email is already in User table.
             $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
 
@@ -101,7 +105,6 @@ class UserDao extends CI_Model {
                 $this->doctrine->em->persist($userWithSameEmail);
                 $this->doctrine->em->flush();
             } else {
-
                 // create user account.
                 $user = new Entities\User();
                 $user->setFbId($fbInfo['fbId']);
@@ -146,6 +149,10 @@ class UserDao extends CI_Model {
                 $this->doctrine->em->flush();
             }
         }
+//        } catch (Exception $e) {
+//            $this->doctrine->em->rollback();
+//        }
+//        $this->doctrine->em->commit();
 //        $this->doctrine->em->flush();
 //        $this->doctrine->em->commit();
         // TODO (high): reimplement generating access token mechanism.

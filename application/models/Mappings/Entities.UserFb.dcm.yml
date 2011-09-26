@@ -11,5 +11,5 @@ Entities\UserFb:
       length: 400
       nullable: false
     fbExpires:
-      type: datetime
+      type: integer
       nullable: false

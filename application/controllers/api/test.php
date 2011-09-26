@@ -40,6 +40,13 @@ class Test extends Stadioom_REST_Controller {
         redirect($this->fb_connect->getLoginUrl($param));
     }
 
+    public function timestamp_get() {
+        $time = new DateTime()->getTimestamp;
+        $now = $time->getTimestamp();
+        
+        $time2 = new DateTime();
+    }
+
     public function facebook_get() {
         $this->load->library('fb_connect');
         if (!$this->fb_connect->user_id) {

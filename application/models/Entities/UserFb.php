@@ -18,7 +18,7 @@ class UserFb
     private $fbAccessToken;
 
     /**
-     * @var datetime $fbExpires
+     * @var integer $fbExpires
      */
     private $fbExpires;
 
@@ -66,7 +66,7 @@ class UserFb
     /**
      * Set fbExpires
      *
-     * @param datetime $fbExpires
+     * @param integer $fbExpires
      */
     public function setFbExpires($fbExpires)
     {
@@ -76,7 +76,7 @@ class UserFb
     /**
      * Get fbExpires
      *
-     * @return datetime $fbExpires
+     * @return integer $fbExpires
      */
     public function getFbExpires()
     {
