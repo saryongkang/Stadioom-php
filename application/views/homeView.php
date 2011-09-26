@@ -59,7 +59,7 @@
 <div id="fb-root" > </div>
 <script type="text/javascript">
     window.fbAsyncInit = function() {
-        FB.init({ appId: '194277843976863',
+        FB.init({ appId: '200987663288876',
             status: true,
             cookie: true,
             xfbml: true,
