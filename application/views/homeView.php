@@ -79,7 +79,7 @@
           
         <div id="social-buttons">
             <div class="span1">
-                <fb:like href="http://www.stadioom.com" send="false" layout="box_count" width="20" show_faces="true"></fb:like> <!-- Place this tag where you want the +1 button to render -->
+                <fb:like href="http://www.facebook.com/pages/Stadioom/168539803210962" send="false" layout="box_count" width="20" show_faces="true"></fb:like>
             </div>
             
             <!-- http://www.seedshock.com/fb/login -->
