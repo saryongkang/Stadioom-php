@@ -67,11 +67,17 @@ class UserDao extends CI_Model {
             $this->fb_connect->setAccessToken($fbAccessToken);
 
             $fbMe = $this->fb_connect->api('/me', 'GET');
+
+            // add Facebook user info to UserFB table.
+            $userFb = new Entities\UserFb();
+            $userFb->setFbId($fbId);
+            // TODO: deside what info should be included.
+            $this->doctrine->em->persist($userFb);
+            
             // check whether the same email is already in User table.
             $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe->email));
 //            $email = "wegra.lee@gmail.com";
 //            $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
-
 //            $this->doctrine->em->beginTransaction();
 
             if ($userWithSameEmail != NULL) {
@@ -107,13 +113,6 @@ class UserDao extends CI_Model {
                 $inviteeFb->setAcceptedDate(new DateTime());
                 $this->doctrine->em->persist($inviteeFb);
             }
-
-            // add user info to UserFB table.
-            $userFb = new Entities\UserFb();
-            $userFb->setFbId($fbId);
-            // TODO: deside what info should be included.
-
-            $this->doctrine->em->persist($userFb);
         } else {
             // already registered
             if (!$user->getFbAuthorized()) {
