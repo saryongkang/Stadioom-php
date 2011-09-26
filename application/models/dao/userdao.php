@@ -53,7 +53,7 @@ class UserDao extends CI_Model {
      * @param string $fbAccessToken The Facebook access token for the user.
      * @return string accessToken
      * 
-     * @throws FacebookApiException if something wrong happened during accesss Facebook API.
+     * @throws Exception 401 - if failed to access Facebook with the given fbAccessToken.
      */
     public function fbConnect($fbInfo) {
         if ($fbInfo == NULL
@@ -71,7 +71,11 @@ class UserDao extends CI_Model {
             $this->load->library('fb_connect');
             $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
 
-            $fbMe = $this->fb_connect->api('/me', 'GET');
+            try {
+                $fbMe = $this->fb_connect->api('/me', 'GET');
+            } catch (FacebookApiException $e) {
+                throw new Exception("Failed to get authorized by Facebook.", 401, $e);
+            }
 
             // add Facebook user info to UserFB table.
             $userFb = new Entities\UserFb();
