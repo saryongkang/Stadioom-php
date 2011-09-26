@@ -24,13 +24,13 @@
                   <span class="help-inline" id="help-fullName"> <?php echo form_error('user[fullName]'); ?> </span>
                 </div>
               </div><!-- /clearfix -->
-              <div class="clearfix <?php if (form_error('user[fullName]')) echo 'error'; ?>" id="clearfix-email">
+              <div class="clearfix <?php if (form_error('user[email]')) echo 'error'; ?>" id="clearfix-email">
                 <div class="input">
                   <input class="xlarge" id="signup-email" name="user[email]" value="<?php echo set_value('user[email]'); ?>" size="30" type="text" placeholder="e-mail"/>
                   <span class="help-inline" id="help-email"> <?php echo form_error('user[email]'); ?> </span>
                 </div>
               </div><!-- /clearfix -->
-              <div class="clearfix <?php if (form_error('user[fullName]')) echo 'error'; ?>" id="clearfix-password">
+              <div class="clearfix <?php if (form_error('user[password]')) echo 'error'; ?>" id="clearfix-password">
                 <div class="input">
                   <input class="xlarge" id="signup-password" name="user[password]" size="30" type="password" placeholder="Password"/>
                   <span class="help-inline" id="help-password"> <?php echo form_error('user[password]'); ?> </span>
@@ -39,6 +39,14 @@
               <div class="clearfix">
               <button class="btn signup large rightAlign">Sign Up!</button>
               </div><!-- /clearfix -->
+            </fieldset>
+          </div>
+          
+          <div id="fb-connect">
+            <fb:login-button size="large"  scope="email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream" redirect-uri="fb/login">
+              Connect with Facebook
+            </fb:login-button>
+
           </div>
       </div>
   </div> <!-- row -->
@@ -47,30 +55,25 @@
   <div class="row">
       <div class="span6">
           
-          <!-- Necessary Scripts -->
-          
-          <div id="fb-root"></div>
-      <script src="http://connect.facebook.net/en_US/all.js"></script>
-      
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=194277843976863&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-<!-- Place this render call where appropriate -->
+<!-- Necessary Scripts -->
+<div id="fb-root" > </div>
 <script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
+    window.fbAsyncInit = function() {
+        FB.init({ appId: '194277843976863',
+            status: true,
+            cookie: true,
+            xfbml: true,
+            oauth: true});
+    };
 
+    (function() {
+        var e = document.createElement('script'); e.async = true;
+        e.src = document.location.protocol
+            + '//connect.facebook.net/en_US/all.js';
+        document.getElementById('fb-root').appendChild(e);
+    }());    
+</script>
+    
 
           <!-- FB Buttons and G+ -->
           
@@ -92,13 +95,14 @@
             </div>
             <div class="span1">
                 <g:plusone size="tall"></g:plusone>
+                <!-- Place this render call where appropriate // BEST after last g plus button -->
                 <script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
+                  (function() {
+                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                    po.src = 'https://apis.google.com/js/plusone.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                  })();
+                </script>
             </div>
         </div>
       </div>

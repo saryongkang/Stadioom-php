@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:fb="https://www.facebook.com/2008/fbml">
-<head>
+<html xmlns:fb="https://www.facebook.com/2008/fbml" >
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
 	<meta charset="utf-8">
+    <meta property="fb:app_id"      content="200987663288876"> 
+    <meta property="og:type"        content="website"> 
+    <meta property="og:url"         content="http://stadioom.com"> 
+    <meta property="og:title"       content="Stadioom - Connecting Sports"> 
 	<title><?php echo $site_title?> - <?php echo $site_name?></title>
         <!-- fav and touch icons -->
         <link rel="shortcut icon" href="images/favicon.ico">
