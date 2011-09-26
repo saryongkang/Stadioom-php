@@ -55,76 +55,96 @@ class UserDao extends CI_Model {
      * 
      * @throws FacebookApiException if something wrong happened during accesss Facebook API.
      */
-    public function fbConnect($fbId, $fbAccessToken) {
-        if ($fbId == NULL || $fbAccessToken == NULL) {
-            throw new Exception("Invalid FB ID or FB access token.", 400);
+    public function fbConnect($fbInfo) {
+        if ($fbInfo == NULL
+                || $fbInfo['fbId'] == NULL
+                || $fbInfo['fbAccessToken'] == NULL
+                || $fbInfo['fbExpires'] == NULL) {
+            throw new Exception("Insufficient data.", 400);
         }
 
-        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbId));
+        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbInfo['fbId']));
+        $result = array('id' => NULL, 'accessToken' => NULL);
+
         if ($user == null) {
             // get user data from FB.
             $this->load->library('fb_connect');
-            $this->fb_connect->setAccessToken($fbAccessToken);
+            $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
 
             $fbMe = $this->fb_connect->api('/me', 'GET');
 
             // add Facebook user info to UserFB table.
             $userFb = new Entities\UserFb();
-            $userFb->setFbId($fbId);
             // TODO: deside what info should be included.
+            $userFb->setFbId($fbInfo['fbId']);
+            $userFb->setFbAccessToken($fbInfo['fbAccessToken']);
+            $userFb->setFbExpires(new DateTime($fbInfo['fbExpires']));
+
             $this->doctrine->em->persist($userFb);
-            
+            $this->doctrine->em->flush();
+
+            $result['accessToken'] = $fbMe['email'];
             // check whether the same email is already in User table.
-            $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe->email));
-//            $email = "wegra.lee@gmail.com";
-//            $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
-//            $this->doctrine->em->beginTransaction();
+            $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
 
             if ($userWithSameEmail != NULL) {
                 // update User table.
-                $userWithSameEmail->setFbId($fbId);
+                $userWithSameEmail->setFbId($fbInfo['fbId']);
                 $userWithSameEmail->setFbLinked(TRUE);
                 $userWithSameEmail->setFbAuthorized(TRUE);
 
                 $this->doctrine->em->persist($userWithSameEmail);
+                $this->doctrine->em->flush();
             } else {
+
                 // create user account.
                 $user = new Entities\User();
-                $user->setFbId($fbId);
-                $user->setEmail($fbMe->email);
-                $user->setName($fbMe->firstName . ' ' . $fbMe->lastName);
-                $user->setGender($fbMe->gender);
-                $user->setDob($fbMe->birthday);
+                $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
+                $user->setName($fbMe['first_name'] . ' ' . $fbMe['last_name']);
+                $user->setEmail($fbMe['email']);
+                $user->setGender($fbMe['gender']);
+                $user->setDob(new DateTime($fbMe['birthday']));
+                $user->setVerified(TRUE);
+                $user->setCreated(new DateTime());
                 $this->doctrine->em->persist($user);
+                $this->doctrine->em->flush();
 
+                $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
+                $result['id'] = $user->getId();
 
-                $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('email' => $fbMe->email));
+                $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('email' => $fbMe['email']));
                 if ($invitee != NULL) {
                     // update 'acceptedDate' in Invitee table.
                     $invitee->setAcceptedDate(new DateTime());
                     $this->doctrine->em->persist($invitee);
+                    $this->doctrine->em->flush();
                 }
             }
-            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('fbId' => $fbId));
+            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('fbId' => $fbInfo['fbId']));
             if ($inviteeFb != NULL) {
                 // update 'acceptedData' in InviteeFB table.
                 $inviteeFb->setAcceptedDate(new DateTime());
                 $this->doctrine->em->persist($inviteeFb);
+                $this->doctrine->em->flush();
             }
         } else {
             // already registered
+            $result['id'] = $user->getId();
+            $result['accessToken'] = $user->getEmail();
             if (!$user->getFbAuthorized()) {
                 $user->setFbAuthroized(TRUE);
 
                 $this->doctrine->em->persist($user);
+                $this->doctrine->em->flush();
             }
         }
-        $this->doctrine->em->flush();
+//        $this->doctrine->em->flush();
 //        $this->doctrine->em->commit();
         // TODO (high): reimplement generating access token mechanism.
-        return base64_encode($email);
+        $result['accessToken'] = base64_encode($result['accessToken']);
+        return $result;
     }
 
     /**

@@ -36,16 +36,16 @@ class EntitiesUserVerificationProxy extends \Entities\UserVerification implement
     }
     
     
-    public function setId($id)
+    public function setEmail($email)
     {
         $this->__load();
-        return parent::setId($id);
+        return parent::setEmail($email);
     }
 
-    public function getId()
+    public function getEmail()
     {
         $this->__load();
-        return parent::getId();
+        return parent::getEmail();
     }
 
     public function setCode($code)
@@ -70,18 +70,6 @@ class EntitiesUserVerificationProxy extends \Entities\UserVerification implement
     {
         $this->__load();
         return parent::getIssuedDate();
-    }
-
-    public function setEmail($email)
-    {
-        $this->__load();
-        return parent::setEmail($email);
-    }
-
-    public function getEmail()
-    {
-        $this->__load();
-        return parent::getEmail();
     }
 
 

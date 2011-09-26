@@ -48,10 +48,34 @@ class EntitiesUserFbProxy extends \Entities\UserFb implements \Doctrine\ORM\Prox
         return parent::getFbId();
     }
 
+    public function setFbAccessToken($fbAccessToken)
+    {
+        $this->__load();
+        return parent::setFbAccessToken($fbAccessToken);
+    }
+
+    public function getFbAccessToken()
+    {
+        $this->__load();
+        return parent::getFbAccessToken();
+    }
+
+    public function setFbExpires($fbExpires)
+    {
+        $this->__load();
+        return parent::setFbExpires($fbExpires);
+    }
+
+    public function getFbExpires()
+    {
+        $this->__load();
+        return parent::getFbExpires();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'fbId');
+        return array('__isInitialized__', 'fbId', 'fbAccessToken', 'fbExpires');
     }
 
     public function __clone()

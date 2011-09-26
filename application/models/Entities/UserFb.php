@@ -12,6 +12,16 @@ class UserFb
      */
     private $fbId;
 
+    /**
+     * @var string $fbAccessToken
+     */
+    private $fbAccessToken;
+
+    /**
+     * @var datetime $fbExpires
+     */
+    private $fbExpires;
+
 
     /**
      * Set fbId
@@ -31,5 +41,45 @@ class UserFb
     public function getFbId()
     {
         return $this->fbId;
+    }
+
+    /**
+     * Set fbAccessToken
+     *
+     * @param string $fbAccessToken
+     */
+    public function setFbAccessToken($fbAccessToken)
+    {
+        $this->fbAccessToken = $fbAccessToken;
+    }
+
+    /**
+     * Get fbAccessToken
+     *
+     * @return string $fbAccessToken
+     */
+    public function getFbAccessToken()
+    {
+        return $this->fbAccessToken;
+    }
+
+    /**
+     * Set fbExpires
+     *
+     * @param datetime $fbExpires
+     */
+    public function setFbExpires($fbExpires)
+    {
+        $this->fbExpires = $fbExpires;
+    }
+
+    /**
+     * Get fbExpires
+     *
+     * @return datetime $fbExpires
+     */
+    public function getFbExpires()
+    {
+        return $this->fbExpires;
     }
 }

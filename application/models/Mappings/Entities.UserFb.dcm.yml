@@ -4,6 +4,12 @@ Entities\UserFb:
     fbId:
       type: string
       id: true
-      length: 20
+      length: 32
       nullable: false
-      
+    fbAccessToken:
+      type: string
+      length: 400
+      nullable: false
+    fbExpires:
+      type: datetime
+      nullable: false

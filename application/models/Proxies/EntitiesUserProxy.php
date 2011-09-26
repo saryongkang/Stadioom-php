@@ -54,6 +54,30 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::getFbId();
     }
 
+    public function setFbLinked($fbLinked)
+    {
+        $this->__load();
+        return parent::setFbLinked($fbLinked);
+    }
+
+    public function getFbLinked()
+    {
+        $this->__load();
+        return parent::getFbLinked();
+    }
+
+    public function setFbAuthorized($fbAuthorized)
+    {
+        $this->__load();
+        return parent::setFbAuthorized($fbAuthorized);
+    }
+
+    public function getFbAuthorized()
+    {
+        $this->__load();
+        return parent::getFbAuthorized();
+    }
+
     public function setPassword($password)
     {
         $this->__load();
@@ -136,30 +160,6 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
     {
         $this->__load();
         return parent::getCreated();
-    }
-
-    public function setFbLinked($fbLinked)
-    {
-        $this->__load();
-        return parent::setFbLinked($fbLinked);
-    }
-
-    public function getFbLinked()
-    {
-        $this->__load();
-        return parent::getFbLinked();
-    }
-
-    public function setFbAuthorized($fbAuthorized)
-    {
-        $this->__load();
-        return parent::setFbAuthorized($fbAuthorized);
-    }
-
-    public function getFbAuthorized()
-    {
-        $this->__load();
-        return parent::getFbAuthorized();
     }
 
 

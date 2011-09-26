@@ -13,9 +13,13 @@ class Fb extends Stadioom_REST_Controller {
     public function connect_post() {
         $fbId = $this->post('fbId');
         $fbAccessToken = $this->post('fbAccessToken');
+        $fbExpires = $this->post('fbExpires');
+        
+        $fbInfo = array('fbId' => $this->post('fbId'), 'fbAccessToken' => $this->post('fbAccessToken'), 'fbExpires' => $this->post('fbExpires'));
 
         try {
-            $accessToken = $this->UserDao->fbConnect($fbId, $fbAccessToken);
+            $result = $this->UserDao->fbConnect($fbInfo);
+            $this->responseOk($result);
         } catch (Exception $e) {
             $this->responseError($e);
         }
