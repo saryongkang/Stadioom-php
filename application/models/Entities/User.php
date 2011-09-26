@@ -222,4 +222,54 @@ class User
     {
         return $this->created;
     }
+    /**
+     * @var boolean $fbLinked
+     */
+    private $fbLinked;
+
+    /**
+     * @var boolean $fbAuthorized
+     */
+    private $fbAuthorized;
+
+
+    /**
+     * Set fbLinked
+     *
+     * @param boolean $fbLinked
+     */
+    public function setFbLinked($fbLinked)
+    {
+        $this->fbLinked = $fbLinked;
+    }
+
+    /**
+     * Get fbLinked
+     *
+     * @return boolean $fbLinked
+     */
+    public function getFbLinked()
+    {
+        return $this->fbLinked;
+    }
+
+    /**
+     * Set fbAuthorized
+     *
+     * @param boolean $fbAuthorized
+     */
+    public function setFbAuthorized($fbAuthorized)
+    {
+        $this->fbAuthorized = $fbAuthorized;
+    }
+
+    /**
+     * Get fbAuthorized
+     *
+     * @return boolean $fbAuthorized
+     */
+    public function getFbAuthorized()
+    {
+        return $this->fbAuthorized;
+    }
 }

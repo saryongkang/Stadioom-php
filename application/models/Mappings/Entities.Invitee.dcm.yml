@@ -1,0 +1,18 @@
+Entities\Invitee:
+  type: entity
+  fields:
+    email:
+      type: string
+      id: true
+      length: 255
+      nullable: false
+    invitorId:
+      type: integer
+      nullable: false
+    invitedDate:
+      type: datetime
+      nullable: false
+    acceptedDate:
+      type: datetime
+      nullable: true
+      

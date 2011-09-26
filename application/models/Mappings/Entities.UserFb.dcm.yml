@@ -1,0 +1,9 @@
+Entities\UserFb:
+  type: entity
+  fields:
+    fbId:
+      type: string
+      id: true
+      length: 20
+      nullable: false
+      

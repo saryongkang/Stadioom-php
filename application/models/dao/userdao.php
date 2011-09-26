@@ -5,7 +5,7 @@ class UserDao extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->library('doctrine');
-    } 
+    }
 
     /**
      * Check if the email is valid or not.
@@ -41,7 +41,114 @@ class UserDao extends CI_Model {
             throw new Exception("Unregistered account.", 404);
         }
 
+        // TODO (high): reimplement generating access token mechanism.
         return base64_encode($prevUser->getEmail());
+    }
+
+    /**
+     * Connect to Facebook with the given Facebook ID and access token.
+     * It create Stadioom user account automatically if the Facebook User has not been registered yet.
+     * 
+     * @param string $fbId The Facebook user ID to connect.
+     * @param string $fbAccessToken The Facebook access token for the user.
+     * @return string accessToken
+     * 
+     * @throws FacebookApiException if something wrong happened during accesss Facebook API.
+     */
+    public function fbConnect($fbId, $fbAccessToken) {
+        if ($fbId == NULL || $fbAccessToken == NULL) {
+            throw new Exception("Invalid FB ID or FB access token.", 400);
+        }
+
+        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbId));
+        if ($user == null) {
+            // get user data from FB.
+            $this->load->library('fb_connect');
+            $this->fb_connect->setAccessToken($fbAccessToken);
+
+            $fbMe = $this->fb_connect->api('/me', 'GET');
+            // check whether the same email is already in User table.
+            $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe->email));
+//            $email = "wegra.lee@gmail.com";
+//            $userWithSameEmail = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
+
+//            $this->doctrine->em->beginTransaction();
+
+            if ($userWithSameEmail != NULL) {
+                // update User table.
+                $userWithSameEmail->setFbId($fbId);
+                $userWithSameEmail->setFbLinked(TRUE);
+                $userWithSameEmail->setFbAuthorized(TRUE);
+
+                $this->doctrine->em->persist($userWithSameEmail);
+            } else {
+                // create user account.
+                $user = new Entities\User();
+                $user->setFbId($fbId);
+                $user->setEmail($fbMe->email);
+                $user->setName($fbMe->firstName . ' ' . $fbMe->lastName);
+                $user->setGender($fbMe->gender);
+                $user->setDob($fbMe->birthday);
+                $user->setFbLinked(TRUE);
+                $user->setFbAuthorized(TRUE);
+                $this->doctrine->em->persist($user);
+
+
+                $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('email' => $fbMe->email));
+                if ($invitee != NULL) {
+                    // update 'acceptedDate' in Invitee table.
+                    $invitee->setAcceptedDate(new DateTime());
+                    $this->doctrine->em->persist($invitee);
+                }
+            }
+            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('fbId' => $fbId));
+            if ($inviteeFb != NULL) {
+                // update 'acceptedData' in InviteeFB table.
+                $inviteeFb->setAcceptedDate(new DateTime());
+                $this->doctrine->em->persist($inviteeFb);
+            }
+
+            // add user info to UserFB table.
+            $userFb = new Entities\UserFb();
+            $userFb->setFbId($fbId);
+            // TODO: deside what info should be included.
+
+            $this->doctrine->em->persist($userFb);
+        } else {
+            // already registered
+            if (!$user->getFbAuthorized()) {
+                $user->setFbAuthroized(TRUE);
+
+                $this->doctrine->em->persist($user);
+            }
+        }
+        $this->doctrine->em->flush();
+//        $this->doctrine->em->commit();
+        // TODO (high): reimplement generating access token mechanism.
+        return base64_encode($email);
+    }
+
+    /**
+     * Deauthorizes of the given Faccbook user.
+     * 
+     * @param type $fbId 
+     * @return Exception 400 - if the given fbId is invalid.
+     * @return Exception 404 - if the given fbId could not be found.
+     */
+    public function fbDeauthorized($fbId) {
+        if ($fbId == NULL) {
+            throw new Exception("Invalid FB ID.", 400);
+        }
+
+        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbId));
+        if ($user == null) {
+            throw new Exception("FB ID not found: " . $fbId, 404);
+        }
+
+        // Update authorized field in User table.
+        $user->setFbAuthorized(FALSE);
+        $this->doctrine->em->persist($user);
+        $this->doctrine->em->flush();
     }
 
     /**
@@ -176,9 +283,8 @@ class UserDao extends CI_Model {
      *
      * @return boolean
      */
-    public function isDuplicateEmail($email)
-    {
-        $q = $this->doctrine->em->createQuery('select u.email from Entities\User u where u.email = :email' );
+    public function isDuplicateEmail($email) {
+        $q = $this->doctrine->em->createQuery('select u.email from Entities\User u where u.email = :email');
         $q->setParameter('email', $email);
         $result = $q->getResult();
 
