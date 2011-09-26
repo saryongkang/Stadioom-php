@@ -43,7 +43,7 @@
           </div>
           
           <div id="fb-connect">
-            <fb:login-button size="large"  scope="email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream" redirect-uri="fb/login">
+            <fb:login-button size="large"  scope="email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream" redirect-uri="http://www.stadioom.com/fb/login">
               Connect with Facebook
             </fb:login-button>
 
@@ -59,7 +59,7 @@
 <div id="fb-root" > </div>
 <script type="text/javascript">
     window.fbAsyncInit = function() {
-        FB.init({ appId: '200987663288876',
+        FB.init({ appId: '<?php echo $fbAppId ?>',
             status: true,
             cookie: true,
             xfbml: true,
@@ -87,8 +87,8 @@
             <div class="span1">
                 <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
               <a href="https://twitter.com/share" class="twitter-share-button"
-                 data-url="http://seedshock.com"
-                 data-counturl="http://seedshock.com"
+                 data-url="http://stadioom.com"
+                 data-counturl="http://stadioom.com"
                  data-via="stadioom"
                  data-related="seedshock: Company behind Stadioom, norumoreno:Co-founder and CEO of SeedShock, justfaceit_kr: Co-founder and CTO of SeedShock"
                  data-count="vertical">Tweet</a>
