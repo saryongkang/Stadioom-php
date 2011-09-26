@@ -8,8 +8,8 @@ class Session extends CI_Controller {
     }
     
     function login($fbAccessToken, $fbId){
-        $data['accessToken'] = $accessToken;
-        $data['fbid'] = $fbuid;
+        $data['accessToken'] = $fbAccessToken;
+        $data['fbid'] = $fbId;
         
         print_r($data);
         
