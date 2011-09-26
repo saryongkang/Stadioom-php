@@ -147,13 +147,13 @@ class Template
 		
 		if($load){
 			
-			$this->css_load .= '<link href="'.$this->CI->config->item('base_url') .'/'. $this->data['assets_dir'] . 'css/' . $css . '.css?'
+			$this->css_load .= '<link href="'.$this->CI->config->item('base_url') . $this->data['assets_dir'] . 'css/' . $css . '.css?'
 				.filemtime($this->data['assets_dir'] . 'css/' . $css . '.css')
 				.'" media="screen" rel="stylesheet" type="text/css" />';
 		
 		} else {
 
-			$css_contents = @implode(file($this->CI->config->item('base_url') .'/' .$this->data['assets_dir'] . 'css/' . $css . '.css', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+			$css_contents = @implode(file($this->CI->config->item('base_url')  .$this->data['assets_dir'] . 'css/' . $css . '.css', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 		
 			$this->css_raw .= $css_contents;
 
@@ -184,13 +184,13 @@ class Template
 		
 		if($load){
 		
-			$this->js_load .= '<script src="'.$this->CI->config->item('base_url') .'/'. $this->data['assets_dir'] . 'js/' . $js . '.js?'
+			$this->js_load .= '<script src="'.$this->CI->config->item('base_url') . $this->data['assets_dir'] . 'js/' . $js . '.js?'
 				.filemtime($this->data['assets_dir'] . 'js/' . $js . '.js')
 				.'" type="text/javascript"></script>';
 
 		} else {
 		
-			$js_contents = @implode(file($this->CI->config->item('base_url') .'/'. $this->data['assets_dir'] . 'js/' . $js . '.js', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+			$js_contents = @implode(file($this->CI->config->item('base_url') . $this->data['assets_dir'] . 'js/' . $js . '.js', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 
 			$this->js_raw = $js_contents;
 		
