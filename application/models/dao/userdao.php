@@ -18,13 +18,13 @@ class UserDao extends CI_Model {
      * @throws Exception 404 - if the user could not be found. 
      */
     public function signIn(&$user) {
-        if (!$this->_checkEmail($user->getEmail())) {
+        if (!$this->isValidEmail($user->getEmail())) {
             throw new Exception("Invalid email.", 400);
         }
         $password = $user->getPassword();
-        $valid = $this->_checkPassword($password);
+        $valid = $this->isValidPassword($password);
 
-        if (!$this->_checkPassword($user->getPassword())) {
+        if (!$this->isValidPassword($user->getPassword())) {
             throw new Exception("Invalid password.", 400);
         }
 
@@ -109,7 +109,7 @@ class UserDao extends CI_Model {
                 $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
                 $result['id'] = $user->getId();
 
-                $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('email' => $fbMe['email']));
+                $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $fbMe['email']));
                 if ($invitee != NULL) {
                     // update 'acceptedDate' in Invitee table.
                     $invitee->setAcceptedDate(new DateTime());
@@ -117,7 +117,7 @@ class UserDao extends CI_Model {
                     $this->doctrine->em->flush();
                 }
             }
-            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('fbId' => $fbInfo['fbId']));
+            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('inviteeFbId' => $fbInfo['fbId']));
             if ($inviteeFb != NULL) {
                 // update 'acceptedData' in InviteeFB table.
                 $inviteeFb->setAcceptedDate(new DateTime());
@@ -163,15 +163,59 @@ class UserDao extends CI_Model {
         $this->doctrine->em->flush();
     }
 
-    public function fbInvite($invitorId, $fbIds) {
+    public function fbInvite($invitorId, $inviteeFbIds) {
+        // TODO: check whether the invitor is real.
         $invitedDate = new DateTime();
-        foreach ($fbIds as $fbId) {
-            $inviteeFb = new Entities\InviteeFb();
-            $inviteeFb->setInviteeFbId($fbId);
-            $inviteeFb->setInvitorId($invitorId);
-            $inviteeFb->setInvitedDate($invitedDate);
+        foreach ($inviteeFbIds as $fbId) {
+            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('inviteeFbId' => $fbId));
+            if ($inviteeFb == NULL) {
+                try {
+                    $inviteeFb = new Entities\InviteeFb();
+                    $inviteeFb->setInviteeFbId($fbId);
+                    $inviteeFb->setInvitorId($invitorId);
+                    $inviteeFb->setInvitedDate($invitedDate);
 
-            $this->doctrine->em->persist($inviteeFb);
+                    $this->doctrine->em->persist($inviteeFb);
+                } catch (Exception $e) {
+                    // ignore (it happens if invition has been request by multiple clients simultaneously).
+                }
+            }
+        }
+        $this->doctrine->em->flush();
+    }
+
+    public function invite($invitorId, $inviteeEmails, $invitingMessage) {
+        // TODO: check whether the invitor is real.
+        $invitedDate = new DateTime();
+        foreach ($inviteeEmails as $email) {
+            if ($this->isValidEmail($email)) {
+                $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
+
+                if ($invitor != null) {
+                    $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $email));
+                    if ($invitee == NULL) {
+                        try {
+                            $invitee = new Entities\Invitee();
+                            $invitee->setInviteeEmail($email);
+                            $invitee->setInvitorId($invitorId);
+                            $invitee->setInvitedDate($invitedDate);
+
+                            $this->doctrine->em->persist($invitee);
+
+                            $subject = $invitor->getName() . " has invited you to Stadioom.";
+                            $message = 'Come to match!!';
+                            if ($invitingMessage != NULL) {
+                                $message = $message . '\n\nFrom ' . $invitor->getName() . ':\n' . $invitingMessage;
+                            }
+                            $message = $message . '\n\n Your Sincerely, SeedShock.';
+                            
+                            $this->sendEmail($email, $subject, $message);
+                        } catch (Exception $e) {
+                            // ignore (it happens if invition has been request by multiple clients simultaneously).
+                        }
+                    }
+                }
+            }
         }
         $this->doctrine->em->flush();
     }
@@ -185,13 +229,13 @@ class UserDao extends CI_Model {
      * @throws Exception 406 - if the user has already registered.
      */
     public function signUp(&$user) {
-        if (!$this->_checkEmail($user->getEmail())) {
+        if (!$this->isValidEmail($user->getEmail())) {
             throw new Exception("Invalid email.", 400);
         }
-        if (!$this->_checkPassword($user->getPassword())) {
+        if (!$this->isValidPassword($user->getPassword())) {
             throw new Exception("Invalid password (> 5).", 400);
         }
-        if (!$this->_checkName($user->getName())) {
+        if (!$this->isValidName($user->getName())) {
             throw new Exception("Invalid name (> 3).", 400);
         }
 
@@ -261,6 +305,10 @@ class UserDao extends CI_Model {
      * @param type $code The verification code.
      */
     public function sendVerificationEmail($email, $code) {
+        $this->sendEmail($email, '[Welcome to Stadioom] Your Verification Code', "Thanks for registering to Stadioom.\n Please click the following URL to verify your email.\n\n " . $this->config->item('base_url') . "/api/auth/verify?code=" . $code . "&email=" . $email . " \n\n Your Sincerely, SeedShock.");
+    }
+
+    private function sendEmail($toEmail, $subject, $message) {
         $config = Array(
             'protocol' => 'smtp',
             'smtp_host' => 'ssl://smtp.gmail.com',
@@ -268,19 +316,20 @@ class UserDao extends CI_Model {
             'smtp_user' => 'wegra.lee@gmail.com',
             'smtp_pass' => 'ehdrnfrjdls',
             'mailtype' => 'html',
-            'charset' => 'iso-8859-1'
+            'charset' => 'utf-8'
         );
         $this->load->library('email', $config);
         $this->email->set_newline("\r\n");
 
         // TODO (Wegra): refine the email contents.
         // TODO (Wegra): the messages are mostly likely stored into outer file.
-        $this->email->from('stadioom@seedshock.com', 'Stadioom @ SeedShock');
-        $this->email->to($email);
+        $this->email->from('stadioom@seedshock.com', 'SeedShock');
+        $this->email->to($toEmail);
+        // TODO (Wegra): make bcc configurable.
         $this->email->bcc('wegra.lee@gmail.com');
 
-        $this->email->subject('[Welcome to Stadioom] Your Verification Code');
-        $this->email->message("Thanks for registering to Stadioom.\n Please click the following URL to verify your email.\n\n " . $this->config->item('base_url') . "/api/auth/verify?code=" . $code . "&email=" . $email . " \n\n Your Sincerely, SeedShock.");
+        $this->email->subject($subject);
+        $this->email->message($message);
 
         $this->email->send();
     }
@@ -334,13 +383,13 @@ class UserDao extends CI_Model {
         }
     }
 
-    // -- INTERNAL APIs --------------------------------------------------------
+// -- INTERNAL APIs --------------------------------------------------------
     /**
      * Check if the email is valid or not.
      *
      * @return boolean
      */
-    private function _checkEmail(&$email) {
+    private function isValidEmail(&$email) {
         $this->load->helper('email');
 
         return valid_email($email);
@@ -351,7 +400,7 @@ class UserDao extends CI_Model {
      *
      * @return boolean
      */
-    private function _checkPassword(&$password) {
+    private function isValidPassword(&$password) {
         $length = strlen($password);
         return $length > 5 && $length <= 20;
     }
@@ -361,7 +410,7 @@ class UserDao extends CI_Model {
      *
      * @return boolean
      */
-    private function _checkName(&$name) {
+    private function isValidName(&$name) {
         $length = strlen($name);
         return $length == 0 || ($length > 4 && $length <= 20);
     }

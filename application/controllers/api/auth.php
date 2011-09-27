@@ -78,6 +78,19 @@ class Auth extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
     }
+    
+    public function invite_post() {
+        $accessToken = $this->post('accessToken');
+
+        try {
+            $invitorId = $this->verifyToken($accessToken);
+
+            $this->UserDao->invite($invitorId, $this->post('inviteeEmails'), $this->post('invitingMessage'));
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+        $this->responseOk();
+    }
 
     /**
      * Returns user instance if the grant info is correct.
