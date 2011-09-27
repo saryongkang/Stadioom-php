@@ -1,7 +1,7 @@
 Entities\Invitee:
   type: entity
   fields:
-    email:
+    inviteeEmail:
       type: string
       id: true
       length: 255

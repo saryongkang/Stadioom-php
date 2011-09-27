@@ -65,8 +65,7 @@ class UserDao extends CI_Model {
         $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbInfo['fbId']));
         $result = array('id' => NULL, 'fullName' => NULL, 'accessToken' => NULL);
 
-//        $this->doctrine->em->beginTransaction();
-//        try {
+        // TODO: consider transaction.
         if ($user == null) {
             // get user data from FB.
             $this->load->library('fb_connect');
@@ -79,7 +78,7 @@ class UserDao extends CI_Model {
             }
 
             $this->storeUserFb($fbInfo, $fbMe);
-            
+
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
             // check whether the same email is already in User table.
             $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
@@ -136,10 +135,6 @@ class UserDao extends CI_Model {
                 $this->doctrine->em->flush();
             }
         }
-//        } catch (Exception $e) {
-//            $this->doctrine->em->rollback();
-//        }
-//        $this->doctrine->em->commit();
 
         $result['accessToken'] = $this->generateAccessToken($user);
         return $result;
@@ -165,6 +160,19 @@ class UserDao extends CI_Model {
         // Update authorized field in User table.
         $user->setFbAuthorized(FALSE);
         $this->doctrine->em->persist($user);
+        $this->doctrine->em->flush();
+    }
+
+    public function fbInvite($invitorId, $fbIds) {
+        $invitedDate = new DateTime();
+        foreach ($fbIds as $fbId) {
+            $inviteeFb = new Entities\InviteeFb();
+            $inviteeFb->setInviteeFbId($fbId);
+            $inviteeFb->setInvitorId($invitorId);
+            $inviteeFb->setInvitedDate($invitedDate);
+
+            $this->doctrine->em->persist($inviteeFb);
+        }
         $this->doctrine->em->flush();
     }
 
@@ -358,10 +366,12 @@ class UserDao extends CI_Model {
         return $length == 0 || ($length > 4 && $length <= 20);
     }
 
-    private function _toStr($array) {
-        return implode(",", $array);
-    }
-
+    /**
+     * Stores Facebook user data to UserFb table.
+     * 
+     * @param array $fbInfo
+     * @param array $fbMe 
+     */
     private function storeUserFb($fbInfo, $fbMe) {
         // TODO: check duplication first.
         // add Facebook user info to UserFB table.
@@ -385,15 +395,16 @@ class UserDao extends CI_Model {
             $userFb->setLocation($location['id'] . ' ' . $location['name']);
         }
         if (array_key_exists('favorite_atheletes', $fbMe)) {
+            // TODO: should be tested..
             $athletes = $fbMe['favorite_atheletes'];
             if ($athletes != NULL) {
-                $userFb->setFavoriteAthletes(_toStr($athletes));
+                $userFb->setFavoriteAthletes(implode(",", $athletes));
             }
         }
         if (array_key_exists('favorite_teams', $fbMe)) {
             $teams = $fbMe['favorite_teams'];
             if ($athletes != NULL) {
-                $userFb->setFavoriteTeams(_toStr($teams));
+                $userFb->setFavoriteTeams(implode(",", $teams));
             }
         }
 

@@ -8,9 +8,9 @@ namespace Entities;
 class Invitee
 {
     /**
-     * @var string $email
+     * @var string $inviteeEmail
      */
-    private $email;
+    private $inviteeEmail;
 
     /**
      * @var integer $invitorId
@@ -29,23 +29,23 @@ class Invitee
 
 
     /**
-     * Set email
+     * Set inviteeEmail
      *
-     * @param string $email
+     * @param string $inviteeEmail
      */
-    public function setEmail($email)
+    public function setInviteeEmail($inviteeEmail)
     {
-        $this->email = $email;
+        $this->inviteeEmail = $inviteeEmail;
     }
 
     /**
-     * Get email
+     * Get inviteeEmail
      *
-     * @return string $email
+     * @return string $inviteeEmail
      */
-    public function getEmail()
+    public function getInviteeEmail()
     {
-        return $this->email;
+        return $this->inviteeEmail;
     }
 
     /**

@@ -1,13 +1,13 @@
 Entities\InviteeFb:
   type: entity
   fields:
-    invitorId:
-      type: integer
-      nullable: false
-    fbId:
+    inviteeFbId:
       type: string
       id: true
       length: 32
+      nullable: false
+    invitorId:
+      type: integer
       nullable: false
     invitedDate:
       type: datetime

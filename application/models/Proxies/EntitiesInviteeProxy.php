@@ -36,16 +36,16 @@ class EntitiesInviteeProxy extends \Entities\Invitee implements \Doctrine\ORM\Pr
     }
     
     
-    public function setEmail($email)
+    public function setInviteeEmail($inviteeEmail)
     {
         $this->__load();
-        return parent::setEmail($email);
+        return parent::setInviteeEmail($inviteeEmail);
     }
 
-    public function getEmail()
+    public function getInviteeEmail()
     {
         $this->__load();
-        return parent::getEmail();
+        return parent::getInviteeEmail();
     }
 
     public function setInvitorId($invitorId)
@@ -87,7 +87,7 @@ class EntitiesInviteeProxy extends \Entities\Invitee implements \Doctrine\ORM\Pr
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'email', 'invitorId', 'invitedDate', 'acceptedDate');
+        return array('__isInitialized__', 'inviteeEmail', 'invitorId', 'invitedDate', 'acceptedDate');
     }
 
     public function __clone()

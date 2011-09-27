@@ -8,14 +8,14 @@ namespace Entities;
 class InviteeFb
 {
     /**
+     * @var string $inviteeFbId
+     */
+    private $inviteeFbId;
+
+    /**
      * @var integer $invitorId
      */
     private $invitorId;
-
-    /**
-     * @var string $fbId
-     */
-    private $fbId;
 
     /**
      * @var datetime $invitedDate
@@ -27,6 +27,26 @@ class InviteeFb
      */
     private $acceptedDate;
 
+
+    /**
+     * Set inviteeFbId
+     *
+     * @param string $inviteeFbId
+     */
+    public function setInviteeFbId($inviteeFbId)
+    {
+        $this->inviteeFbId = $inviteeFbId;
+    }
+
+    /**
+     * Get inviteeFbId
+     *
+     * @return string $inviteeFbId
+     */
+    public function getInviteeFbId()
+    {
+        return $this->inviteeFbId;
+    }
 
     /**
      * Set invitorId
@@ -46,26 +66,6 @@ class InviteeFb
     public function getInvitorId()
     {
         return $this->invitorId;
-    }
-
-    /**
-     * Set fbId
-     *
-     * @param string $fbId
-     */
-    public function setFbId($fbId)
-    {
-        $this->fbId = $fbId;
-    }
-
-    /**
-     * Get fbId
-     *
-     * @return string $fbId
-     */
-    public function getFbId()
-    {
-        return $this->fbId;
     }
 
     /**

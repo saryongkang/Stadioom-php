@@ -36,6 +36,18 @@ class EntitiesInviteeFbProxy extends \Entities\InviteeFb implements \Doctrine\OR
     }
     
     
+    public function setInviteeFbId($inviteeFbId)
+    {
+        $this->__load();
+        return parent::setInviteeFbId($inviteeFbId);
+    }
+
+    public function getInviteeFbId()
+    {
+        $this->__load();
+        return parent::getInviteeFbId();
+    }
+
     public function setInvitorId($invitorId)
     {
         $this->__load();
@@ -46,18 +58,6 @@ class EntitiesInviteeFbProxy extends \Entities\InviteeFb implements \Doctrine\OR
     {
         $this->__load();
         return parent::getInvitorId();
-    }
-
-    public function setFbId($fbId)
-    {
-        $this->__load();
-        return parent::setFbId($fbId);
-    }
-
-    public function getFbId()
-    {
-        $this->__load();
-        return parent::getFbId();
     }
 
     public function setInvitedDate($invitedDate)
@@ -87,7 +87,7 @@ class EntitiesInviteeFbProxy extends \Entities\InviteeFb implements \Doctrine\OR
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'invitorId', 'fbId', 'invitedDate', 'acceptedDate');
+        return array('__isInitialized__', 'inviteeFbId', 'invitorId', 'invitedDate', 'acceptedDate');
     }
 
     public function __clone()
