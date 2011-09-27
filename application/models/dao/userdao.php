@@ -78,18 +78,8 @@ class UserDao extends CI_Model {
                 throw new Exception("Failed to get authorized by Facebook.", 401, $e);
             }
 
-            // add Facebook user info to UserFB table.
-            $userFb = new Entities\UserFb();
-            // TODO: deside what info should be included.
-            $userFb->setFbId($fbInfo['fbId']);
-            $userFb->setFbAccessToken($fbInfo['fbAccessToken']);
-            $currentDate = new DateTime();
-            $fbExpires = $currentDate->getTimeStamp() + $fbInfo['fbExpires'];
-            $userFb->setFbExpires($fbExpires);
-
-            $this->doctrine->em->persist($userFb);
-            $this->doctrine->em->flush();
-
+            $this->storeUserFb($fbInfo, $fbMe);
+            
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
             // check whether the same email is already in User table.
             $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
@@ -366,6 +356,49 @@ class UserDao extends CI_Model {
     private function _checkName(&$name) {
         $length = strlen($name);
         return $length == 0 || ($length > 4 && $length <= 20);
+    }
+
+    private function _toStr($array) {
+        return implode(",", $array);
+    }
+
+    private function storeUserFb($fbInfo, $fbMe) {
+        // TODO: check duplication first.
+        // add Facebook user info to UserFB table.
+        $userFb = new Entities\UserFb();
+        // TODO: deside what info should be included.
+        $userFb->setFbId($fbInfo['fbId']);
+        $userFb->setFbAccessToken($fbInfo['fbAccessToken']);
+        $currentDate = new DateTime();
+        $fbExpires = $currentDate->getTimeStamp() + $fbInfo['fbExpires'];
+        $userFb->setFbExpires($fbExpires);
+        $userFb->setGender($fbMe['gender']);
+        $userFb->setLocale($fbMe['locale']);
+        $userFb->setTimezone($fbMe['timezone']);
+        $userFb->setBirthday($fbMe['birthday']);
+        $hometown = $fbMe['hometown'];
+        if ($hometown != NULL) {
+            $userFb->setHometown($hometown['id'] . ' ' . $hometown['name']);
+        }
+        $location = $fbMe['location'];
+        if ($location != NULL) {
+            $userFb->setLocation($location['id'] . ' ' . $location['name']);
+        }
+        if (array_key_exists('favorite_atheletes', $fbMe)) {
+            $athletes = $fbMe['favorite_atheletes'];
+            if ($athletes != NULL) {
+                $userFb->setFavoriteAthletes(_toStr($athletes));
+            }
+        }
+        if (array_key_exists('favorite_teams', $fbMe)) {
+            $teams = $fbMe['favorite_teams'];
+            if ($athletes != NULL) {
+                $userFb->setFavoriteTeams(_toStr($teams));
+            }
+        }
+
+        $this->doctrine->em->persist($userFb);
+        $this->doctrine->em->flush();
     }
 
 }
