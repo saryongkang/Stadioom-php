@@ -42,17 +42,12 @@
             </fieldset>
           </div>
           
+          <div id="fb-connect">
+              <fb:login-button id="fb-auth" size="large">
+                  Connect with Facebook
+            </fb:login-button>
 
-          
-          <?php if ($fbUser): ?>
-            <a href="<?php echo $logoutUrl; ?>">Logout</a>
-            <?php else: ?>
-            <div id="php-fb-connect">
-            Login using OAuth 2.0 handled by the PHP SDK:
-            <a href="<?php echo $loginUrl; ?>"><img src="assets/images/fb-connect-large.png" /> </a>
           </div>
-            
-            <?php endif ?>
       </div>
   </div> <!-- row -->
 
@@ -63,6 +58,38 @@
 <!-- Necessary Scripts -->
 <div id="fb-root" > </div>
 <script type="text/javascript">
+    window.fbAsyncInit = function() {
+        FB.init({ appId: '<?php echo $fbAppId ?>',
+            status: true,
+            cookie: true,
+            xfbml: true,
+            oauth: true});
+        
+        button = document.getElementById('fb-auth');
+        
+        button.onclick = function() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    FB.api('/me', function(info) {
+                        fbHandler(response, info);
+                    });	   
+                } else {
+                    //user cancelled login or did not grant authorization
+                }
+            }, {scope:'email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream'});  	
+        }
+    };
+    
+    function fbHandler(response, info){
+        
+        if (response.authResponse) {
+            //console.log(response.authResponse);
+            location.href = 'fb/session/login/'+info['id']+'/'+response.authResponse.accessToken+'/'+response.authResponse.expiresIn;
+            
+        }
+	}  
+
+	 
     (function() {
         var e = document.createElement('script'); e.async = true;
         e.src = document.location.protocol
