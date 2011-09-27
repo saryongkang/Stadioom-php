@@ -184,40 +184,57 @@ class UserDao extends CI_Model {
         $this->doctrine->em->flush();
     }
 
-    public function invite($invitorId, $inviteeEmails, $invitingMessage) {
-        // TODO: check whether the invitor is real.
+    public function invite($invitorId, $inviteeEmails, $invitationMessage) {
+        if ($invitorId == NULL) {
+            throw new Exception("The 'invitorId' MUST NOT be NULL.", 400);
+        }
+        if ($inviteeEmails == NULL) {
+            throw new Exception("The 'inviteeEmails' MUST NOT be NULL.", 400);
+        }
+        
+        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
+        if ($invitor == NULL) {
+            throw new Exception("Invitor not found.", 404);
+        }
+        $result;
         $invitedDate = new DateTime();
         foreach ($inviteeEmails as $email) {
-            if ($this->isValidEmail($email)) {
-                $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
+            if (!$this->isValidEmail($email)) {
+                $result[$email] = 'invalid email.';
+                continue;
+            }
+            
+            $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
+            if ($user != NULL) {
+                $result[$email] = "already registered.";
+                continue;
+            }
+            
+            $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $email));
+            if ($invitee == NULL) {
+                try {
+                    $invitee = new Entities\Invitee();
+                    $invitee->setInviteeEmail($email);
+                    $invitee->setInvitorId($invitorId);
+                    $invitee->setInvitedDate($invitedDate);
 
-                if ($invitor != null) {
-                    $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $email));
-                    if ($invitee == NULL) {
-                        try {
-                            $invitee = new Entities\Invitee();
-                            $invitee->setInviteeEmail($email);
-                            $invitee->setInvitorId($invitorId);
-                            $invitee->setInvitedDate($invitedDate);
-
-                            $this->doctrine->em->persist($invitee);
-
-                            $subject = $invitor->getName() . " has invited you to Stadioom.";
-                            $message = 'Come to match!!';
-                            if ($invitingMessage != NULL) {
-                                $message = $message . '\n\nFrom ' . $invitor->getName() . ':\n' . $invitingMessage;
-                            }
-                            $message = $message . '\n\n Your Sincerely, SeedShock.';
-                            
-                            $this->sendEmail($email, $subject, $message);
-                        } catch (Exception $e) {
-                            // ignore (it happens if invition has been request by multiple clients simultaneously).
-                        }
-                    }
+                    $this->doctrine->em->persist($invitee);
+                } catch (Exception $e) {
+                    // ignore (it happens if invition has been request by multiple clients simultaneously).
                 }
             }
+            $subject = $invitor->getName() . " has invited you to Stadioom.";
+            $message = 'Come to match!!';
+            if ($invitationMessage != NULL) {
+                $message = $message . '<br><br>From ' . $invitor->getName() . ':<br><br>' . $invitationMessage;
+            }
+            $message = $message . '<br><br> Your Sincerely, SeedShock.';
+
+            $this->sendEmail($email, $subject, $message);
+            $result[$email] = 'invitation sent.';
         }
         $this->doctrine->em->flush();
+        return $result;
     }
 
     /**
@@ -305,7 +322,7 @@ class UserDao extends CI_Model {
      * @param type $code The verification code.
      */
     public function sendVerificationEmail($email, $code) {
-        $this->sendEmail($email, '[Welcome to Stadioom] Your Verification Code', "Thanks for registering to Stadioom.\n Please click the following URL to verify your email.\n\n " . $this->config->item('base_url') . "/api/auth/verify?code=" . $code . "&email=" . $email . " \n\n Your Sincerely, SeedShock.");
+        $this->sendEmail($email, '[Welcome to Stadioom] Your Verification Code', "Thanks for registering to Stadioom.<br>Please click the following URL to verify your email.<br><br> " . $this->config->item('base_url') . "/api/auth/verify?code=" . $code . "&email=" . $email . " <br><br>Your Sincerely, SeedShock.");
     }
 
     private function sendEmail($toEmail, $subject, $message) {

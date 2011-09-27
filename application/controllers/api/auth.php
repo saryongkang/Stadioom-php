@@ -85,11 +85,10 @@ class Auth extends Stadioom_REST_Controller {
         try {
             $invitorId = $this->verifyToken($accessToken);
 
-            $this->UserDao->invite($invitorId, $this->post('inviteeEmails'), $this->post('invitingMessage'));
+            $this->responseOk($this->UserDao->invite($invitorId, $this->post('inviteeEmails'), $this->post('invitationMessage')));
         } catch (Exception $e) {
             $this->responseError($e);
         }
-        $this->responseOk();
     }
 
     /**
