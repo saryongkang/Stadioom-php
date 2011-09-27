@@ -15,45 +15,6 @@ class Home extends CI_Controller {
 		$this->form_validation->set_rules('user[password]', 'Password', 'trim|required|min_length[5]|md5');
 		$this->form_validation->set_rules('user[email]', 'E-mail', 'trim|required|valid_email');
     
-        $data['fbUser'] = null;
-        
-        // FB Stuff
-        
-        $this->load->library('facebook');
-          
-        $facebook = new $this->facebook(array(
-          'appId' => '200987663288876',
-          'secret' => '6d3dd0e7aa9dae300920ec05552bddee',
-        ));
-
-        // Get User ID
-        $data['fbUser'] = $facebook->getUser();
-
-        if ($data['fbUser']) {
-
-          try {
-            // Proceed knowing you have a logged in user who's authenticated.
-            $user_profile = $facebook->api('/me');
-          } catch (FacebookApiException $e) {
-            error_log($e);
-            $data['fbUser'] = null;
-          }
-        }
-
-        $fbLoginData = array(
-            'scope' => 'email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream',
-            'redirect_uri' => 'fb/session/login/'
-        );
-        
-        // Login or logout url will be needed depending on current user state.
-        if ($data['fbUser']) {
-            
-           $data['logoutUrl'] = $facebook->getLogoutUrl();
-        } else {
-           $data['loginUrl'] = $facebook->getLoginUrl($fbLoginData);
-        }
-        
-        
         
         
         //$this->template->add_message('success', 'You are using duellsys template library');
@@ -71,9 +32,6 @@ class Home extends CI_Controller {
 		{
 			//redirect('/signup/send', 'refresh');
 		}
-        
-        
-        
 	}
     
     function checkEmail() {
