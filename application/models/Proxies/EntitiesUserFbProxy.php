@@ -72,10 +72,106 @@ class EntitiesUserFbProxy extends \Entities\UserFb implements \Doctrine\ORM\Prox
         return parent::getFbExpires();
     }
 
+    public function setGender($gender)
+    {
+        $this->__load();
+        return parent::setGender($gender);
+    }
+
+    public function getGender()
+    {
+        $this->__load();
+        return parent::getGender();
+    }
+
+    public function setLocale($locale)
+    {
+        $this->__load();
+        return parent::setLocale($locale);
+    }
+
+    public function getLocale()
+    {
+        $this->__load();
+        return parent::getLocale();
+    }
+
+    public function setTimezone($timezone)
+    {
+        $this->__load();
+        return parent::setTimezone($timezone);
+    }
+
+    public function getTimezone()
+    {
+        $this->__load();
+        return parent::getTimezone();
+    }
+
+    public function setBirthday($birthday)
+    {
+        $this->__load();
+        return parent::setBirthday($birthday);
+    }
+
+    public function getBirthday()
+    {
+        $this->__load();
+        return parent::getBirthday();
+    }
+
+    public function setHometown($hometown)
+    {
+        $this->__load();
+        return parent::setHometown($hometown);
+    }
+
+    public function getHometown()
+    {
+        $this->__load();
+        return parent::getHometown();
+    }
+
+    public function setLocation($location)
+    {
+        $this->__load();
+        return parent::setLocation($location);
+    }
+
+    public function getLocation()
+    {
+        $this->__load();
+        return parent::getLocation();
+    }
+
+    public function setFavoriteAthletes($favoriteAthletes)
+    {
+        $this->__load();
+        return parent::setFavoriteAthletes($favoriteAthletes);
+    }
+
+    public function getFavoriteAthletes()
+    {
+        $this->__load();
+        return parent::getFavoriteAthletes();
+    }
+
+    public function setFavoriteTeams($favoriteTeams)
+    {
+        $this->__load();
+        return parent::setFavoriteTeams($favoriteTeams);
+    }
+
+    public function getFavoriteTeams()
+    {
+        $this->__load();
+        return parent::getFavoriteTeams();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'fbId', 'fbAccessToken', 'fbExpires');
+        return array('__isInitialized__', 'fbId', 'fbAccessToken', 'fbExpires', 'gender', 'locale', 'timezone', 'birthday', 'hometown', 'location', 'favorite_athletes', 'favorite_teams');
     }
 
     public function __clone()

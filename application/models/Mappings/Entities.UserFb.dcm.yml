@@ -13,3 +13,35 @@ Entities\UserFb:
     fbExpires:
       type: integer
       nullable: false
+    gender:
+      type: string
+      length: 20
+      nullable: true
+    locale:
+      type: string
+      length: 20
+      nullable: true
+    timezone:
+      type: integer
+      nullable: true
+    birthday:
+      type: string
+      length: 10
+      nullable: true
+    hometown:
+      type: string
+      length: 50
+      nullable: true
+    location:
+      type: string
+      length: 50
+      nullable: true
+    favorite_athletes:
+      type: string
+      length: 200
+      nullable: true
+    favorite_teams:
+      type: string
+      length: 200
+      nullable: true
+    

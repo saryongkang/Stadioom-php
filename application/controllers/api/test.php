@@ -52,6 +52,27 @@ class Test extends Stadioom_REST_Controller {
         }
     }
 
+    public function encoding_get() {
+        $this->output->set_header("HTTP/1.1 200 OK");
+        $this->output->set_content_type('text/html; charset=utf-8');
+
+        $result = "";
+
+        $data['name'] = 'Norú 복연';
+        $intermediate = $data['name'];
+        $result = $result . "original: " . $intermediate . "<br>";
+        $intermediate = utf8_encode($intermediate);
+        $result = $result . "utf8_encoded: " . $intermediate . "<br>";
+        $intermediate = json_encode($intermediate);
+        $result = $result . "json_encoded: " . $intermediate . "<br>";
+        $intermediate = json_decode($intermediate);
+        $result = $result . "json_decoded: " . $intermediate . "<br>";
+        $intermediate = utf8_decode($intermediate);
+        $result = $result . "utf8_encoded: " . $intermediate . "<br>";
+
+        $this->output->set_output($result);
+    }
+
 }
 
 ?>
