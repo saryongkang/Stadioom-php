@@ -29,26 +29,26 @@ class Fb extends Stadioom_REST_Controller {
         $accessToken = $this->post('accessToken');
 
         try {
-            $this->verifyToken($accessToken);
+            $id = $this->verifyToken($accessToken);
 
-            $this->UserDao->fbDeauthorize($this->post('fbId'));
+            $this->UserDao->fbDeauthorizeWithId($id);
         } catch (Exception $e) {
             $this->responseError($e);
         }
         $this->responseOk();
     }
-    
+
     public function invite_post() {
         $accessToken = $this->post('accessToken');
 
         try {
             $invitorId = $this->verifyToken($accessToken);
 
-            $this->UserDao->fbInvite($invitorId, $this->post('inviteeFbIds'));
+            $result = $this->UserDao->fbInvite($invitorId, $this->post('inviteeFbIds'));
+            $this->responseOk($result);
         } catch (Exception $e) {
             $this->responseError($e);
         }
-        $this->responseOk();
     }
 
 }

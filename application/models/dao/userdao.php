@@ -100,7 +100,12 @@ class UserDao extends CI_Model {
                 $user->setName($result['fullName']);
                 $user->setEmail($fbMe['email']);
                 $user->setGender($fbMe['gender']);
-                $user->setDob(new DateTime($fbMe['birthday']));
+                if (array_key_exists('birthday', $fbMe)) {
+                    $birthday = $fbMe['birthday'];
+                    if ($birthday != NULL) {
+                        $user->setDob(new DateTime($birthday));
+                    }
+                }
                 $user->setVerified(TRUE);
                 $user->setCreated(new DateTime());
                 $this->doctrine->em->persist($user);
@@ -158,30 +163,68 @@ class UserDao extends CI_Model {
         }
 
         // Update authorized field in User table.
-        $user->setFbAuthorized(FALSE);
-        $this->doctrine->em->persist($user);
-        $this->doctrine->em->flush();
+        if ($user->getFbAuthoried()) {
+            $user->setFbAuthorized(FALSE);
+            $this->doctrine->em->persist($user);
+            $this->doctrine->em->flush();
+        }
+    }
+
+    public function fbDeauthorizeWithId($id) {
+        if ($id == NULL) {
+            throw new Exception("Invalid ID.", 400);
+        }
+
+        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $id));
+        if ($user == null) {
+            throw new Exception("ID not found: " . $id, 404);
+        }
+
+        // Update authorized field in User table.
+        if ($user->getFbAuthorized()) {
+            $user->setFbAuthorized(FALSE);
+            $this->doctrine->em->persist($user);
+            $this->doctrine->em->flush();
+        }
     }
 
     public function fbInvite($invitorId, $inviteeFbIds) {
         // TODO: check whether the invitor is real.
         $invitedDate = new DateTime();
+        if ($inviteeFbIds == NULL) {
+            throw new Exception("At least one invitee is required.", 400);
+        }
+        $result;
         foreach ($inviteeFbIds as $fbId) {
+            if (!ctype_digit($fbId)) {
+                $result[$fbId] = "invalid ID.";
+                continue;
+            }
+            $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbId));
+            if ($user != NULL) {
+                $result[$fbId] = "already registered.";
+                continue;
+            }
+            $result[$fbId] = "invitation sent.";
             $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('inviteeFbId' => $fbId));
-            if ($inviteeFb == NULL) {
-                try {
-                    $inviteeFb = new Entities\InviteeFb();
-                    $inviteeFb->setInviteeFbId($fbId);
-                    $inviteeFb->setInvitorId($invitorId);
-                    $inviteeFb->setInvitedDate($invitedDate);
+            if ($inviteeFb != NULL) {
+                // already sent.
+                continue;
+            }
+            try {
+                $inviteeFb = new Entities\InviteeFb();
+                $inviteeFb->setInviteeFbId($fbId);
+                $inviteeFb->setInvitorId($invitorId);
+                $inviteeFb->setInvitedDate($invitedDate);
 
-                    $this->doctrine->em->persist($inviteeFb);
-                } catch (Exception $e) {
-                    // ignore (it happens if invition has been request by multiple clients simultaneously).
-                }
+                $this->doctrine->em->persist($inviteeFb);
+            } catch (Exception $e) {
+                // ignore (it happens if invition has been request by multiple clients simultaneously).
             }
         }
         $this->doctrine->em->flush();
+        
+        return $result;
     }
 
     public function invite($invitorId, $inviteeEmails, $invitationMessage) {
@@ -191,7 +234,7 @@ class UserDao extends CI_Model {
         if ($inviteeEmails == NULL) {
             throw new Exception("The 'inviteeEmails' MUST NOT be NULL.", 400);
         }
-        
+
         $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => 1));
 //        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
         if ($invitor == NULL) {
@@ -204,13 +247,13 @@ class UserDao extends CI_Model {
                 $result[$email] = 'invalid email.';
                 continue;
             }
-            
+
             $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
             if ($user != NULL) {
                 $result[$email] = "already registered.";
                 continue;
             }
-            
+
             $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $email));
             if ($invitee == NULL) {
                 try {
@@ -452,16 +495,36 @@ class UserDao extends CI_Model {
         $fbExpires = $currentDate->getTimeStamp() + $fbInfo['fbExpires'];
         $userFb->setFbExpires($fbExpires);
         $userFb->setGender($fbMe['gender']);
-        $userFb->setLocale($fbMe['locale']);
-        $userFb->setTimezone($fbMe['timezone']);
-        $userFb->setBirthday($fbMe['birthday']);
-        $hometown = $fbMe['hometown'];
-        if ($hometown != NULL) {
-            $userFb->setHometown($hometown['id'] . ' ' . $hometown['name']);
+
+        if (array_key_exists('locale', $fbMe)) {
+            $locale = $fbMe['locale'];
+            if ($locale != NULL) {
+                $userFb->setLocale($locale);
+            }
         }
-        $location = $fbMe['location'];
-        if ($location != NULL) {
-            $userFb->setLocation($location['id'] . ' ' . $location['name']);
+        if (array_key_exists('timezone', $fbMe)) {
+            $timezone = $fbMe['timezone'];
+            if ($timezone != NULL) {
+                $userFb->setTimezone($timezone);
+            }
+        }
+        if (array_key_exists('birthday', $fbMe)) {
+            $birthday = $fbMe['birthday'];
+            if ($birthday != NULL) {
+                $userFb->setBirthday($birthday);
+            }
+        }
+        if (array_key_exists('hometown', $fbMe)) {
+            $hometown = $fbMe['hometown'];
+            if ($hometown != NULL) {
+                $userFb->setHometown($hometown['id'] . ' ' . $hometown['name']);
+            }
+        }
+        if (array_key_exists('location', $fbMe)) {
+            $location = $fbMe['location'];
+            if ($location != NULL) {
+                $userFb->setLocation($location['id'] . ' ' . $location['name']);
+            }
         }
         if (array_key_exists('favorite_atheletes', $fbMe)) {
             // TODO: should be tested..

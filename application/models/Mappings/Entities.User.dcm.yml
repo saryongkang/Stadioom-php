@@ -40,7 +40,7 @@ Entities\User:
       nullable: true
     dob:
       type: datetime
-      nullable: false
+      nullable: true
     verified:
       type: boolean
       nullable: false

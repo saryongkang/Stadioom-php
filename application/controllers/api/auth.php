@@ -43,14 +43,14 @@ class Auth extends Stadioom_REST_Controller {
         $grantType = $this->post('grantType');
         $code = $this->post('code');
 
-        $user = $this->toUser($grantType, $code);
-        $user->setName($this->post('name'));
-        $user->setGender($this->post('gender'));
-        $dob = new DateTime();
-        $dob->setTimestamp($this->post('dob'));
-        $user->setDob($dob);
-
         try {
+            $user = $this->toUser($grantType, $code);
+            $user->setName($this->post('name'));
+            $user->setGender($this->post('gender'));
+            $dob = new DateTime();
+            $dob->setTimestamp($this->post('dob'));
+            $user->setDob($dob);
+
             $this->UserDao->signUp($user);
         } catch (Exception $e) {
             $this->responseError($e);
@@ -78,14 +78,15 @@ class Auth extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
     }
-    
+
     public function invite_post() {
         $accessToken = $this->post('accessToken');
 
         try {
             $invitorId = $this->verifyToken($accessToken);
 
-            $this->responseOk($this->UserDao->invite($invitorId, $this->post('inviteeEmails'), $this->post('invitationMessage')));
+            $result = $this->UserDao->invite($invitorId, $this->post('inviteeEmails'), $this->post('invitationMessage'));
+            $this->responseOk($result);
         } catch (Exception $e) {
             $this->responseError($e);
         }

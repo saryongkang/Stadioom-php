@@ -15,7 +15,7 @@ class Stadioom_REST_Controller extends REST_Controller {
         if ($res != null) {
             $this->response($res, 200);
         }
-        $this->responseOk($this->DEFAULT_SUCCEED_MSG);
+        $this->response($this->DEFAULT_SUCCEED_MSG, 200);
     }
 
     protected function responseError($e) {
@@ -27,7 +27,7 @@ class Stadioom_REST_Controller extends REST_Controller {
      * Then returns the token owner's user ID.
      * 
      * @param string $accessToken 
-     * @returns string The invitor's ID.
+     * @returns string The user's ID.
      */
     protected function verifyToken($accessToken) {
         if ($accessToken == NULL) {
@@ -46,7 +46,7 @@ class Stadioom_REST_Controller extends REST_Controller {
         $curDate = new DateTime();
         $curDate = $curDate->getTimestamp();
         if ($expired != 0 && $expired < $curDate) {
-            throw new Exception("Token expired.", 406);
+            throw new Exception("Token expired.", 401);
         }
 
         return $userId;
