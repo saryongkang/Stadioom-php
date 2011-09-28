@@ -13,6 +13,124 @@ class Test extends Stadioom_REST_Controller {
         $this->load->model('dao/UserDao');
     }
 
+    private function _post($uri, $param) {
+        $this->curl->create($uri);
+        $this->curl->post($param);
+        return $this->curl->execute();
+    }
+
+    private function _get($uri, $param) {
+        return $this->curl->simple_get($uri, $param);
+    }
+
+    private function _getGrantCode($email, $password) {
+        return $this->_get("http://stadioom:8080/api/test/base64_encode", array('email' => $email,
+                    'password' => $password));
+    }
+    
+    protected function assertArray($result, $key, $value) {
+        $json = json_decode($result);
+        if (!array_key_exists($key, $json)) {
+            $this->response("[key] expected:" . $key . ", actual:" . $result);
+        }
+        if ($json->$key != $value) {
+            $this->response("[key:" . $key . "] expected:" . $value . ", actual:" . $json->$key);
+        }
+    } 
+    protected function assertEquals($result, $expected) {
+        $actual = json_decode($result);
+        if ($actual != $expected) {
+            $this->response("[key] expected:" . $expected . ", actual:" . $actual);
+        }
+    }
+    protected function assertArray_NotNull($result, $key) {
+        $json = json_decode($result);
+        if ($json->$key == NULL) {
+            $this->response("[key:" . $key . "] expected: Not NULL");
+        }
+    }
+    
+    public function auth_get() {
+        // sign up with 'invalid' email -> failed
+        $grandCode = $this->_getGrantCode('wegra.lee', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signUp", array('grantType' => 'authorization_code',
+            'code' => $grandCode,
+            'name' => 'Wegra',
+            'gender' => 'male',
+            'dob' => 1232123222));
+        $this->assertArray($result, 'error_code', 400);
+
+        // sign up with email_1
+        $grandCode = $this->_getGrantCode('wegra.lee@gmail.com', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signUp", array('grantType' => 'authorization_code',
+            'code' => $grandCode,
+            'name' => 'Wegra',
+            'gender' => 'male',
+            'dob' => 1232123222));
+        $this->assertEquals($result, 'OK');
+
+        // sign up with email_2
+        $grandCode = $this->_getGrantCode('wegra@seedshock.com', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signUp", array('grantType' => 'authorization_code',
+            'code' => $grandCode,
+            'name' => 'Wegra',
+            'gender' => 'male',
+            'dob' => 1232123222));
+        $this->assertEquals($result, 'OK');
+        
+        // sign up with email_2 -> failed
+        $grandCode = $this->_getGrantCode('wegra@seedshock.com', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signUp", array('grantType' => 'authorization_code',
+            'code' => $grandCode,
+            'name' => 'Wegra',
+            'gender' => 'male',
+            'dob' => 1232123222));
+        $this->assertArray($result, 'error_code', 406);
+
+        // sign in with email_2
+        $grandCode = $this->_getGrantCode('wegra@seedshock.com', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signIn", array('grantType' => 'authorization_code',
+            'code' => $grandCode));
+        $this->assertArray_NotNull($result, 'accessToken');
+
+        // sign in with email_2 w/ 'invalid' password.
+        $grandCode = $this->_getGrantCode('wegra@seedshock.com', 'invalid_password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signIn", array('grantType' => 'authorization_code',
+            'code' => $grandCode));
+        $this->assertArray($result, 'error_code', 403);
+
+        // sign in with 'unregistered' email.
+        $grandCode = $this->_getGrantCode('unregistered@seedshock.com', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signIn", array('grantType' => 'authorization_code',
+            'code' => $grandCode));
+        $this->assertArray($result, 'error_code', 404);
+        
+        // sign in with email_1
+        $grandCode = $this->_getGrantCode('wegra.lee@gmail.com', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signIn", array('grantType' => 'authorization_code',
+            'code' => $grandCode));
+        $this->assertArray_NotNull($result, 'accessToken');
+        
+        // now.. keep the access token of email_1 for later tests.
+        $json = json_decode($result);
+        $accessToken = $json->accessToken;
+        
+        // invite 'invalid' email -> invalid
+        // invite email_2 -> already registered
+        // invite email_3 -> succeed.
+        // invite all of them -> ..
+        echo $result;
+    }
+
+    public function testStadioomFb_get() {
+        // connect with 'invalid' fbId -> failed
+        // connect with wegra.lee's fbId
+        // connect with wegra.lee's fbId
+        // now.. keep the access token of wegra.lee's
+        // invite 'invalid(non-integer)' fbId -> failed
+        // invite own '1', '2', and own fbId -> already registered
+    }
+
     public function base64_encode_get() {
         $msg = $this->get('email') . ":" . $this->get('password');
 

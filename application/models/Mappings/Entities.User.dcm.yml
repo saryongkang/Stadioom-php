@@ -16,8 +16,12 @@ Entities\User:
       nullable: true
     fbLinked:
       type: boolean
+      nullable: false
+      dafault: 0
     fbAuthorized:
       type: boolean
+      nullable: false
+      dafault: 0
     password:
       type: string
       length: 32
@@ -39,6 +43,8 @@ Entities\User:
       nullable: false
     verified:
       type: boolean
+      nullable: false
+      dafault: 0
     created:
       type: datetime
       nullable: false

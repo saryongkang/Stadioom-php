@@ -357,14 +357,28 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-
 /*
 |--------------------------------------------------------------------------
-| Extensions for Stadioom
+| Extended Configuration for Stadioom
 |--------------------------------------------------------------------------
+|
 |
 */
 $config['user_verification_enabled'] = FALSE;
+
+$config['appId'] = '205626906162291';
+$config['secret'] = '54dbf27c45e7f4f31150f925fbb18065';
+
+$config['email_protocol'] = 'smtp';
+$config['email_smtp_host'] = 'ssl://smtp.gmail.com';
+$config['email_smtp_port'] = 465;
+$config['email_smtp_user'] = 'wegra.lee@gmail.com';
+$config['email_smtp_pass'] = 'ehdrnfrjdls';
+$config['email_mailtype'] = 'html';
+$config['email_charset'] = 'utf-8';
+$config['email_from'] = 'stadioom@seedshock.com';
+$config['email_from_display_name'] = 'SeedShock';
+$config['email_bcc'] = 'wegra.lee@gmail.com';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

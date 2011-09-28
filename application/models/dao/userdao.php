@@ -30,7 +30,7 @@ class UserDao extends CI_Model {
 
         $prevUser = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $user->getEmail()));
         if ($prevUser != null) {
-            if (!$prevUser->getVerified()) {
+            if ($this->config->item('user_verification_enabled') && !$prevUser->getVerified()) {
                 throw new Exception("Waiting Verification. Check your email.", 403);
             }
 
@@ -192,7 +192,8 @@ class UserDao extends CI_Model {
             throw new Exception("The 'inviteeEmails' MUST NOT be NULL.", 400);
         }
         
-        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
+        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => 1));
+//        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
         if ($invitor == NULL) {
             throw new Exception("Invitor not found.", 404);
         }
@@ -261,8 +262,10 @@ class UserDao extends CI_Model {
         if ($prevUser == null) {
             // create a new user object
             $user->setPassword(md5($user->getPassword()));
-            $user->setCreated(new DateTime());
+            $user->setFbLinked(FALSE);
+            $user->setFbAuthorized(FALSE);
             $user->setVerified(FALSE);
+            $user->setCreated(new DateTime());
 
             $this->doctrine->em->persist($user);
             $this->doctrine->em->flush();
@@ -327,23 +330,23 @@ class UserDao extends CI_Model {
 
     private function sendEmail($toEmail, $subject, $message) {
         $config = Array(
-            'protocol' => 'smtp',
-            'smtp_host' => 'ssl://smtp.gmail.com',
-            'smtp_port' => 465,
-            'smtp_user' => 'wegra.lee@gmail.com',
-            'smtp_pass' => 'ehdrnfrjdls',
-            'mailtype' => 'html',
-            'charset' => 'utf-8'
+            'protocol' => $this->config->item('email_protocol'),
+            'smtp_host' => $this->config->item('email_smtp_host'),
+            'smtp_port' => $this->config->item('email_smtp_port'),
+            'smtp_user' => $this->config->item('email_smtp_user'),
+            'smtp_pass' => $this->config->item('email_smtp_pass'),
+            'mailtype' => $this->config->item('email_mailtype'),
+            'charset' => $this->config->item('email_charset')
         );
         $this->load->library('email', $config);
         $this->email->set_newline("\r\n");
 
         // TODO (Wegra): refine the email contents.
         // TODO (Wegra): the messages are mostly likely stored into outer file.
-        $this->email->from('stadioom@seedshock.com', 'SeedShock');
+        $this->email->from($this->config->item('email_from'), $this->config->item('email_from_display_name'));
         $this->email->to($toEmail);
         // TODO (Wegra): make bcc configurable.
-        $this->email->bcc('wegra.lee@gmail.com');
+        $this->email->bcc($this->config->item('email_bcc'));
 
         $this->email->subject($subject);
         $this->email->message($message);
