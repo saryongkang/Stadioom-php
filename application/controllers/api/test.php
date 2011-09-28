@@ -30,9 +30,6 @@ class Test extends Stadioom_REST_Controller {
     
     protected function assertArray($result, $key, $value) {
         $json = json_decode($result);
-        if (!array_key_exists($key, $json)) {
-            $this->response("[key] expected:" . $key . ", actual:" . $result);
-        }
         if ($json->$key != $value) {
             $this->response("[key:" . $key . "] expected:" . $value . ", actual:" . $json->$key);
         }
@@ -51,6 +48,15 @@ class Test extends Stadioom_REST_Controller {
     }
     
     public function auth_get() {
+        // sign up with not-implemented authorization code. -> failed
+        $grandCode = $this->_getGrantCode('wegra.lee', 'password');
+        $result = $this->_post("http://stadioom:8080/api/auth/signUp", array('grantType' => 'non-authorization_code',
+            'code' => $grandCode,
+            'name' => 'Wegra',
+            'gender' => 'male',
+            'dob' => 1232123222));
+        $this->assertArray($result, 'error_code', 501);
+        
         // sign up with 'invalid' email -> failed
         $grandCode = $this->_getGrantCode('wegra.lee', 'password');
         $result = $this->_post("http://stadioom:8080/api/auth/signUp", array('grantType' => 'authorization_code',
@@ -78,7 +84,7 @@ class Test extends Stadioom_REST_Controller {
             'dob' => 1232123222));
         $this->assertEquals($result, 'OK');
         
-        // sign up with email_2 -> failed
+        // sign up with email_2 (already registered) -> failed
         $grandCode = $this->_getGrantCode('wegra@seedshock.com', 'password');
         $result = $this->_post("http://stadioom:8080/api/auth/signUp", array('grantType' => 'authorization_code',
             'code' => $grandCode,
@@ -93,13 +99,13 @@ class Test extends Stadioom_REST_Controller {
             'code' => $grandCode));
         $this->assertArray_NotNull($result, 'accessToken');
 
-        // sign in with email_2 w/ 'invalid' password.
+        // sign in with email_2 w/ 'invalid' password. -> failed
         $grandCode = $this->_getGrantCode('wegra@seedshock.com', 'invalid_password');
         $result = $this->_post("http://stadioom:8080/api/auth/signIn", array('grantType' => 'authorization_code',
             'code' => $grandCode));
         $this->assertArray($result, 'error_code', 403);
 
-        // sign in with 'unregistered' email.
+        // sign in with 'unregistered' email. -> failed
         $grandCode = $this->_getGrantCode('unregistered@seedshock.com', 'password');
         $result = $this->_post("http://stadioom:8080/api/auth/signIn", array('grantType' => 'authorization_code',
             'code' => $grandCode));
@@ -116,10 +122,35 @@ class Test extends Stadioom_REST_Controller {
         $accessToken = $json->accessToken;
         
         // invite 'invalid' email -> invalid
+        $result = $this->_post("http://stadioom:8080/api/auth/invite", array('accessToken' => $accessToken,
+            'inviteeEmails' => array('invalid.email.com')));
+        $this->assertArray($result, 'invalid.email.com', 'invalid email.');
+        
         // invite email_2 -> already registered
+        $result = $this->_post("http://stadioom:8080/api/auth/invite", array('accessToken' => $accessToken,
+            'inviteeEmails' => array('wegra@seedshock.com'), 'invitationMessage' => 'This is a custom message for test.'));
+        $this->assertArray($result, 'wegra@seedshock.com', 'already registered.');
+        
         // invite email_3 -> succeed.
+        $result = $this->_post("http://stadioom:8080/api/auth/invite", array('accessToken' => $accessToken,
+            'inviteeEmails' => array('xegra.lee@gmail.com'), 'invitationMessage' => 'This is a custom message for test.'));
+        $this->assertArray($result, 'xegra.lee@gmail.com', 'invitation sent.');
+        
+        // invite nobody -> failed.
+        $result = $this->_post("http://stadioom:8080/api/auth/invite", array('accessToken' => $accessToken,
+            'invitationMessage' => 'This is a custom message for test.'));
+        $this->assertArray($result, 'error_code', 400);
+        
         // invite all of them -> ..
-        echo $result;
+        // invite email_2 -> already registered
+        $result = $this->_post("http://stadioom:8080/api/auth/invite", array('accessToken' => $accessToken,
+            'inviteeEmails' => array('wegra@seedshock.com', 'invalid.email.com', 'xegra.lee@gmail.com'), 'invitationMessage' => 'This is a custom message for test.'
+            ));
+        $this->assertArray($result, 'invalid.email.com', 'invalid email.');
+        $this->assertArray($result, 'wegra@seedshock.com', 'already registered.');
+        $this->assertArray($result, 'xegra.lee@gmail.com', 'invitation sent.');
+        
+        echo "All Tests Passed.";
     }
 
     public function testStadioomFb_get() {
