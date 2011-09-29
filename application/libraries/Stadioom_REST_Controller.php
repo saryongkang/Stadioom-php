@@ -1,10 +1,12 @@
 <?php
+
 require(APPPATH . '/libraries/REST_Controller.php');
 
 /**
  * Common REST controller for Stadioom REST APIs.
  */
 class Stadioom_REST_Controller extends REST_Controller {
+
     private $DEFAULT_SUCCEED_MSG = "OK";
 
     private function ex2Array($e) {
@@ -51,20 +53,50 @@ class Stadioom_REST_Controller extends REST_Controller {
 
         return $userId;
     }
-    
+
 }
 
-
-
 class Test_REST_Controller extends Stadioom_REST_Controller {
+
+    protected function testPost($desc, $uri, $param) {
+        echo '| -----------------------------------------------------------------------------<br>';
+        echo '| ' . $desc . '<br>';
+        echo '| -----------------------------------------------------------------------------<br>';
+
+        echo '| [REQUEST] - POST<br>';
+        echo '| URI: ' . $this->config->item('base_url') . $uri . '<br>';
+        echo '| PARAM {<br>' . $this->arrayToString($param) . '| }<br>';
+        $result = $this->sendPost($uri, $param);
+        echo '| [RESPONSE] ' . $this->arrayToString($result) . '<br>';
+        echo '| -----------------------------------------------------------------------------<br>';
+
+        return $result;
+    }
+
+    protected function testGet($desc, $uri, $param) {
+        echo '| -----------------------------------------------------------------------------<br>';
+        echo '| ' . $desc . '<br>';
+        echo '| -----------------------------------------------------------------------------<br>';
+
+        echo '| [REQUEST] - GET<br>';
+        echo '| URI: ' . $this->config->item('base_url') . $uri . '<br>';
+        echo '| PARAM {<br>' . $this->arrayToString($param) . '}<br>';
+        $result = $this->sendGet($uri, $param);
+        echo '| [RESPONSE] ' . $this->arrayToString($result) . '<br>';
+
+        return $result;
+    }
 
     protected function sendPost($uri, $param) {
         $this->curl->create($this->config->item('base_url') . $uri);
         $this->curl->post($param);
+
         return $this->curl->execute();
     }
 
     protected function sendGet($uri, $param = NULL) {
+        $this->last_request = '[GET] ' . $this->config->item('base_url') . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
+
         return $this->curl->simple_get($this->config->item('base_url') . $uri, $param);
     }
 
@@ -89,7 +121,7 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
     protected function assertArray_NotNull($result, $key) {
         $json = json_decode($result);
         if ($json->$key == NULL) {
-            throw new Exception("[key:" . $key . "] expected: Not NULL");
+            throw new Exception("[key:" . $key . "] expected: Not NULL." . "\nResult: " . $result);
         }
     }
 
@@ -118,6 +150,29 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         }
     }
 
-}
+    protected function arrayToString($array) {
+        if ($array == NULL) {
+            return "NULL";
+        }
+        if (!is_array($array)) {
+            return $array;
+        }
 
-?>
+        $result = '';
+
+        $keys = array_keys($array);
+        foreach ($keys as $key) {
+            $value = $array[$key];
+            if (is_array($value)) {
+                $result = $result . '| ' . $key . ': {<br>';
+                $result = $result . $this->arrayToString($value);
+                $result = $result . '| }<br>';
+            } else {
+                $result = $result . '| ' . $key . ': ' . $array[$key] . '<br>';
+            }
+        }
+
+        return $result;
+    }
+
+}
