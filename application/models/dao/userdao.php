@@ -475,7 +475,7 @@ class UserDao extends CI_Model {
      */
     private function isValidName(&$name) {
         $length = strlen($name);
-        return $length == 0 || ($length > 4 && $length <= 20);
+        return $length == 0 || ($length > 3);
     }
 
     /**
