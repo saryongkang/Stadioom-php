@@ -6,6 +6,11 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
  * Contains stuffs for just testing.
  */
 class Auth extends Test_REST_Controller {
+    public function __construct() {
+        parent::__construct();
+        
+        force_ssl();
+    }
 
     public function all_get() {
         try {

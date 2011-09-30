@@ -7,6 +7,12 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
  */
 class Fb extends Test_REST_Controller {
 
+    function __construct() {
+        parent::__construct();
+        if (function_exists('force_ssl'))
+            remove_ssl();
+    }
+
     public function all_get() {
         try {
             $result = $this->testPost("connect with an 'invalid' Facebook account.", "api/fb/connect", array('fbId' => '111', 'fbAccessToken' => 'bypass me.', 'fbExpires' => 0));

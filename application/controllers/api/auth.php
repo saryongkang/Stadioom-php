@@ -8,6 +8,8 @@ class Auth extends Stadioom_REST_Controller {
         parent::__construct();
 
         $this->load->model('dao/UserDao');
+        
+        force_ssl();
     }
 
     /**
