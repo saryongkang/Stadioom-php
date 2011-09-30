@@ -28,7 +28,7 @@ Entities\User:
       nullable: true
     name:
       type: string
-      length: 50
+      length: 100
       nullable: false
     email:
       type: string

@@ -57,8 +57,10 @@ class Stadioom_REST_Controller extends REST_Controller {
 }
 
 class Test_REST_Controller extends Stadioom_REST_Controller {
+    protected $last_request = null;
 
     protected function testPost($desc, $uri, $param) {
+        echo '<div>';
         echo '| -----------------------------------------------------------------------------<br>';
         echo '| ' . $desc . '<br>';
         echo '| -----------------------------------------------------------------------------<br>';
@@ -69,11 +71,13 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         $result = $this->sendPost($uri, $param);
         echo '| [RESPONSE] ' . $this->arrayToString($result) . '<br>';
         echo '| -----------------------------------------------------------------------------<br>';
+        echo '</div>';
 
         return $result;
     }
 
     protected function testGet($desc, $uri, $param) {
+        echo '<div>';
         echo '| -----------------------------------------------------------------------------<br>';
         echo '| ' . $desc . '<br>';
         echo '| -----------------------------------------------------------------------------<br>';
@@ -83,11 +87,13 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         echo '| PARAM {<br>' . $this->arrayToString($param) . '}<br>';
         $result = $this->sendGet($uri, $param);
         echo '| [RESPONSE] ' . $this->arrayToString($result) . '<br>';
+        echo '</div>';
 
         return $result;
     }
 
     protected function sendPost($uri, $param) {
+        $this->last_request = '[POST] ' . $this->config->item('base_url') . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
         $this->curl->create($this->config->item('base_url') . $uri);
         $this->curl->post($param);
 
