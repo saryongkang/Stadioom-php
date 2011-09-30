@@ -62,6 +62,11 @@ class User
      */
     private $created;
 
+    /**
+     * @var datetime $lastUpdated
+     */
+    private $lastUpdated;
+
 
     /**
      * Get id
@@ -271,5 +276,25 @@ class User
     public function getCreated()
     {
         return $this->created;
+    }
+
+    /**
+     * Set lastUpdated
+     *
+     * @param datetime $lastUpdated
+     */
+    public function setLastUpdated($lastUpdated)
+    {
+        $this->lastUpdated = $lastUpdated;
+    }
+
+    /**
+     * Get lastUpdated
+     *
+     * @return datetime $lastUpdated
+     */
+    public function getLastUpdated()
+    {
+        return $this->lastUpdated;
     }
 }

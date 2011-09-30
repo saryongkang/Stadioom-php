@@ -89,7 +89,7 @@ class UserDao extends CI_Model {
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
 
-                $this->doctrine->em->persist($user);
+                $this->persistUser($user);
                 $this->doctrine->em->flush();
             } else {
                 // create user account.
@@ -108,7 +108,7 @@ class UserDao extends CI_Model {
                 }
                 $user->setVerified(TRUE);
                 $user->setCreated(new DateTime());
-                $this->doctrine->em->persist($user);
+                $this->persistUser($user);
                 $this->doctrine->em->flush();
 
                 $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
@@ -136,7 +136,7 @@ class UserDao extends CI_Model {
             if (!$user->getFbAuthorized()) {
                 $user->setFbAuthorized(TRUE);
 
-                $this->doctrine->em->persist($user);
+                $this->persistUser($user);
                 $this->doctrine->em->flush();
             }
         }
@@ -165,7 +165,7 @@ class UserDao extends CI_Model {
         // Update authorized field in User table.
         if ($user->getFbAuthoried()) {
             $user->setFbAuthorized(FALSE);
-            $this->doctrine->em->persist($user);
+            $this->persistUser($user);
             $this->doctrine->em->flush();
         }
     }
@@ -183,7 +183,7 @@ class UserDao extends CI_Model {
         // Update authorized field in User table.
         if ($user->getFbAuthorized()) {
             $user->setFbAuthorized(FALSE);
-            $this->doctrine->em->persist($user);
+            $this->persistUser($user);
             $this->doctrine->em->flush();
         }
     }
@@ -310,7 +310,7 @@ class UserDao extends CI_Model {
             $user->setVerified(FALSE);
             $user->setCreated(new DateTime());
 
-            $this->doctrine->em->persist($user);
+            $this->persistUser($user);
             $this->doctrine->em->flush();
 
             if ($this->config->item('user_verification_enabled')) {
@@ -417,7 +417,7 @@ class UserDao extends CI_Model {
             $user->setVerified(1);
 
             $this->doctrine->em->beginTransaction();
-            $this->doctrine->em->persist($user);
+            $this->persistUser($user);
             $this->doctrine->em->remove($userVerification);
             $this->doctrine->em->flush();
             $this->doctrine->em->commit();
@@ -495,6 +495,7 @@ class UserDao extends CI_Model {
         $fbExpires = $currentDate->getTimeStamp() + $fbInfo['fbExpires'];
         $userFb->setFbExpires($fbExpires);
         $userFb->setGender($fbMe['gender']);
+        
 
         if (array_key_exists('locale', $fbMe)) {
             $locale = $fbMe['locale'];
@@ -544,6 +545,10 @@ class UserDao extends CI_Model {
         $this->doctrine->em->flush();
     }
 
+    private function persistUser($user) {
+        $user->setLastUpdated(new DateTime());
+        $this->doctrine->em->persist($user);
+    }
 }
 
 ?>

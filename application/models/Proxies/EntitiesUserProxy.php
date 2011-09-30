@@ -162,10 +162,22 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::getCreated();
     }
 
+    public function setLastUpdated($lastUpdated)
+    {
+        $this->__load();
+        return parent::setLastUpdated($lastUpdated);
+    }
+
+    public function getLastUpdated()
+    {
+        $this->__load();
+        return parent::getLastUpdated();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'fbId', 'fbLinked', 'fbAuthorized', 'password', 'name', 'email', 'gender', 'dob', 'verified', 'created');
+        return array('__isInitialized__', 'id', 'fbId', 'fbLinked', 'fbAuthorized', 'password', 'name', 'email', 'gender', 'dob', 'verified', 'created', 'lastUpdated');
     }
 
     public function __clone()
