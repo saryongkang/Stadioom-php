@@ -27,6 +27,24 @@ class Auth extends Test_REST_Controller {
             $this->assertArray($result, 'error_code', 400);
             echo '=> PASSED.<br><br>';
 
+            $grantCode = $this->generateGrantCode('wegra.lee', 'password');
+            $result = $this->testPost("sign up with a 'too short(length = 3)' name", "api/auth/signUp", array('grantType' => 'authorization_code',
+                'code' => $grantCode,
+                'name' => '123',
+                'gender' => 'female',
+                'dob' => 1232123222));
+            $this->assertArray($result, 'error_code', 400);
+            echo '=> PASSED.<br><br>';
+
+            $grantCode = $this->generateGrantCode('wegra.lee', 'password');
+            $result = $this->testPost("sign up with a 'too long(length = 101)' name", "api/auth/signUp", array('grantType' => 'authorization_code',
+                'code' => $grantCode,
+                'name' => 'name_----1---------2---------3---------4---------5---------6---------7---------8---------9---------0-',
+                'gender' => 'male',
+                'dob' => 1232123222));
+            $this->assertArray($result, 'error_code', 400);
+            echo '=> PASSED.<br><br>';
+
             // get valid test accounts.
             $testUser1 = $this->createTestUser();
             $testUser2 = $this->createTestUser();

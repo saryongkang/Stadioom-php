@@ -297,7 +297,7 @@ class UserDao extends CI_Model {
             throw new Exception("Invalid password (> 5).", 400);
         }
         if (!$this->isValidName($user->getName())) {
-            throw new Exception("Invalid name (> 3).", 400);
+            throw new Exception("Invalid name (3 < name <= 100).", 400);
         }
 
         $prevUser = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $user->getEmail()));
@@ -465,7 +465,7 @@ class UserDao extends CI_Model {
      */
     private function isValidPassword(&$password) {
         $length = strlen($password);
-        return $length > 5 && $length <= 20;
+        return 5 < $length && $length <= 20;
     }
 
     /**
@@ -475,7 +475,7 @@ class UserDao extends CI_Model {
      */
     private function isValidName(&$name) {
         $length = strlen($name);
-        return $length == 0 || ($length > 3);
+        return $length == 0 || (3 < $length && $length <= 100);
     }
 
     /**
