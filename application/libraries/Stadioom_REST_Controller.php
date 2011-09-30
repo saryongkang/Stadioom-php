@@ -33,7 +33,7 @@ class Stadioom_REST_Controller extends REST_Controller {
      */
     protected function verifyToken($accessToken) {
         if ($accessToken == NULL) {
-            throw new Exception("Invalid access token.", 400);
+            throw new Exception("Invalid access token. (" . $accessToken . ")", 400);
         }
         $this->load->library('encrypt');
         $decodedToken = $this->encrypt->decode($accessToken);
@@ -42,7 +42,7 @@ class Stadioom_REST_Controller extends REST_Controller {
         $expired = strtok(":");
 
         if ($magicCode != "SeedShock" || $userId <= 0) {
-            throw new Exception("Invaild access token.", 400);
+            throw new Exception("Invaild access token. (" . $magidCode . ':' . $userId . ':' . $expired . ")", 400);
         }
 
         $curDate = new DateTime();
