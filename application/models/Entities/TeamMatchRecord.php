@@ -28,6 +28,11 @@ class TeamMatchRecord
     private $matchId;
 
     /**
+     * @var integer $brandId
+     */
+    private $brandId;
+
+    /**
      * @var integer $score
      */
     private $score;
@@ -141,6 +146,26 @@ class TeamMatchRecord
     public function getMatchId()
     {
         return $this->matchId;
+    }
+
+    /**
+     * Set brandId
+     *
+     * @param integer $brandId
+     */
+    public function setBrandId($brandId)
+    {
+        $this->brandId = $brandId;
+    }
+
+    /**
+     * Get brandId
+     *
+     * @return integer $brandId
+     */
+    public function getBrandId()
+    {
+        return $this->brandId;
     }
 
     /**

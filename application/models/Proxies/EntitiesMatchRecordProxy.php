@@ -66,6 +66,18 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getSportId();
     }
 
+    public function setBrandId($brandId)
+    {
+        $this->__load();
+        return parent::setBrandId($brandId);
+    }
+
+    public function getBrandId()
+    {
+        $this->__load();
+        return parent::getBrandId();
+    }
+
     public function setMatchType($matchType)
     {
         $this->__load();
@@ -76,6 +88,18 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
     {
         $this->__load();
         return parent::getMatchType();
+    }
+
+    public function setLeaugeType($leaugeType)
+    {
+        $this->__load();
+        return parent::setLeaugeType($leaugeType);
+    }
+
+    public function getLeaugeType()
+    {
+        $this->__load();
+        return parent::getLeaugeType();
     }
 
     public function setStarted($started)
@@ -177,7 +201,7 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'matchType', 'started', 'ended', 'canceled', 'location', 'latitude', 'longitude', 'created', 'lastUpdated');
+        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'matchType', 'leaugeType', 'started', 'ended', 'canceled', 'location', 'latitude', 'longitude', 'created', 'lastUpdated');
     }
 
     public function __clone()

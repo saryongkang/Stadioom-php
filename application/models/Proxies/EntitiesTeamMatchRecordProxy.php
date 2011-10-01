@@ -78,6 +78,18 @@ class EntitiesTeamMatchRecordProxy extends \Entities\TeamMatchRecord implements 
         return parent::getMatchId();
     }
 
+    public function setBrandId($brandId)
+    {
+        $this->__load();
+        return parent::setBrandId($brandId);
+    }
+
+    public function getBrandId()
+    {
+        $this->__load();
+        return parent::getBrandId();
+    }
+
     public function setScore($score)
     {
         $this->__load();
@@ -189,7 +201,7 @@ class EntitiesTeamMatchRecordProxy extends \Entities\TeamMatchRecord implements 
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'teamId', 'sportId', 'matchId', 'score', 'started', 'ended', 'canceled', 'location', 'latitude', 'longitude', 'created', 'lastUpdated');
+        return array('__isInitialized__', 'id', 'teamId', 'sportId', 'matchId', 'brandId', 'score', 'started', 'ended', 'canceled', 'location', 'latitude', 'longitude', 'created', 'lastUpdated');
     }
 
     public function __clone()

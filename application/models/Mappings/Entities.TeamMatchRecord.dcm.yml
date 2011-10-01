@@ -15,6 +15,9 @@ Entities\TeamMatchRecord:
     matchId:
       type: integer
       nullable: false
+    brandId:
+      type: integer
+      nullable: true
     score:
       type: integer
       nullable: false

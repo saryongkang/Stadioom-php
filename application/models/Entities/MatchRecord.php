@@ -23,9 +23,19 @@ class MatchRecord
     private $sportId;
 
     /**
+     * @var integer $brandId
+     */
+    private $brandId;
+
+    /**
      * @var integer $matchType
      */
     private $matchType;
+
+    /**
+     * @var integer $leaugeType
+     */
+    private $leaugeType;
 
     /**
      * @var datetime $started
@@ -119,6 +129,26 @@ class MatchRecord
     }
 
     /**
+     * Set brandId
+     *
+     * @param integer $brandId
+     */
+    public function setBrandId($brandId)
+    {
+        $this->brandId = $brandId;
+    }
+
+    /**
+     * Get brandId
+     *
+     * @return integer $brandId
+     */
+    public function getBrandId()
+    {
+        return $this->brandId;
+    }
+
+    /**
      * Set matchType
      *
      * @param integer $matchType
@@ -136,6 +166,26 @@ class MatchRecord
     public function getMatchType()
     {
         return $this->matchType;
+    }
+
+    /**
+     * Set leaugeType
+     *
+     * @param integer $leaugeType
+     */
+    public function setLeaugeType($leaugeType)
+    {
+        $this->leaugeType = $leaugeType;
+    }
+
+    /**
+     * Get leaugeType
+     *
+     * @return integer $leaugeType
+     */
+    public function getLeaugeType()
+    {
+        return $this->leaugeType;
     }
 
     /**

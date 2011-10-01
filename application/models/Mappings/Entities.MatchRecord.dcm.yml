@@ -12,9 +12,15 @@ Entities\MatchRecord:
     sportId:
       type: integer
       nullable: false
-    matchType:
+    brandId:
       type: integer
+      nullable: true
+    matchType:
+      type: integer # team or single
       nullable: false
+    leaugeType:
+      type: integer # amature, pro(general), or specific league. 
+      nullable: true
     started:
       type: datetime
       nullable: true
