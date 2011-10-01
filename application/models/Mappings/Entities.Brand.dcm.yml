@@ -1,0 +1,28 @@
+Entities\Brand:
+  type: entity
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 32
+      nullable: false
+    description:
+      type: string
+      length: 500
+      nullable: true
+    weight:
+      type: integer
+      nullable: false
+    firstRevision:
+      type: integer
+      nullable: false
+    latestRevision:
+      type: integer
+      nullable: false
+    updateFlag:
+      type: integer
+      nullable: false

@@ -1,0 +1,23 @@
+Entities\Team:
+  type: entity
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 32
+      nullable: false
+    description:
+      type: string
+      length: 500
+      nullable: true
+    created:
+      type: datetime
+      nullable: false
+    lastUpdated:
+      type: datetime
+      nullable: false
+      

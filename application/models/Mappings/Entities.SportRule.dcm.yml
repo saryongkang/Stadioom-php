@@ -1,0 +1,12 @@
+Entities\SportRule:
+  type: entity
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      nullable: 50
+      
