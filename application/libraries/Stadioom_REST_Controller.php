@@ -57,53 +57,53 @@ class Stadioom_REST_Controller extends REST_Controller {
 }
 
 class Test_REST_Controller extends Stadioom_REST_Controller {
+
     protected $last_request = null;
 
-    protected function testPost($desc, $uri, $param) {
+    protected function runTest($desc, $api, $param, $httpMethod = 'POST') {
+        $uri = $this->config->item('base_url') . $api;
+
         echo '<div>';
         echo '| -----------------------------------------------------------------------------<br>';
         echo '| ' . $desc . '<br>';
         echo '| -----------------------------------------------------------------------------<br>';
 
-        echo '| [REQUEST] - POST<br>';
-        echo '| URI: ' . $this->config->item('base_url') . $uri . '<br>';
+        echo '| [REQUEST] - ' . $httpMethod . '<br>';
+        echo '| URI: ' . $uri . '<br>';
         echo '| PARAM {<br>' . $this->arrayToString($param) . '| }<br>';
-        $result = $this->sendPost($uri, $param);
+        switch ($httpMethod) {
+            case "POST":
+                $result = $this->sendPost($uri, $param);
+                break;
+            case "GET":
+                $result = $this->sendGet($uri, $param);
+                break;
+            case "PUT":
+                throw new Exception("Not Implemented: " . $httpMethod);
+            case "DELETE":
+                throw new Exception("Not Implemented: " . $httpMethod);
+            default:
+                throw new Exception("Unknown HTTP method: " . $httpMethod);
+        }
         echo '| [RESPONSE] ' . $this->arrayToString($result) . '<br>';
         echo '| -----------------------------------------------------------------------------<br>';
-        echo '</div>';
-
-        return $result;
-    }
-
-    protected function testGet($desc, $uri, $param) {
-        echo '<div>';
-        echo '| -----------------------------------------------------------------------------<br>';
-        echo '| ' . $desc . '<br>';
-        echo '| -----------------------------------------------------------------------------<br>';
-
-        echo '| [REQUEST] - GET<br>';
-        echo '| URI: ' . $this->config->item('base_url') . $uri . '<br>';
-        echo '| PARAM {<br>' . $this->arrayToString($param) . '}<br>';
-        $result = $this->sendGet($uri, $param);
-        echo '| [RESPONSE] ' . $this->arrayToString($result) . '<br>';
         echo '</div>';
 
         return $result;
     }
 
     protected function sendPost($uri, $param) {
-        $this->last_request = '[POST] ' . $this->config->item('base_url') . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
-        $this->curl->create($this->config->item('base_url') . $uri);
+        $this->last_request = '[POST] ' . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
+        $this->curl->create($uri);
         $this->curl->post($param);
 
         return $this->curl->execute();
     }
 
     protected function sendGet($uri, $param = NULL) {
-        $this->last_request = '[GET] ' . $this->config->item('base_url') . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
+        $this->last_request = '[GET] ' . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
 
-        return $this->curl->simple_get($this->config->item('base_url') . $uri, $param);
+        return $this->curl->simple_get($uri, $param);
     }
 
     protected function generateGrantCode($email, $password) {
@@ -181,4 +181,47 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         return $result;
     }
 
+
+    protected function getSuite($object) {
+        $class = new ReflectionClass(get_class($object));
+        $allMethods = $class->getMethods();
+        
+        $suite = array();
+        foreach($allMethods as $method) {
+            if (strpos($method->name, 'test') === 0) {
+                array_push($suite, array($class->getName(), $method->name));
+            }
+        }
+        
+        return $suite;
+    }
+
+
+    public function all_get() {
+        $suite = $this->getSuite($this);
+
+        $passed = 0;
+        foreach ($suite as $case) {
+            try {
+                echo 'Running.. ' . $case[1];
+                call_user_func($case);
+                $passed += 1;
+                echo '=> PASSED.<br><br>';
+            } catch (Exception $e) {
+                echo '=> FAILED.<br><br>';
+                echo "<pre>";
+                echo 'Last Request: ' . $this->last_request . '<br>';
+                echo 'Code: ' . $e->getCode() . '<br>';
+                echo 'File: ' . $e->getFile() . '<br>';
+                echo 'Line: ' . $e->getLine() . '<br>';
+                echo 'Message: ' . $e->getMessage() . '<br>';
+                echo 'Previous: ' . $e->getPrevious() . '<br>';
+                echo 'Trace: <br>' . $e->getTraceAsString() . '<br>';
+                echo "</pre>";
+            }
+        }
+        echo '| =============================================================================<br>';
+        echo "| Passed " . $passed . ' out of ' . count($suite) . '<br>';
+        echo '| =============================================================================<br>';
+    }
 }
