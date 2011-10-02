@@ -42,6 +42,9 @@ class Brand
      */
     private $updateFlag;
 
+    public function toArray() {
+        return get_object_vars($this);
+    }
 
     /**
      * Get id

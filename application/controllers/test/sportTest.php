@@ -41,7 +41,7 @@ class SportTest extends Test_REST_Controller {
 
     public function testGetById() {
         // get sport 1
-        $result = $this->runTest("get a sport info by ID #" . $this->sportId1, "api/sport", array('accessToken' => $this->accessToken, 'id' => $this->sportId1, 'XDEBUG_SESSION_START' => 'netbeans-xdebug'), 'GET');
+        $result = $this->runTest("get a sport info by ID #" . $this->sportId1, "api/sport", array('accessToken' => $this->accessToken, 'id' => $this->sportId1), 'GET');
         Assert::assertArray($result, 'id', $this->sportId1);
 
         // get sport 2
