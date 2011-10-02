@@ -5,11 +5,13 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 /**
  * Contains stuffs for just testing.
  */
-class Auth extends Test_REST_Controller {
+class AuthTest extends Test_REST_Controller {
     public function __construct() {
         parent::__construct();
         
-        force_ssl();
+//        force_ssl();
+        if (function_exists('force_ssl'))
+            remove_ssl();
     }
 
     public function all_get() {
@@ -20,7 +22,7 @@ class Auth extends Test_REST_Controller {
                 'name' => 'Wegra',
                 'gender' => 'male',
                 'dob' => 1232123222));
-            $this->assertArray($result, 'error_code', 501);
+            Assert::assertError($result, 501);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode('wegra.lee', 'password');
@@ -29,7 +31,7 @@ class Auth extends Test_REST_Controller {
                 'name' => 'Wegra',
                 'gender' => 'male',
                 'dob' => 1232123222));
-            $this->assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode('wegra.lee', 'password');
@@ -38,7 +40,7 @@ class Auth extends Test_REST_Controller {
                 'name' => '123',
                 'gender' => 'female',
                 'dob' => 1232123222));
-            $this->assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode('wegra.lee', 'password');
@@ -47,7 +49,7 @@ class Auth extends Test_REST_Controller {
                 'name' => 'name_----1---------2---------3---------4---------5---------6---------7---------8---------9---------0-',
                 'gender' => 'male',
                 'dob' => 1232123222));
-            $this->assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             // get valid test accounts.
@@ -61,7 +63,7 @@ class Auth extends Test_REST_Controller {
                 'name' => $testUser1['name'],
                 'gender' => 'male',
                 'dob' => 1232123222));
-            $this->assertEquals($result, 'OK');
+            Assert::assertEquals($result, 'OK');
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode($testUser2['email'], $testUser2['password']);
@@ -70,7 +72,7 @@ class Auth extends Test_REST_Controller {
                 'name' => $testUser2['name'],
                 'gender' => 'male',
                 'dob' => 1232123222));
-            $this->assertEquals($result, 'OK');
+            Assert::assertEquals($result, 'OK');
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode($testUser2['email'], $testUser2['password']);
@@ -79,31 +81,31 @@ class Auth extends Test_REST_Controller {
                 'name' => $testUser2['name'],
                 'gender' => 'male',
                 'dob' => 1232123222));
-            $this->assertArray($result, 'error_code', 406);
+            Assert::assertError($result, 406);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode($testUser2['email'], $testUser2['password']);
             $result = $this->runTest("sign in with a valid email_2", "api/auth/signIn", array('grantType' => 'authorization_code',
                 'code' => $grantCode));
-            $this->assertArray_NotNull($result, 'accessToken');
+            Assert::assertArray_NotNull($result, 'accessToken');
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode($testUser2['email'], $testUser2['password'] . '_');
             $result = $this->runTest("sign in with a valid email_2 w/ 'invalid' password.", "api/auth/signIn", array('grantType' => 'authorization_code',
                 'code' => $grantCode));
-            $this->assertArray($result, 'error_code', 403);
+            Assert::assertError($result, 403);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode('unregistered@seedshock.com', 'password');
             $result = $this->runTest("sign in with an 'unregistered' email.", "api/auth/signIn", array('grantType' => 'authorization_code',
                 'code' => $grantCode));
-            $this->assertArray($result, 'error_code', 404);
+            Assert::assertError($result, 404);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode($testUser1['email'], $testUser1['password']);
             $result = $this->runTest("sign in with a valid email_1", "api/auth/signIn", array('grantType' => 'authorization_code',
                 'code' => $grantCode));
-            $this->assertArray_NotNull($result, 'accessToken');
+            Assert::assertArray_NotNull($result, 'accessToken');
             echo '=> PASSED.<br><br>';
 
             // now.. keep the access token of email_1 for later tests.
@@ -112,29 +114,29 @@ class Auth extends Test_REST_Controller {
 
             $result = $this->runTest("invite an 'invalid' email", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array('invalid.email.com')));
-            $this->assertArray($result, 'invalid.email.com', 'invalid email.');
+            Assert::assertArray($result, 'invalid.email.com', 'invalid email.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite a valid email_2 (already registered)", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array($testUser2['email']), 'invitationMessage' => 'This is a custom message for test.'));
-            $this->assertArray($result, $testUser2['email'], 'already registered.');
+            Assert::assertArray($result, $testUser2['email'], 'already registered.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite a valid email_3", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array($testUser3['email']), 'invitationMessage' => 'This is a custom message for test.'));
-            $this->assertArray($result, $testUser3['email'], 'invitation sent.');
+            Assert::assertArray($result, $testUser3['email'], 'invitation sent.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite nobody", "api/auth/invite", array('accessToken' => $accessToken,
                 'invitationMessage' => 'This is a custom message for test.'));
-            $this->assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite all of them", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array($testUser2['email'], 'invalid.email.com', 'xegra.lee@gmail.com'), 'invitationMessage' => 'This is a custom message for test.'));
-            $this->assertArray($result, 'invalid.email.com', 'invalid email.');
-            $this->assertArray($result, $testUser2['email'], 'already registered.');
-            $this->assertArray($result, 'xegra.lee@gmail.com', 'invitation sent.');
+            Assert::assertArray($result, 'invalid.email.com', 'invalid email.');
+            Assert::assertArray($result, $testUser2['email'], 'already registered.');
+            Assert::assertArray($result, 'xegra.lee@gmail.com', 'invitation sent.');
             echo '=> PASSED.<br><br>';
 
             echo '| =============================================================================<br>';

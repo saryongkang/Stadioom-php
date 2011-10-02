@@ -5,7 +5,7 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 /**
  * Contains stuffs for just testing.
  */
-class Fb extends Test_REST_Controller {
+class FbTest extends Test_REST_Controller {
 
     function __construct() {
         parent::__construct();
