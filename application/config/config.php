@@ -380,5 +380,8 @@ $config['email_from'] = 'stadioom@seedshock.com';
 $config['email_from_display_name'] = 'SeedShock';
 $config['email_bcc'] = 'wegra.lee@gmail.com';
 
+$config['test_account'] = 'test@seedshock.com';
+$config['test_account_password'] = 'password';
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */

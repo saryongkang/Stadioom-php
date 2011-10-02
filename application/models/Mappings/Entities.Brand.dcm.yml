@@ -1,5 +1,9 @@
 Entities\Brand:
   type: entity
+  uniqueConstraints:
+    email_index:
+      columns:
+       - name
   fields:
     id:
       type: integer

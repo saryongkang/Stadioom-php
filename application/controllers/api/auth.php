@@ -9,7 +9,9 @@ class Auth extends Stadioom_REST_Controller {
 
         $this->load->model('dao/UserDao');
         
-        force_ssl();
+//        force_ssl();
+        if (function_exists('force_ssl'))
+            remove_ssl();
     }
 
     /**

@@ -60,7 +60,7 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
 
     protected $last_request = null;
 
-    protected function runTest($desc, $api, $param, $httpMethod = 'POST') {
+    protected final function runTest($desc, $api, $param, $httpMethod = 'POST') {
         $uri = $this->config->item('base_url') . $api;
 
         echo '<div>';
@@ -79,9 +79,11 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
                 $result = $this->sendGet($uri, $param);
                 break;
             case "PUT":
-                throw new Exception("Not Implemented: " . $httpMethod);
+                $result = $this->sendPut($uri, $param);
+                break;
             case "DELETE":
-                throw new Exception("Not Implemented: " . $httpMethod);
+                $result = $this->sendDelete($uri, $param);
+                break;
             default:
                 throw new Exception("Unknown HTTP method: " . $httpMethod);
         }
@@ -92,7 +94,7 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         return $result;
     }
 
-    protected function sendPost($uri, $param) {
+    protected final function sendPost($uri, $param) {
         $this->last_request = '[POST] ' . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
         $this->curl->create($uri);
         $this->curl->post($param);
@@ -100,38 +102,33 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         return $this->curl->execute();
     }
 
-    protected function sendGet($uri, $param = NULL) {
+    protected final function sendDelete($uri, $param) {
+        $this->last_request = '[DELETE] ' . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
+        $this->curl->create($uri);
+        $this->curl->delete($param);
+
+        return $this->curl->execute();
+    }
+
+    protected final function sendPut($uri, $param) {
+        $this->last_request = '[PUT] ' . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
+        $this->curl->create($uri);
+        $this->curl->put($param);
+
+        return $this->curl->execute();
+    }
+
+    protected final function sendGet($uri, $param = NULL) {
         $this->last_request = '[GET] ' . $uri . '<br> - with params {<br>' . $this->arrayToString($param) . '}';
 
         return $this->curl->simple_get($uri, $param);
     }
 
-    protected function generateGrantCode($email, $password) {
+    public static function generateGrantCode($email, $password) {
         return base64_encode($email . ":" . $password);
     }
 
-    protected function assertArray($result, $key, $value) {
-        $json = json_decode($result);
-        if ($json->$key != $value) {
-            throw new Exception("[key:" . $key . "] expected:" . $value . ", actual:" . $json->$key);
-        }
-    }
-
-    protected function assertEquals($result, $expected) {
-        $actual = json_decode($result);
-        if ($actual != $expected) {
-            throw new Exception("[key] expected:" . $expected . ", actual:" . $actual);
-        }
-    }
-
-    protected function assertArray_NotNull($result, $key) {
-        $json = json_decode($result);
-        if ($json->$key == NULL) {
-            throw new Exception("[key:" . $key . "] expected: Not NULL." . "\nResult: " . $result);
-        }
-    }
-
-    protected function createTestUser() {
+    protected final function createTestUser() {
         $response = $this->curl->simple_get("https://graph.facebook.com/200987663288876/accounts/test-users?installed=true&permissions=publish_stream,email,offline_access&method=post&access_token=200987663288876%7C6d3dd0e7aa9dae300920ec05552bddee");
         $json_decoded = json_decode($response);
 
@@ -156,7 +153,7 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         }
     }
 
-    protected function arrayToString($array) {
+    protected final function arrayToString($array) {
         if ($array == NULL) {
             return "NULL";
         }
@@ -181,47 +178,120 @@ class Test_REST_Controller extends Stadioom_REST_Controller {
         return $result;
     }
 
-
-    protected function getSuite($object) {
+    private function getSuite($object) {
         $class = new ReflectionClass(get_class($object));
         $allMethods = $class->getMethods();
-        
+
         $suite = array();
-        foreach($allMethods as $method) {
+        foreach ($allMethods as $method) {
             if (strpos($method->name, 'test') === 0) {
                 array_push($suite, array($class->getName(), $method->name));
             }
         }
-        
+
         return $suite;
     }
 
+    protected function beforeClass() {
+        // will be overrided by child class if required.
+    }
 
-    public function all_get() {
+    protected function before() {
+        // will be overrided by child class if required.
+    }
+
+    protected function after() {
+        // will be overrided by child class if required.
+    }
+
+    protected function afterClass() {
+        // will be overrided by child class if required.
+    }
+
+    public final function index_get() {
         $suite = $this->getSuite($this);
 
         $passed = 0;
-        foreach ($suite as $case) {
-            try {
-                echo 'Running.. ' . $case[1];
-                call_user_func($case);
-                $passed += 1;
-                echo '=> PASSED.<br><br>';
-            } catch (Exception $e) {
-                echo '=> FAILED.<br><br>';
-                echo "<pre>";
-                echo 'Last Request: ' . $this->last_request . '<br>';
-                echo 'Code: ' . $e->getCode() . '<br>';
-                echo 'File: ' . $e->getFile() . '<br>';
-                echo 'Line: ' . $e->getLine() . '<br>';
-                echo 'Message: ' . $e->getMessage() . '<br>';
-                echo 'Previous: ' . $e->getPrevious() . '<br>';
-                echo 'Trace: <br>' . $e->getTraceAsString() . '<br>';
-                echo "</pre>";
+        try {
+            $this->beforeClass();
+
+            foreach ($suite as $case) {
+                try {
+                    $this->before();
+
+                    echo 'Running.. ' . $case[1];
+                    call_user_func($case);
+                    $passed += 1;
+                    echo '=> PASSED.<br><br>';
+
+                    $this->after();
+                } catch (Exception $e) {
+                    echo '=> FAILED.<br><br>';
+                    echo "<pre>";
+                    echo 'Last Request: ' . $this->last_request . '<br>';
+                    $this->printException($e);
+                    echo "</pre>";
+                }
             }
+
+            $this->afterClass();
+        } catch (Exception $e) {
+            echo "<pre>";
+            echo 'Errors on beforeClass or afterClass:<br>';
+            $this->printException($e);
+            echo "</pre>";
         }
         echo '| =============================================================================<br>';
         echo "| Passed " . $passed . ' out of ' . count($suite) . '<br>';
         echo '| =============================================================================<br>';
     }
+
+    private function printException($e) {
+        echo 'Code: ' . $e->getCode() . '<br>';
+        echo 'File: ' . $e->getFile() . '<br>';
+        echo 'Line: ' . $e->getLine() . '<br>';
+        echo 'Message: ' . $e->getMessage() . '<br>';
+        echo 'Previous: ' . $e->getPrevious() . '<br>';
+        echo 'Trace: <br>' . $e->getTraceAsString() . '<br>';
+    }
+
+}
+
+class Assert {
+
+    public static function assertArray($result, $key, $value) {
+        $json = json_decode($result);
+        if ($json->$key != $value) {
+            throw new Exception("[key:" . $key . "] expected:" . $value . ", actual:" . $json->$key);
+        }
+    }
+
+    public static function assertInArray($result, $index, $key, $value) {
+        $json = json_decode($result);
+        if ($json[$index]->$key != $value) {
+            throw new Exception("[index:" . $index . "] [key:" . $key . "] expected:" . $value . ", actual:" . $json[$index]->$key);
+        }
+    }
+
+    public static function assertError($result, $errorCode) {
+        $json = json_decode($result);
+        if ($json->error_code != $errorCode) {
+            throw new Exception("Expected Error Code:" . $value . ", actual:" . $json->error_code);
+        }
+    }
+
+    public static function assertEquals($result, $expected) {
+        $actual = json_decode($result);
+        if ($actual != $expected) {
+            throw new Exception("[key] expected:" . $expected . ", actual:" . $actual);
+        }
+    }
+
+    public static function assertArray_NotNull($result, $key) {
+        $json = json_decode($result);
+        if ($json->$key == NULL) {
+            throw new Exception("[key:" . $key . "] expected: Not NULL." . "\nResult: " . $result);
+        }
+    }
+
 }
