@@ -8,42 +8,7 @@
           Logo goes here
       </div>
       <div class="span8 showgrid">
-          <div class="signup-unit">
-              
-            <?php
-            $formAttributes = array('class' => 'form-stacked', 'id' => 'signup-form');
-
-            echo form_open('home', $formAttributes);
-            ?>
-              
-            <fieldset>
-              <legend>Register for the closed beta!</legend>
-              <div class="clearfix <?php if (form_error('user[fullName]')) echo 'error'; ?>"  id="clearfix-fullName">
-                <div class="input">
-                  <input class="xlarge" id="signup-fullName" name="user[fullName]" value="<?php echo set_value('user[fullName]'); ?>" size="30" type="text" placeholder="Full Name"/>
-                  <span class="help-inline" id="help-fullName"> <?php echo form_error('user[fullName]'); ?> </span>
-                </div>
-              </div><!-- /clearfix -->
-              <div class="clearfix <?php if (form_error('user[email]')) echo 'error'; ?>" id="clearfix-email">
-                <div class="input">
-                  <input class="xlarge" id="signup-email" name="user[email]" value="<?php echo set_value('user[email]'); ?>" size="30" type="text" placeholder="e-mail"/>
-                  <span class="help-inline" id="help-email"> <?php echo form_error('user[email]'); ?> </span>
-                </div>
-              </div><!-- /clearfix -->
-              <div class="clearfix <?php if (form_error('user[password]')) echo 'error'; ?>" id="clearfix-password">
-                <div class="input">
-                  <input class="xlarge" id="signup-password" name="user[password]" size="30" type="password" placeholder="Password"/>
-                  <span class="help-inline" id="help-password"> <?php echo form_error('user[password]'); ?> </span>
-                </div>
-              </div><!-- /clearfix -->
-              <div class="clearfix">
-              <button class="btn signup large rightAlign">Sign Up!</button>
-              </div><!-- /clearfix -->
-            </fieldset>
-          </div>
-          
-
-          
+  
           <?php if ($fbUser): ?>
             <a href="<?php echo $logoutUrl; ?>">Logout</a>
             <?php else: ?>
@@ -62,21 +27,20 @@
           
 <!-- Necessary Scripts -->
 <div id="fb-root" > </div>
-<script type="text/javascript">
-    (function() {
-        var e = document.createElement('script'); e.async = true;
-        e.src = document.location.protocol
-            + '//connect.facebook.net/en_US/all.js';
-        document.getElementById('fb-root').appendChild(e);
-    }());    
-</script>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
     
 
           <!-- FB Buttons and G+ -->
           
         <div id="social-buttons">
             <div class="span1">
-                <fb:like href="http://www.facebook.com/pages/Stadioom/168539803210962" send="false" layout="box_count" width="20" show_faces="true"></fb:like> 
+                <div class="fb-like" data-href="http://facebook.com/pages/Stadioom/168539803210962" data-send="false" data-layout="box_count" data-width="100" data-show-faces="true"></div>
             </div>
             
             <!-- http://www.seedshock.com/fb/login -->
