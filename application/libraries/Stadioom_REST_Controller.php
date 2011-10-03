@@ -54,6 +54,24 @@ class Stadioom_REST_Controller extends REST_Controller {
         return $userId;
     }
 
+    protected function filterByKeys($array, $filterKeys) {
+        $keys = array_keys($array);
+        $filteredArray = array();
+        foreach ($keys as $key) {
+            $filtered = false;
+            foreach ($filterKeys as $filterKey) {
+                if ($key == $filterKey) {
+                    $filtered = true;
+                    break;
+                }
+            }
+            if (!$filtered) {
+                $filteredArray[$key] = $array[$key];
+            }
+        }
+        return $filteredArray;
+    }
+
 }
 
 class Test_REST_Controller extends Stadioom_REST_Controller {
@@ -271,6 +289,16 @@ class Assert {
         if ($json[$index]->$key != $value) {
             throw new Exception("[index:" . $index . "] [key:" . $key . "] expected:" . $value . ", actual:" . $json[$index]->$key);
         }
+    }
+
+    public static function assertContainsInArray($result, $key, $value) {
+        $json = json_decode($result);
+        foreach ($json as $element) {
+            if ($element->$key == $value) {
+                return;
+            }
+        }
+        throw new Exception("[key:" . $key . "] expected:" . $value);
     }
 
     public static function assertError($result, $errorCode) {

@@ -9,6 +9,7 @@ class Brand extends Stadioom_REST_Controller {
 
         $this->load->model('dao/BrandDao');
         $this->load->model('dao/BrandSportMapDao');
+        
         if (function_exists('force_ssl'))
             remove_ssl();
     }
@@ -57,19 +58,16 @@ class Brand extends Stadioom_REST_Controller {
             $brandId = $this->get('id');
             if ($brandId == null) {
 
-                // TODO returns list ordered by weight.
                 $allSports = $this->BrandDao->getAll();
                 $array = array();
                 foreach ($allSports as $brand) {
-                    array_push($array, $brand->toArray());
+                    array_push($array, $this->filterByKeys($brand->toArray(), array('firstRevision', 'latestRevision', 'updateFlag')));
                 }
                 $this->responseOk($array);
             } else {
                 $brand = $this->BrandDao->find($brandId);
 
-                $brand_array = $brand->toArray();
-
-                $this->responseOk($brand->toArray());
+                $this->responseOk($this->filterByKeys($brand->toArray(), array('firstRevision', 'latestRevision', 'updateFlag')));
             }
         } catch (Exception $e) {
             $this->responseError($e);

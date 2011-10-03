@@ -17,7 +17,7 @@ class Fb extends Stadioom_REST_Controller {
         $fbAccessToken = $this->post('fbAccessToken');
         $fbExpires = $this->post('fbExpires');
 
-        $fbInfo = array('fbId' => $this->post('fbId'), 'fbAccessToken' => $this->post('fbAccessToken'), 'fbExpires' => $this->post('fbExpires'));
+        $fbInfo = array('fbId' => $fbId, 'fbAccessToken' => $fbAccessToken, 'fbExpires' => $fbExpires);
 
         try {
             $result = $this->UserDao->fbConnect($fbInfo);

@@ -50,7 +50,7 @@ class UserDao extends CI_Model {
      * 
      * @param string $fbId The Facebook user ID to connect.
      * @param string $fbAccessToken The Facebook access token for the user.
-     * @return string accessToken
+     * @return array Array contains 'id', 'fullName', and 'accessToken'.
      * 
      * @throws Exception 401 - if failed to access Facebook with the given fbAccessToken.
      */
@@ -252,8 +252,7 @@ class UserDao extends CI_Model {
             throw new Exception("The 'inviteeEmails' MUST NOT be NULL.", 400);
         }
 
-        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => 1));
-//        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
+        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
         if ($invitor == null) {
             throw new Exception("Invitor not found.", 404);
         }

@@ -8,6 +8,8 @@ class Sport extends Stadioom_REST_Controller {
         parent::__construct();
 
         $this->load->model('dao/SportDao');
+        $this->load->model('dao/BrandSportMapDao');
+        
         if (function_exists('force_ssl'))
             remove_ssl();
     }
@@ -90,20 +92,57 @@ class Sport extends Stadioom_REST_Controller {
         }
     }
 
-    public function sports_get() {
+
+    public function brand_get() {
         $accessToken = $this->get('accessToken');
-        $sportId = $this->get('id');
 
         try {
             $userId = $this->verifyToken($accessToken);
 
-            throw new Exception("Not Implemented.", 501);
-            
+            $sportId = $this->get('sportId');
+            $brands = $this->BrandSportMapDao->findSponsorsOf($sportId);
+            $array = array();
+            foreach ($brands as $brand) {
+                array_push($array, $brand->toArray());
+            }
+            if ($array == null) {
+                $this->responseError(new Exception("Not Found.", 404));
+            }
+            $this->responseOk($array);
         } catch (Exception $e) {
             $this->responseError($e);
         }
     }
 
+    public function sport_post() {
+        $accessToken = $this->post('accessToken');
+
+        try {
+            $userId = $this->verifyToken($accessToken);
+
+            $brandId = $this->post('brandId');
+            $sportId = $this->post('sportId');
+            $this->BrandSportMapDao->link($brandId, $sportId);
+            $this->responseOk();
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    public function sport_delete() {
+        $accessToken = $this->delete('accessToken');
+
+        try {
+            $userId = $this->verifyToken($accessToken);
+
+            $brandId = $this->delete('brandId');
+            $sportId = $this->delete('sportId');
+            $this->BrandSportMapDao->unlink($brandId, $sportId);
+            $this->responseOk();
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
 }
 
 ?>

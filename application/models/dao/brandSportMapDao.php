@@ -10,7 +10,7 @@ class BrandSportMapDao extends CI_Model {
     public function link(&$brandId, &$sportId) {
         $q = $this->doctrine->em->createQuery('SELECT m FROM Entities\BrandSportMap m WHERE m.brandId = ' . $brandId . ' AND m.sportId = ' . $sportId);
         $result = $q->getResult();
-        if (array_count_values($result) == 0) {
+        if (count($result) == 0) {
             $map = new Entities\BrandSportMap();
             $map->setBrandId($brandId);
             $map->setSportId($sportId);
