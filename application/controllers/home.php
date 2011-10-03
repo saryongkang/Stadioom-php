@@ -18,14 +18,12 @@ class Home extends CI_Controller {
         $data['fbUser'] = null;
         
         // FB Stuff
-        
-        $this->load->library('facebook');
           
         $facebook = new $this->facebook(array(
           'appId' => '200987663288876',
           'secret' => '6d3dd0e7aa9dae300920ec05552bddee',
         ));
-
+        
         // Get User ID
         $data['fbUser'] = $facebook->getUser();
 

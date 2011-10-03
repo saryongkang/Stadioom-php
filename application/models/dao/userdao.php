@@ -55,10 +55,10 @@ class UserDao extends CI_Model {
      * @throws Exception 401 - if failed to access Facebook with the given fbAccessToken.
      */
     public function fbConnect($fbInfo) {
-        if ($fbInfo == null
+        if ($fbInfo === NULL
                 || $fbInfo['fbId'] == null
                 || $fbInfo['fbAccessToken'] == null
-                || $fbInfo['fbExpires'] == null) {
+                || $fbInfo['fbExpires'] == NULL) {
             throw new Exception("Insufficient data. fbId=".$fbInfo['fbId']." fbAccessToken=".$fbInfo['fbAccessToken']." fbExpires=". $fbInfo['fbExpires'], 400);
             //throw new Exception("Insufficient data.", 400);
         }

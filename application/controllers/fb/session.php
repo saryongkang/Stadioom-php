@@ -4,7 +4,6 @@ class Session extends CI_Controller {
     
     function __construct() {
         parent::__construct();
-        $this->load->library('facebook');
     }
 
 	function index()
@@ -14,6 +13,8 @@ class Session extends CI_Controller {
     
     function login(){
         $this->load->helper('url');
+        
+        echo "<html><head><meta charset='utf-8'></head><body>";
         
         $facebook = new $this->facebook(array(
           'appId' => '200987663288876',
@@ -29,15 +30,20 @@ class Session extends CI_Controller {
             // Proceed knowing you have a logged in user who's authenticated.
             $user_profile = $facebook->api('/me');
             $data['fbAccessToken'] = $facebook->getAccessToken();
-            $data['fbExpires'] = 0;
+            //$data['fbExpires'] = $facebook->getSession()->expires;
+            $data['fbExpires'] = '0';
             
             if ($this->_checkFBUserDB($data)){
-                echo "Welcome";
+                echo "Welcome ".$this->session->userdata('fullName') ;
+                //print_r($user_profile);
+                echo "<img src='https://graph.facebook.com/".$this->session->userdata('fbUId')."/picture' />";
+                
+                echo "</body></html>";
             }else{
                 redirect('home/loginDBErr', 'refresh');
             }
             
-          } catch (FacebookApiException $e) {
+          } catch ( FacebookApiException $e) {
             error_log($e);
             $data['fbUserID'] = null;
             redirect('home/loginErr', 'refresh');
@@ -91,7 +97,7 @@ class Session extends CI_Controller {
         $this->load->model('dao/UserDao');
         if ($userData = $this->UserDao->fbConnect($data)){
         
-            echo('<br /> FB User Succesfuly Connectedd <br />');
+            echo('<br /> FB User Succesfuly Connected <br />');
 
             //Create session
             $this->load->library('session');
@@ -101,7 +107,7 @@ class Session extends CI_Controller {
 
             $userSession = array(
                 'stdUid'  => $userData['id'],
-                'fbAccessToken'  => $data['accessToken'],
+                'fbAccessToken'  => $data['fbAccessToken'],
                 'fbExpires'  => $data['fbExpires'],
                 'fbUId'  => $data['fbId'],
                 'fullName'  => $userData['fullName'],

@@ -1,7 +1,5 @@
 <?php
 
-include(APPPATH . 'libraries/facebook/facebook.php');
-
 class Fb_connect extends Facebook {
 
     //declare public variables
