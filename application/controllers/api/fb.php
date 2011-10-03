@@ -21,7 +21,7 @@ class Fb extends Stadioom_REST_Controller {
 
         try {
             $result = $this->UserDao->fbConnect($fbInfo);
-            $this->responseOk($result);
+            $this->responseOk($this->filter($result, array('id')));
         } catch (Exception $e) {
             $this->responseError($e);
         }

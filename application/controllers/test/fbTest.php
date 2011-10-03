@@ -24,7 +24,6 @@ class FbTest extends Test_REST_Controller {
 
             $result = $this->runTest("connect with a valid Facebook account", "api/fb/connect", array('fbId' => $testUser['fbId'], 'fbAccessToken' => $testUser['fbAccessToken'], 'fbExpires' => 0));
 
-            Assert::assertArray_NotNull($result, 'id');
             Assert::assertArray($result, 'fullName', $testUser['name']);
             Assert::assertArray_NotNull($result, 'accessToken');
             echo '=> PASSED.<br><br>';
@@ -34,7 +33,6 @@ class FbTest extends Test_REST_Controller {
 
             $result = $this->runTest("connect with a valid Facebook account (again)", "api/fb/connect", array('fbId' => $testUser['fbId'], 'fbAccessToken' => $testUser['fbAccessToken'], 'fbExpires' => 0));
 
-            Assert::assertArray_NotNull($result, 'id', $id);
             Assert::assertArray($result, 'fullName', $testUser['name']);
             Assert::assertArray_NotNull($result, 'accessToken');
             echo '=> PASSED.<br><br>';
