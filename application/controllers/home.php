@@ -1,7 +1,7 @@
 <?php
 class Home extends CI_Controller {
 
-	function index()
+	function index($err = null)
 	{
 		$data['fbAppId'] = "200987663288876";
         
@@ -41,8 +41,8 @@ class Home extends CI_Controller {
         }
 
         $fbLoginData = array(
-            'scope' => 'email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,offline_access,publish_stream',
-            'redirect_uri' => 'fb/session/login/'
+            'scope' => 'email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,publish_stream',
+            'redirect_uri' => 'https://stadioom.com/fb/session/login/'
         );
         
         // Login or logout url will be needed depending on current user state.

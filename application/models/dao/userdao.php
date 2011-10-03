@@ -59,7 +59,8 @@ class UserDao extends CI_Model {
                 || $fbInfo['fbId'] == null
                 || $fbInfo['fbAccessToken'] == null
                 || $fbInfo['fbExpires'] == null) {
-            throw new Exception("Insufficient data.", 400);
+            throw new Exception("Insufficient data. fbId=".$fbInfo['fbId']." fbAccessToken=".$fbInfo['fbAccessToken']." fbExpires=". $fbInfo['fbExpires'], 400);
+            //throw new Exception("Insufficient data.", 400);
         }
 
         $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbInfo['fbId']));
