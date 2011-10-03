@@ -51,7 +51,15 @@ class BrandDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->doctrine->em->createQuery('SELECT s FROM Entities\Brand s WHERE s.id != 0 ORDER BY s.weight DESC');
+        $q = $this->doctrine->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.id != 0 ORDER BY b.weight DESC');
+        return $q->getResult();
+    }
+
+    public function findAfter($after) {
+        if ($after == null || $after < 0) {
+            $after = 0;
+        }
+        $q = $this->doctrine->em->createQuery('SELECT b FROM Entities\Brand b WHERE latestRevision > ' . $after);
         return $q->getResult();
     }
 

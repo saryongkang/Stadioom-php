@@ -3,6 +3,7 @@
 require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class Sport extends Stadioom_REST_Controller {
+    private $filterKeys = array('firstRevision', 'latestRevision', 'updateFlag');
 
     function __construct() {
         parent::__construct();
@@ -62,17 +63,13 @@ class Sport extends Stadioom_REST_Controller {
                 $allSports = $this->SportDao->getAll();
                 $array = array();
                 foreach ($allSports as $sport) {
-                    array_push($array, $sport->toArray());
+                    array_push($array, $this->filter($sport->toArray(), $this->filterKeys));
                 }
                 $this->responseOk($array);
             } else {
                 $sport = $this->SportDao->find($sportId);
                 
-//                $arrayed = (array) $sport;
-//                $object_vars = get_object_vars($sport);
-                $sport_array = $sport->toArray();
-                
-                $this->responseOk($sport->toArray());
+                $this->responseOk($this->filter($sport->toArray(), $this->filterKeys));
             }
         } catch (Exception $e) {
             $this->responseError($e);
@@ -103,7 +100,7 @@ class Sport extends Stadioom_REST_Controller {
             $brands = $this->BrandSportMapDao->findSponsorsOf($sportId);
             $array = array();
             foreach ($brands as $brand) {
-                array_push($array, $brand->toArray());
+                array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
             }
             if ($array == null) {
                 $this->responseError(new Exception("Not Found.", 404));

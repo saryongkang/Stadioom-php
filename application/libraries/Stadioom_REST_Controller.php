@@ -54,7 +54,7 @@ class Stadioom_REST_Controller extends REST_Controller {
         return $userId;
     }
 
-    protected function filterByKeys($array, $filterKeys) {
+    protected function filter($array, $filterKeys) {
         $keys = array_keys($array);
         $filteredArray = array();
         foreach ($keys as $key) {

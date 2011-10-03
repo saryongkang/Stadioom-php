@@ -4,12 +4,14 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class Brand extends Stadioom_REST_Controller {
 
+    private $filterKeys = array('firstRevision', 'latestRevision', 'updateFlag');
+
     function __construct() {
         parent::__construct();
 
         $this->load->model('dao/BrandDao');
         $this->load->model('dao/BrandSportMapDao');
-        
+
         if (function_exists('force_ssl'))
             remove_ssl();
     }
@@ -61,13 +63,13 @@ class Brand extends Stadioom_REST_Controller {
                 $allSports = $this->BrandDao->getAll();
                 $array = array();
                 foreach ($allSports as $brand) {
-                    array_push($array, $this->filterByKeys($brand->toArray(), array('firstRevision', 'latestRevision', 'updateFlag')));
+                    array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
                 }
                 $this->responseOk($array);
             } else {
                 $brand = $this->BrandDao->find($brandId);
 
-                $this->responseOk($this->filterByKeys($brand->toArray(), array('firstRevision', 'latestRevision', 'updateFlag')));
+                $this->responseOk($this->filter($brand->toArray(), $this->filterKeys));
             }
         } catch (Exception $e) {
             $this->responseError($e);
@@ -76,12 +78,16 @@ class Brand extends Stadioom_REST_Controller {
 
     public function delta_get($after) {
         $accessToken = $this->get('accessToken');
-        $after = $this->get('after');
         // TODO returns list of brands modified after the specified revision(exclusive).
         try {
             $userId = $this->verifyToken($accessToken);
-
-            throw new Exception("Not Implemented.", 501);
+            $after = $this->get('after');
+            $allSports = $this->BrandDao->findAfter($after);
+            $array = array();
+            foreach ($allSports as $brand) {
+                array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
+            }
+            $this->responseOk($array);
         } catch (Exception $e) {
             $this->responseError($e);
         }
@@ -97,8 +103,9 @@ class Brand extends Stadioom_REST_Controller {
             $sports = $this->BrandSportMapDao->findSponsoredBy($brandId);
             $array = array();
             foreach ($sports as $sport) {
-                array_push($array, $sport->toArray());
+                array_push($array, $this->filter($sport->toArray(), $this->filterKeys));
             }
+
             if ($array == null) {
                 $this->responseError(new Exception("Not Found.", 404));
             }

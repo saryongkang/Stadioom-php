@@ -109,4 +109,8 @@ class BrandTest extends Test_REST_Controller {
         Assert::assertError($result, 404);
     }
 
+    public function testDelta() {
+        // get all brands
+        $result = $this->runTest("get all sports", "api/brand", array('accessToken' => $this->accessToken), 'GET');
+    }
 }

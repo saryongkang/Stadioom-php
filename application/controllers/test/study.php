@@ -4,6 +4,12 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class study extends Test_REST_Controller {
 
+    function __construct() {
+        parent::__construct();
+        if (function_exists('force_ssl'))
+            remove_ssl();
+    }
+
     public final function final_get() {
         
     }
