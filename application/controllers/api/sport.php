@@ -114,7 +114,7 @@ class Sport extends Stadioom_REST_Controller {
         }
     }
 
-    public function sport_post() {
+    public function brand_post() {
         $accessToken = $this->post('accessToken');
 
         try {
@@ -129,7 +129,7 @@ class Sport extends Stadioom_REST_Controller {
         }
     }
 
-    public function sport_delete() {
+    public function brand_delete() {
         $accessToken = $this->delete('accessToken');
 
         try {
