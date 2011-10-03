@@ -8,10 +8,10 @@ class Brand extends Stadioom_REST_Controller {
         parent::__construct();
 
         $this->load->model('dao/BrandDao');
+        $this->load->model('dao/BrandSportMapDao');
         if (function_exists('force_ssl'))
             remove_ssl();
     }
-
 
     // only for testing purpose.
     public function index_post() {
@@ -56,7 +56,7 @@ class Brand extends Stadioom_REST_Controller {
 
             $brandId = $this->get('id');
             if ($brandId == null) {
-                
+
                 // TODO returns list ordered by weight.
                 $allSports = $this->BrandDao->getAll();
                 $array = array();
@@ -66,9 +66,9 @@ class Brand extends Stadioom_REST_Controller {
                 $this->responseOk($array);
             } else {
                 $brand = $this->BrandDao->find($brandId);
-                
+
                 $brand_array = $brand->toArray();
-                
+
                 $this->responseOk($brand->toArray());
             }
         } catch (Exception $e) {
@@ -89,15 +89,52 @@ class Brand extends Stadioom_REST_Controller {
         }
     }
 
-    public function sports_get() {
+    public function sport_get() {
         $accessToken = $this->get('accessToken');
-        $sportId = $this->get('id');
 
         try {
             $userId = $this->verifyToken($accessToken);
 
-            throw new Exception("Not Implemented.", 501);
-            
+            $brandId = $this->get('brandId');
+            $sports = $this->BrandSportMapDao->findSponsoredBy($brandId);
+            $array = array();
+            foreach ($sports as $sport) {
+                array_push($array, $sport->toArray());
+            }
+            if ($array == null) {
+                $this->responseError(new Exception("Not Found.", 404));
+            }
+            $this->responseOk($array);
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    public function sport_post() {
+        $accessToken = $this->post('accessToken');
+
+        try {
+            $userId = $this->verifyToken($accessToken);
+
+            $brandId = $this->post('brandId');
+            $sportId = $this->post('sportId');
+            $this->BrandSportMapDao->link($brandId, $sportId);
+            $this->responseOk();
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    public function sport_delete() {
+        $accessToken = $this->delete('accessToken');
+
+        try {
+            $userId = $this->verifyToken($accessToken);
+
+            $brandId = $this->delete('brandId');
+            $sportId = $this->delete('sportId');
+            $this->BrandSportMapDao->unlink($brandId, $sportId);
+            $this->responseOk();
         } catch (Exception $e) {
             $this->responseError($e);
         }

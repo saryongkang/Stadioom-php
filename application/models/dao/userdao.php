@@ -55,15 +55,15 @@ class UserDao extends CI_Model {
      * @throws Exception 401 - if failed to access Facebook with the given fbAccessToken.
      */
     public function fbConnect($fbInfo) {
-        if ($fbInfo == NULL
-                || $fbInfo['fbId'] == NULL
-                || $fbInfo['fbAccessToken'] == NULL
-                || $fbInfo['fbExpires'] == NULL) {
+        if ($fbInfo == null
+                || $fbInfo['fbId'] == null
+                || $fbInfo['fbAccessToken'] == null
+                || $fbInfo['fbExpires'] == null) {
             throw new Exception("Insufficient data.", 400);
         }
 
         $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbInfo['fbId']));
-        $result = array('id' => NULL, 'fullName' => NULL, 'accessToken' => NULL);
+        $result = array('id' => null, 'fullName' => null, 'accessToken' => null);
 
         // TODO: consider transaction.
         if ($user == null) {
@@ -83,7 +83,7 @@ class UserDao extends CI_Model {
             // check whether the same email is already in User table.
             $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
 
-            if ($user != NULL) {
+            if ($user != null) {
                 // update User table.
                 $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
@@ -102,7 +102,7 @@ class UserDao extends CI_Model {
                 $user->setGender($fbMe['gender']);
                 if (array_key_exists('birthday', $fbMe)) {
                     $birthday = $fbMe['birthday'];
-                    if ($birthday != NULL) {
+                    if ($birthday != null) {
                         $user->setDob(new DateTime($birthday));
                     }
                 }
@@ -115,7 +115,7 @@ class UserDao extends CI_Model {
                 $result['id'] = $user->getId();
 
                 $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $fbMe['email']));
-                if ($invitee != NULL) {
+                if ($invitee != null) {
                     // update 'acceptedDate' in Invitee table.
                     $invitee->setAcceptedDate(new DateTime());
                     $this->doctrine->em->persist($invitee);
@@ -123,7 +123,7 @@ class UserDao extends CI_Model {
                 }
             }
             $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('inviteeFbId' => $fbInfo['fbId']));
-            if ($inviteeFb != NULL) {
+            if ($inviteeFb != null) {
                 // update 'acceptedData' in InviteeFB table.
                 $inviteeFb->setAcceptedDate(new DateTime());
                 $this->doctrine->em->persist($inviteeFb);
@@ -153,7 +153,7 @@ class UserDao extends CI_Model {
      * @return Exception 404 - if the given fbId could not be found.
      */
     public function fbDeauthorize($fbId) {
-        if ($fbId == NULL) {
+        if ($fbId == null) {
             throw new Exception("Invalid FB ID.", 400);
         }
 
@@ -171,7 +171,7 @@ class UserDao extends CI_Model {
     }
 
     public function fbDeauthorizeWithId($id) {
-        if ($id == NULL) {
+        if ($id == null) {
             throw new Exception("Invalid ID.", 400);
         }
 
@@ -188,10 +188,18 @@ class UserDao extends CI_Model {
         }
     }
 
+    /**
+     * Stores Facebook invitation result. (Unlike the 'invite' method, it does
+     * not send invitation actually.)
+     * 
+     * @param type $invitorId Invitor's Stadioom ID.
+     * @param type $inviteeFbIds Array of invitee's Facebook ID.
+     * @return string Invitation results for each invitee.
+     */
     public function fbInvite($invitorId, $inviteeFbIds) {
         // TODO: check whether the invitor is real.
         $invitedDate = new DateTime();
-        if ($inviteeFbIds == NULL) {
+        if ($inviteeFbIds == null) {
             throw new Exception("At least one invitee is required.", 400);
         }
         $result;
@@ -201,13 +209,13 @@ class UserDao extends CI_Model {
                 continue;
             }
             $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbId));
-            if ($user != NULL) {
+            if ($user != null) {
                 $result[$fbId] = "already registered.";
                 continue;
             }
             $result[$fbId] = "invitation sent.";
             $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('inviteeFbId' => $fbId));
-            if ($inviteeFb != NULL) {
+            if ($inviteeFb != null) {
                 // already sent.
                 continue;
             }
@@ -227,17 +235,25 @@ class UserDao extends CI_Model {
         return $result;
     }
 
-    public function invite($invitorId, $inviteeEmails, $invitationMessage) {
-        if ($invitorId == NULL) {
+    /**
+     * Send invitations to the given email addresses.
+     * 
+     * @param type $invitorId Invitor's Stadioom ID.
+     * @param type $inviteeEmails Email addresses of the invitees.
+     * @param type $invitationMessage (optional) Custom invitation message.
+     * @return string 
+     */
+    public function invite($invitorId, $inviteeEmails, $invitationMessage = null) {
+        if ($invitorId == null) {
             throw new Exception("The 'invitorId' MUST NOT be NULL.", 400);
         }
-        if ($inviteeEmails == NULL) {
+        if ($inviteeEmails == null) {
             throw new Exception("The 'inviteeEmails' MUST NOT be NULL.", 400);
         }
 
         $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => 1));
 //        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
-        if ($invitor == NULL) {
+        if ($invitor == null) {
             throw new Exception("Invitor not found.", 404);
         }
         $result;
@@ -249,13 +265,13 @@ class UserDao extends CI_Model {
             }
 
             $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
-            if ($user != NULL) {
+            if ($user != null) {
                 $result[$email] = "already registered.";
                 continue;
             }
 
             $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $email));
-            if ($invitee == NULL) {
+            if ($invitee == null) {
                 try {
                     $invitee = new Entities\Invitee();
                     $invitee->setInviteeEmail($email);
@@ -269,7 +285,7 @@ class UserDao extends CI_Model {
             }
             $subject = $invitor->getName() . " has invited you to Stadioom.";
             $message = 'Come to match!!';
-            if ($invitationMessage != NULL) {
+            if ($invitationMessage != null) {
                 $message = $message . '<br><br>From ' . $invitor->getName() . ':<br><br>' . $invitationMessage;
             }
             $message = $message . '<br><br> Your Sincerely, SeedShock.';
@@ -388,7 +404,6 @@ class UserDao extends CI_Model {
         // TODO (Wegra): the messages are mostly likely stored into outer file.
         $this->email->from($this->config->item('email_from'), $this->config->item('email_from_display_name'));
         $this->email->to($toEmail);
-        // TODO (Wegra): make bcc configurable.
         $this->email->bcc($this->config->item('email_bcc'));
 
         $this->email->subject($subject);
@@ -499,44 +514,44 @@ class UserDao extends CI_Model {
 
         if (array_key_exists('locale', $fbMe)) {
             $locale = $fbMe['locale'];
-            if ($locale != NULL) {
+            if ($locale != null) {
                 $userFb->setLocale($locale);
             }
         }
         if (array_key_exists('timezone', $fbMe)) {
             $timezone = $fbMe['timezone'];
-            if ($timezone != NULL) {
+            if ($timezone != null) {
                 $userFb->setTimezone($timezone);
             }
         }
         if (array_key_exists('birthday', $fbMe)) {
             $birthday = $fbMe['birthday'];
-            if ($birthday != NULL) {
+            if ($birthday != null) {
                 $userFb->setBirthday($birthday);
             }
         }
         if (array_key_exists('hometown', $fbMe)) {
             $hometown = $fbMe['hometown'];
-            if ($hometown != NULL) {
+            if ($hometown != null) {
                 $userFb->setHometown($hometown['id'] . ' ' . $hometown['name']);
             }
         }
         if (array_key_exists('location', $fbMe)) {
             $location = $fbMe['location'];
-            if ($location != NULL) {
+            if ($location != null) {
                 $userFb->setLocation($location['id'] . ' ' . $location['name']);
             }
         }
         if (array_key_exists('favorite_atheletes', $fbMe)) {
             // TODO: should be tested..
             $athletes = $fbMe['favorite_atheletes'];
-            if ($athletes != NULL) {
+            if ($athletes != null) {
                 $userFb->setFavoriteAthletes(implode(",", $athletes));
             }
         }
         if (array_key_exists('favorite_teams', $fbMe)) {
             $teams = $fbMe['favorite_teams'];
-            if ($athletes != NULL) {
+            if ($athletes != null) {
                 $userFb->setFavoriteTeams(implode(",", $teams));
             }
         }

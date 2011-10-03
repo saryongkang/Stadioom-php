@@ -10,7 +10,7 @@ class BrandTest extends Test_REST_Controller {
     protected $brandId3 = 0;
     protected $sportId1 = 0;
     protected $sportId2 = 0;
-    
+
     function __construct() {
         parent::__construct();
         if (function_exists('force_ssl'))
@@ -33,27 +33,29 @@ class BrandTest extends Test_REST_Controller {
         $this->brandId2 = json_decode($result);
         $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $this->accessToken, 'name' => 'brand_3', 'desc' => 'Brand for testing_3 with lower weight', 'weight' => 50, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
         $this->brandId3 = json_decode($result);
-        
+
         // add sport 1, 2.
-//        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_1', 'desc' => 'Sport for testing_1 with higher weight', 'weight' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
-//        $this->sportId1 = json_decode($result);
-//        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_2', 'desc' => 'Sport for testing_2 with lower weight', 'weight' => 1, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
-//        $this->sportId2 = json_decode($result);
-        
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_1', 'desc' => 'Sport for testing_1 with higher weight', 'weight' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $this->sportId1 = json_decode($result);
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_2', 'desc' => 'Sport for testing_2 with lower weight', 'weight' => 1, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
+        $this->sportId2 = json_decode($result);
+
         // map brand 1 to sport 1.
+        $this->sendPost($this->config->item('base_url') . "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId1, 'sportId' => $this->sportId1));
+
         // map brand 2 to sport 1, 2.
+        $this->sendPost($this->config->item('base_url') . "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId2, 'sportId' => $this->sportId1));
+        $this->sendPost($this->config->item('base_url') . "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId2, 'sportId' => $this->sportId2));
     }
 
     public function afterClass() {
         // remove sport 1, 2
 //        $this->sendDelete($this->config->item('base_url') . 'api/sport', array('accessToken' => $this->accessToken, 'id' => $this->sportId1));
 //        $this->sendDelete($this->config->item('base_url') . 'api/sport', array('accessToken' => $this->accessToken, 'id' => $this->sportId2));
-
         // remove brand 1, 2, 3
 //        $this->sendDelete($this->config->item('base_url') . 'api/brand', array('accessToken' => $this->accessToken, 'id' => $this->brandId1));
 //        $this->sendDelete($this->config->item('base_url') . 'api/brand', array('accessToken' => $this->accessToken, 'id' => $this->brandId2));
 //        $this->sendDelete($this->config->item('base_url') . 'api/brand', array('accessToken' => $this->accessToken, 'id' => $this->brandId3));
-        
         // (mapping info should be updated automatically)
     }
 
@@ -89,9 +91,19 @@ class BrandTest extends Test_REST_Controller {
 
     public function testGetSponsoredSports() {
         // get sports sponsored by brand 1.
+        $result = $this->runTest("get sports sponsored by brand " . $this->brandId1, "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId1), 'GET');
+        Assert::assertArrayCount($result, 1);
+        Assert::assertInArray($result, 0, 'id', $this->sportId1);
+
         // get sports sponsored by brand 2.
+        $result = $this->runTest("get sports sponsored by brand " . $this->brandId2, "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId2), 'GET');
+        Assert::assertArrayCount($result, 2);
+        Assert::assertInArray($result, 0, 'id', $this->sportId1);
+        Assert::assertInArray($result, 1, 'id', $this->sportId2);
+
         // get sports sponsored by brand 3.
-        throw new Exception("Not Implemented", 501);
+        $result = $this->runTest("get sports sponsored by brand" . $this->brandId3, "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId3), 'GET');
+        Assert::assertError($result, 404);
     }
 
 }
