@@ -76,16 +76,15 @@ class Brand extends Stadioom_REST_Controller {
         }
     }
 
-    public function delta_get($after) {
+    public function delta_get() {
         $accessToken = $this->get('accessToken');
-        // TODO returns list of brands modified after the specified revision(exclusive).
         try {
             $userId = $this->verifyToken($accessToken);
             $after = $this->get('after');
             $allSports = $this->BrandDao->findAfter($after);
             $array = array();
             foreach ($allSports as $brand) {
-                array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
+                array_push($array, $brand->toArray());
             }
             $this->responseOk($array);
         } catch (Exception $e) {

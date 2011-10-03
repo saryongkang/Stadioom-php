@@ -314,6 +314,10 @@ class Assert {
             throw new Exception("[key] expected:" . $expected . ", actual:" . $actual);
         }
     }
+    
+    public static function fail() {
+        throw new Exception("Assertion failed.");
+    }
 
     public static function assertArrayCount($result, $expectedCount) {
         $actual = json_decode($result);

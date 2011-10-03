@@ -59,7 +59,7 @@ class BrandDao extends CI_Model {
         if ($after == null || $after < 0) {
             $after = 0;
         }
-        $q = $this->doctrine->em->createQuery('SELECT b FROM Entities\Brand b WHERE latestRevision > ' . $after);
+        $q = $this->doctrine->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.latestRevision > ' . $after);
         return $q->getResult();
     }
 

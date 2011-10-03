@@ -108,4 +108,30 @@ class SportTest extends Test_REST_Controller {
         Assert::assertError($result, 404);
     }
 
+
+    public function testDelta() {
+        $result = $this->runTest("get all sports modified after revision 0", "api/sport/delta", array('accessToken' => $this->accessToken, 'after' => 0), 'GET');
+        $jsonDecoded = json_decode($result);
+        foreach ($jsonDecoded as $element) {
+            if ($element->latestRevision <= 0) {
+                Assert::fail();
+            }
+        }
+        
+        $result = $this->runTest("get all sports modified after revision 1", "api/sport/delta", array('accessToken' => $this->accessToken, 'after' => 1), 'GET');
+        $jsonDecoded = json_decode($result);
+        foreach ($jsonDecoded as $element) {
+            if ($element->latestRevision <= 1) {
+                Assert::fail();
+            }
+        }
+        
+        $result = $this->runTest("get all sports modified after revision 2", "api/sport/delta", array('accessToken' => $this->accessToken, 'after' => 2), 'GET');
+        $jsonDecoded = json_decode($result);
+        foreach ($jsonDecoded as $element) {
+            if ($element->latestRevision <= 2) {
+                Assert::fail();
+            }
+        }
+    }
 }

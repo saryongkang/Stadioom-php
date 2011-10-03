@@ -110,7 +110,29 @@ class BrandTest extends Test_REST_Controller {
     }
 
     public function testDelta() {
-        // get all brands
-        $result = $this->runTest("get all sports", "api/brand", array('accessToken' => $this->accessToken), 'GET');
+        $result = $this->runTest("get all brands modified after revision 0", "api/brand/delta", array('accessToken' => $this->accessToken, 'after' => 0), 'GET');
+        $jsonDecoded = json_decode($result);
+        foreach ($jsonDecoded as $element) {
+            if ($element->latestRevision <= 0) {
+                Assert::fail();
+            }
+        }
+        
+        $result = $this->runTest("get all brands modified after revision 1", "api/brand/delta", array('accessToken' => $this->accessToken, 'after' => 1), 'GET');
+        $jsonDecoded = json_decode($result);
+        foreach ($jsonDecoded as $element) {
+            if ($element->latestRevision <= 1) {
+                Assert::fail();
+            }
+        }
+        
+        $result = $this->runTest("get all brands modified after revision 2", "api/brand/delta", array('accessToken' => $this->accessToken, 'after' => 2), 'GET');
+        $jsonDecoded = json_decode($result);
+        foreach ($jsonDecoded as $element) {
+            if ($element->latestRevision <= 2) {
+                Assert::fail();
+            }
+        }
     }
+
 }

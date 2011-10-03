@@ -55,6 +55,14 @@ class SportDao extends CI_Model {
         return $q->getResult();
     }
 
+    public function findAfter($after) {
+        if ($after == null || $after < 0) {
+            $after = 0;
+        }
+        $q = $this->doctrine->em->createQuery('SELECT s FROM Entities\Sport s WHERE s.latestRevision > ' . $after);
+        return $q->getResult();
+    }
+
     /**
      * Check if the length of string is in the given range (inclusive).
      *

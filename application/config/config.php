@@ -17,7 +17,7 @@ if (!defined('BASEPATH'))
   | path to your installation.
   |
  */
-$config['base_url'] = 'http://stadioom.com/';
+$config['base_url'] = 'http://stadioom:8080/';
 
 /*
   |--------------------------------------------------------------------------

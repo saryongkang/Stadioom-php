@@ -76,14 +76,17 @@ class Sport extends Stadioom_REST_Controller {
         }
     }
 
-    public function delta_get($after) {
+    public function delta_get() {
         $accessToken = $this->get('accessToken');
-        $after = $this->get('after');
-        // TODO returns list of brands modified after the specified revision(exclusive).
         try {
             $userId = $this->verifyToken($accessToken);
-
-            throw new Exception("Not Implemented.", 501);
+            $after = $this->get('after');
+            $allSports = $this->SportDao->findAfter($after);
+            $array = array();
+            foreach ($allSports as $sport) {
+                array_push($array, $sport->toArray());
+            }
+            $this->responseOk($array);
         } catch (Exception $e) {
             $this->responseError($e);
         }
