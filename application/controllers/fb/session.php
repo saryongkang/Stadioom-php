@@ -14,7 +14,6 @@ class Session extends CI_Controller {
     function login(){
         $this->load->helper('url');
         
-        echo "<html><head><meta charset='utf-8'></head><body>";
         
         $facebook = new $this->facebook(array(
           'appId' => '200987663288876',
@@ -34,11 +33,10 @@ class Session extends CI_Controller {
             $data['fbExpires'] = '0';
             
             if ($this->_checkFBUserDB($data)){
-                echo "Welcome ".$this->session->userdata('fullName') ;
-                //print_r($user_profile);
-                echo "<img src='https://graph.facebook.com/".$this->session->userdata('fbUId')."/picture' />";
                 
-                echo "</body></html>";
+                //Properly logged and check in, redirect to the main app
+                redirect('main', 'refresh');
+                
             }else{
                 redirect('home/loginDBErr', 'refresh');
             }
@@ -97,7 +95,7 @@ class Session extends CI_Controller {
         $this->load->model('dao/UserDao');
         if ($userData = $this->UserDao->fbConnect($data)){
         
-            echo('<br /> FB User Succesfuly Connected <br />');
+            echo('Cleaning up the field...');
 
             //Create session
             $this->load->library('session');
@@ -116,7 +114,7 @@ class Session extends CI_Controller {
             );
 
             $this->session->set_userdata($userSession);
-            print_r($userSession);
+            //print_r($userSession);
             //Load some php page just to redirect to the real system
         }else{
             return false;

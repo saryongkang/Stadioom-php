@@ -1,0 +1,147 @@
+/* 
+    Document   : home
+    Created on : Sep 22, 2011, 5:52:22 PM
+    Author     : noru
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+body {
+    padding-top: 60px;
+}
+
+
+/* MAIN MENU */
+#leftmenu{
+    margin-left: 0px;
+}
+
+#leftmenu ul{ /* remove bullets and list indents */
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#leftmenu a, #leftmenu h2 {
+  font: bold 14px/16px arial, helvetica, sans-serif;
+  display: block;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccc #888 #555 #bbb;
+  margin: 0;
+  /* padding: 2px 3px; */
+}
+
+#leftmenu h2 {
+  color: #fff;
+  background: #000;
+  text-transform: uppercase;
+}
+
+#leftmenu a {
+  color: #000;
+  background: #efefef;
+  text-decoration: none;
+}
+
+#leftmenu a:hover {
+	color: #063;
+	background: #fff;
+}
+
+
+#user-pic-container{
+	padding-top:5px;
+	margin:auto;
+}
+
+#user-pic-img{
+	height:100px;
+	width:100px;
+	margin:auto;
+}
+
+/* CONTENT WELCOME PAGE IN MAIN */
+
+.minisection{
+
+}
+.minisection-header{
+
+}
+
+.minisection-header-text{
+	float:left;
+}
+.minisection-view-all{
+	float:right;
+	font-size:12px;
+}
+
+.minisection-body{
+	clear:both;
+	background-color:#F2F6ED;
+	height:70px;
+	width:100%;
+	margin-bottom:5px;
+}
+
+.match-banner{
+	clear:both;
+	background-color:#F2F6ED;
+	height:70px;
+	margin-bottom:5px;
+}
+
+.match-banner-title{
+	background-color:#000;
+	color:#FFF;
+	height:18px;
+}
+
+.match-banner-body{
+	width:100%;
+	height:52px;
+}
+
+.match-player{
+	margin-top:4px;
+	float:left;
+	position:relative;
+	font-size:12px;
+	width:35%;
+	height:90%;
+	padding-left:5px;
+}
+
+.match-player-text{
+	float:left;
+	position:relative;
+	margin-left:4px;
+	width:70%;
+	height:100%;
+	text-align:center;
+	
+}
+.match-player-img{
+	float:left;
+	position:relative;
+	width:45px;
+	height:45px;
+}
+
+.match-vs{
+	text-align:center;
+	float:left;
+	position:relative;
+	width:28%;
+	height:50%;
+	margin-top:14px;
+	font-weight:bold;
+	font-size:18px;
+	font-style:italic;
+}

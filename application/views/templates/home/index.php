@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:fb="https://www.facebook.com/2008/fbml" >
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
+<head prefix="og:http://ogp.me/ns# fb:http://ogp.me/ns/fb# website:http://ogp.me/ns/website#">
 	<meta charset="utf-8">
     <meta property="fb:app_id"      content="200987663288876"> 
     <meta property="og:type"        content="website"> 
@@ -8,10 +8,10 @@
     <meta property="og:title"       content="Stadioom - Connecting Sports"> 
 	<title><?php echo $site_title?> - <?php echo $site_name?></title>
         <!-- fav and touch icons -->
-        <link rel="shortcut icon" href="images/favicon.ico">
-        <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+        <link rel="shortcut icon" href="/images/favicon.ico">
+        <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">
 	<?php echo $head?>
 	<?php echo $css?>
 	<?php echo $js?>
@@ -53,7 +53,7 @@
 	<section id="footer">
 		<div class="container center">
                     <footer>
-                        <p>&copy;<?php echo $site_name ?> by  <img class="miniseedshock-logo" src="assets/images/SeedShock_log0_mini.jpg" />  <?php echo $company_name ?> 2011</p>
+                        <p>&copy;<?php echo $site_name ?> by  <img class="miniseedshock-logo" src="/assets/images/SeedShock_log0_mini.jpg" />  <?php echo $company_name ?> 2011</p>
                     </footer>
 		</div>
 		

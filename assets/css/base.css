@@ -1,1 +1,78 @@
 /** Add your custom styles here **/
+
+body {
+    padding-top: 60px;
+}
+
+.right{
+    text-align: right;
+}
+
+.center{
+    text-align: center;
+}
+
+.left{
+    text-align: left;
+}
+
+.miniseedshock-logo{
+    width: 30px;
+    height: 30px;
+}
+
+.headerTinymanPhoto {
+    border: solid 1px #FFFFFF;
+    border-top: solid 1px #FFFFFF;
+    -webkit-border-radius: 2px;
+    height: 23px;
+    margin: 3px 5px 3px 3px;
+    width: 23px;
+}
+
+#pageNav .topNavLink a {
+    float: left;
+    position: relative;
+    height: 31px;
+    line-height: 29px;
+    padding: 0;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+#pageNav .topNavLink .headerTinymanName {
+    padding-right: 8px;
+    vertical-align: middle;
+}
+
+
+#pageNav .topNavLink .topSettings {
+    padding-left: 4px;
+    padding-right: 4px;
+    vertical-align: middle;
+}
+
+#pageNav {
+    margin-right: 1px;
+    padding-top: 6px;
+}
+
+#pageNav ul{ /* remove bullets and list indents */
+	list-style: none;
+/*	margin: 0;
+	padding: 0;*/
+}
+
+#pageNav li .topNavLink{
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+#pageNav li.topNavLink:hover
+{ 
+    background-color:#666;
+}
+
+.rfloat {
+    float: right;
+}

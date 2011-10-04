@@ -15,7 +15,7 @@ $template_conf = array(
 	'assets_dir' => 'assets/'
 );
 
-$template_css = array('base');
+$template_css = array('base','bootstrap.min');
 
 $template_js = array('jquery-1.6.4.min');
 
