@@ -2,9 +2,13 @@
 
 class UserDao extends CI_Model {
 
+    private $em;
+
     public function __construct() {
         parent::__construct();
         $this->load->library('doctrine');
+
+        $this->em = $this->doctrine->em;
     }
 
     /**
@@ -28,7 +32,7 @@ class UserDao extends CI_Model {
             throw new Exception("Invalid password.", 400);
         }
 
-        $prevUser = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $user->getEmail()));
+        $prevUser = $this->em->getRepository('Entities\User')->findOneByEmail($user->getEmail());
         if ($prevUser != null) {
             if ($this->config->item('user_verification_enabled') && !$prevUser->getVerified()) {
                 throw new Exception("Waiting Verification. Check your email.", 403);
@@ -63,7 +67,7 @@ class UserDao extends CI_Model {
             //throw new Exception("Insufficient data.", 400);
         }
 
-        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbInfo['fbId']));
+        $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbInfo['fbId']);
         $result = array('id' => null, 'fullName' => null, 'accessToken' => null);
 
         // TODO: consider transaction.
@@ -82,7 +86,7 @@ class UserDao extends CI_Model {
 
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
             // check whether the same email is already in User table.
-            $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
+            $user = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
 
             if ($user != null) {
                 // update User table.
@@ -91,7 +95,7 @@ class UserDao extends CI_Model {
                 $user->setFbAuthorized(TRUE);
 
                 $this->persistUser($user);
-                $this->doctrine->em->flush();
+                $this->em->flush();
             } else {
                 // create user account.
                 $user = new Entities\User();
@@ -110,25 +114,25 @@ class UserDao extends CI_Model {
                 $user->setVerified(TRUE);
                 $user->setCreated(new DateTime());
                 $this->persistUser($user);
-                $this->doctrine->em->flush();
+                $this->em->flush();
 
-                $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $fbMe['email']));
+                $user = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
                 $result['id'] = $user->getId();
 
-                $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $fbMe['email']));
+                $invitee = $this->em->getRepository('Entities\Invitee')->findOneByInviteeEmail($fbMe['email']);
                 if ($invitee != null) {
                     // update 'acceptedDate' in Invitee table.
                     $invitee->setAcceptedDate(new DateTime());
-                    $this->doctrine->em->persist($invitee);
-                    $this->doctrine->em->flush();
+                    $this->em->persist($invitee);
+                    $this->em->flush();
                 }
             }
-            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('inviteeFbId' => $fbInfo['fbId']));
+            $inviteeFb = $this->em->getRepository('Entities\InviteeFb')->findOneByInviteeFbId($fbInfo['fbId']);
             if ($inviteeFb != null) {
                 // update 'acceptedData' in InviteeFB table.
                 $inviteeFb->setAcceptedDate(new DateTime());
-                $this->doctrine->em->persist($inviteeFb);
-                $this->doctrine->em->flush();
+                $this->em->persist($inviteeFb);
+                $this->em->flush();
             }
         } else {
             // already registered
@@ -138,7 +142,7 @@ class UserDao extends CI_Model {
                 $user->setFbAuthorized(TRUE);
 
                 $this->persistUser($user);
-                $this->doctrine->em->flush();
+                $this->em->flush();
             }
         }
 
@@ -158,7 +162,7 @@ class UserDao extends CI_Model {
             throw new Exception("Invalid FB ID.", 400);
         }
 
-        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbId));
+        $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
         if ($user == null) {
             throw new Exception("FB ID not found: " . $fbId, 404);
         }
@@ -167,7 +171,7 @@ class UserDao extends CI_Model {
         if ($user->getFbAuthoried()) {
             $user->setFbAuthorized(FALSE);
             $this->persistUser($user);
-            $this->doctrine->em->flush();
+            $this->em->flush();
         }
     }
 
@@ -176,7 +180,7 @@ class UserDao extends CI_Model {
             throw new Exception("Invalid ID.", 400);
         }
 
-        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $id));
+        $user = $this->em->find('Entities\User', $id);
         if ($user == null) {
             throw new Exception("ID not found: " . $id, 404);
         }
@@ -185,7 +189,7 @@ class UserDao extends CI_Model {
         if ($user->getFbAuthorized()) {
             $user->setFbAuthorized(FALSE);
             $this->persistUser($user);
-            $this->doctrine->em->flush();
+            $this->em->flush();
         }
     }
 
@@ -209,13 +213,13 @@ class UserDao extends CI_Model {
                 $result[$fbId] = "invalid ID.";
                 continue;
             }
-            $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('fbId' => $fbId));
+            $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
             if ($user != null) {
                 $result[$fbId] = "already registered.";
                 continue;
             }
             $result[$fbId] = "invitation sent.";
-            $inviteeFb = $this->doctrine->em->getRepository('Entities\InviteeFb')->findOneBy(array('inviteeFbId' => $fbId));
+            $inviteeFb = $this->em->getRepository('Entities\InviteeFb')->findOneByInviteeFbId($fbId);
             if ($inviteeFb != null) {
                 // already sent.
                 continue;
@@ -226,12 +230,12 @@ class UserDao extends CI_Model {
                 $inviteeFb->setInvitorId($invitorId);
                 $inviteeFb->setInvitedDate($invitedDate);
 
-                $this->doctrine->em->persist($inviteeFb);
+                $this->em->persist($inviteeFb);
             } catch (Exception $e) {
                 // ignore (it happens if invition has been request by multiple clients simultaneously).
             }
         }
-        $this->doctrine->em->flush();
+        $this->em->flush();
         
         return $result;
     }
@@ -252,7 +256,7 @@ class UserDao extends CI_Model {
             throw new Exception("The 'inviteeEmails' MUST NOT be NULL.", 400);
         }
 
-        $invitor = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $invitorId));
+        $invitor = $this->em->find('Entities\User', $invitorId);
         if ($invitor == null) {
             throw new Exception("Invitor not found.", 404);
         }
@@ -264,13 +268,13 @@ class UserDao extends CI_Model {
                 continue;
             }
 
-            $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
+            $user = $this->em->getRepository('Entities\User')->findOneByEmail($email);
             if ($user != null) {
                 $result[$email] = "already registered.";
                 continue;
             }
 
-            $invitee = $this->doctrine->em->getRepository('Entities\Invitee')->findOneBy(array('inviteeEmail' => $email));
+            $invitee = $this->em->getRepository('Entities\Invitee')->findOneByInviteeEmail($email);
             if ($invitee == null) {
                 try {
                     $invitee = new Entities\Invitee();
@@ -278,7 +282,7 @@ class UserDao extends CI_Model {
                     $invitee->setInvitorId($invitorId);
                     $invitee->setInvitedDate($invitedDate);
 
-                    $this->doctrine->em->persist($invitee);
+                    $this->em->persist($invitee);
                 } catch (Exception $e) {
                     // ignore (it happens if invition has been request by multiple clients simultaneously).
                 }
@@ -293,7 +297,7 @@ class UserDao extends CI_Model {
             $this->sendEmail($email, $subject, $message);
             $result[$email] = 'invitation sent.';
         }
-        $this->doctrine->em->flush();
+        $this->em->flush();
         return $result;
     }
 
@@ -316,7 +320,7 @@ class UserDao extends CI_Model {
             throw new Exception("Invalid name (3 < name <= 100).", 400);
         }
 
-        $prevUser = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $user->getEmail()));
+        $prevUser = $this->em->getRepository('Entities\User')->findOneByEmail($user->getEmail());
 
         if ($prevUser == null) {
             // create a new user object
@@ -327,7 +331,7 @@ class UserDao extends CI_Model {
             $user->setCreated(new DateTime());
 
             $this->persistUser($user);
-            $this->doctrine->em->flush();
+            $this->em->flush();
 
             if ($this->config->item('user_verification_enabled')) {
                 // generate verification code.
@@ -339,8 +343,8 @@ class UserDao extends CI_Model {
                 $userVerification->setCode($code);
                 $userVerification->setIssuedDate(new DateTime());
 
-                $this->doctrine->em->persist($userVerification);
-                $this->doctrine->em->flush();
+                $this->em->persist($userVerification);
+                $this->em->flush();
 
                 // send verifiation email.
                 $this->sendVerificationEmail($user->getEmail(), $code);
@@ -422,20 +426,20 @@ class UserDao extends CI_Model {
      * @throws Exception 406 - if the user has already verified.
      */
     public function verifyUser($email, $code) {
-        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
+        $user = $this->em->getRepository('Entities\User')->findOneByEmail($email);
         if ($user->getVerified() != 0) {
             throw new Exception("Already Verified.", 406);
         }
 
-        $userVerification = $this->doctrine->em->getRepository('Entities\UserVerification')->findOneBy(array('email' => $email));
+        $userVerification = $this->em->getRepository('Entities\UserVerification')->findOneByEmail($email);
         if ($userVerification != null && $userVerification->getCode() == $code) {
             $user->setVerified(1);
 
-            $this->doctrine->em->beginTransaction();
+            $this->em->beginTransaction();
             $this->persistUser($user);
-            $this->doctrine->em->remove($userVerification);
-            $this->doctrine->em->flush();
-            $this->doctrine->em->commit();
+            $this->em->remove($userVerification);
+            $this->em->flush();
+            $this->em->commit();
 
             return TRUE;
         }
@@ -450,7 +454,7 @@ class UserDao extends CI_Model {
      * @return boolean
      */
     public function isDuplicateEmail($email) {
-        $q = $this->doctrine->em->createQuery('select u.email from Entities\User u where u.email = :email');
+        $q = $this->em->createQuery('select u.email from Entities\User u where u.email = :email');
         $q->setParameter('email', $email);
         $result = $q->getResult();
 
@@ -556,13 +560,13 @@ class UserDao extends CI_Model {
             }
         }
 
-        $this->doctrine->em->persist($userFb);
-        $this->doctrine->em->flush();
+        $this->em->persist($userFb);
+        $this->em->flush();
     }
 
     private function persistUser($user) {
         $user->setLastUpdated(new DateTime());
-        $this->doctrine->em->persist($user);
+        $this->em->persist($user);
     }
 }
 
