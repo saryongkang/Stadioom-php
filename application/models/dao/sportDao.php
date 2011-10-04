@@ -2,9 +2,13 @@
 
 class SportDao extends CI_Model {
 
+    private $em;
+
     public function __construct() {
         parent::__construct();
         $this->load->library('doctrine');
+
+        $this->em = $this->doctrine->em;
     }
 
     /**
@@ -17,12 +21,12 @@ class SportDao extends CI_Model {
             throw new Exception("Invalid name (5 <= name <= 32).", 400);
         }
 
-        $prev = $this->doctrine->em->getRepository('Entities\Sport')->findOneBy(array('name' => $sport->getName()));
+        $prev = $this->em->getRepository('Entities\Sport')->findOneByName($sport->getName());
         if ($prev == null) {
-            $this->doctrine->em->persist($sport);
-            $this->doctrine->em->flush();
+            $this->em->persist($sport);
+            $this->em->flush();
         }
-        $added = $this->doctrine->em->getRepository('Entities\Sport')->findOneBy(array('name' => $sport->getName()));
+        $added = $this->em->getRepository('Entities\Sport')->findOneByName($sport->getName());
         return $added->getId();
     }
 
@@ -32,10 +36,10 @@ class SportDao extends CI_Model {
      * @param integer $id
      */
     public function remove(&$id) {
-        $sport = $this->doctrine->em->getRepository('Entities\Sport')->findOneBy(array('id' => $id));
+        $sport = $this->em->find('Entities\Sport', $id);
         if ($sport != null) {
-            $this->doctrine->em->remove($sport);
-            $this->doctrine->em->flush();
+            $this->em->remove($sport);
+            $this->em->flush();
         }
     }
 
@@ -43,15 +47,15 @@ class SportDao extends CI_Model {
         if (!(is_numeric($id) && $id > 0)) {
             throw new Exception("Invalid ID: " . $id, 400);
         }
-        $sport = $this->doctrine->em->getRepository('Entities\Sport')->findOneBy(array('id' => $id));
+        $sport = $this->em->find('Entities\Sport', $id);
         if ($sport == null) {
             throw new Exception("Not Found.", 404);
         }
         return $sport;
     }
-    
+
     public function getAll() {
-        $q = $this->doctrine->em->createQuery('SELECT s FROM Entities\Sport s WHERE s.id != 0 ORDER BY s.weight DESC');
+        $q = $this->em->createQuery('SELECT s FROM Entities\Sport s WHERE s.id != 0 ORDER BY s.weight DESC');
         return $q->getResult();
     }
 
@@ -59,18 +63,12 @@ class SportDao extends CI_Model {
         if ($after == null || $after < 0) {
             $after = 0;
         }
-        $q = $this->doctrine->em->createQuery('SELECT s FROM Entities\Sport s WHERE s.latestRevision > ' . $after);
-        return $q->getResult();
+        return $this->em->getReponsitory('Entities\Sport')->findBy(array('latestRevision' > $after));
     }
 
-    /**
-     * Check if the length of string is in the given range (inclusive).
-     *
-     * @return boolean
-     */
     private function isInRange(&$str, $min, $max) {
         $length = strlen($str);
-        return $length == 0 || (3 <= $min && $length <= $max);
+        return $length == 0 || ($min <= $length && $length <= $max);
     }
 
 }

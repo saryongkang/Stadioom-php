@@ -2,9 +2,13 @@
 
 class BrandDao extends CI_Model {
 
+    private $em;
+
     public function __construct() {
         parent::__construct();
         $this->load->library('doctrine');
+
+        $this->em = $this->doctrine->em;
     }
 
     /**
@@ -17,12 +21,12 @@ class BrandDao extends CI_Model {
             throw new Exception("Invalid name (5 <= name <= 32).", 400);
         }
 
-        $prev = $this->doctrine->em->getRepository('Entities\Brand')->findOneBy(array('name' => $brand->getName()));
+        $prev = $this->em->getRepository('Entities\Brand')->findOneByName($brand->getName());
         if ($prev == null) {
-            $this->doctrine->em->persist($brand);
-            $this->doctrine->em->flush();
+            $this->em->persist($brand);
+            $this->em->flush();
         }
-        $added = $this->doctrine->em->getRepository('Entities\Brand')->findOneBy(array('name' => $brand->getName()));
+        $added = $this->em->getRepository('Entities\Brand')->findOneByName($brand->getName());
         return $added->getId();
     }
 
@@ -32,10 +36,10 @@ class BrandDao extends CI_Model {
      * @param integer $id
      */
     public function remove(&$id) {
-        $brand = $this->doctrine->em->getRepository('Entities\Brand')->findOneBy(array('id' => $id));
+        $brand = $this->em->find('Entities\Brand', $id);
         if ($brand != null) {
-            $this->doctrine->em->remove($brand);
-            $this->doctrine->em->flush();
+            $this->em->remove($brand);
+            $this->em->flush();
         }
     }
 
@@ -43,7 +47,7 @@ class BrandDao extends CI_Model {
         if (!(is_numeric($id) && $id > 0)) {
             throw new Exception("Invalid ID: " . $id, 400);
         }
-        $brand = $this->doctrine->em->getRepository('Entities\Brand')->findOneBy(array('id' => $id));
+        $brand = $this->em->find('Entities\Brand', $id);
         if ($brand == null) {
             throw new Exception("Not Found.", 404);
         }
@@ -51,7 +55,7 @@ class BrandDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->doctrine->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.id != 0 ORDER BY b.weight DESC');
+        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.id != 0 ORDER BY b.weight DESC');
         return $q->getResult();
     }
 
@@ -59,18 +63,12 @@ class BrandDao extends CI_Model {
         if ($after == null || $after < 0) {
             $after = 0;
         }
-        $q = $this->doctrine->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.latestRevision > ' . $after);
-        return $q->getResult();
+        return $this->em->getReponsitory('Entities\Brand')->findBy(array('latestRevision' > $after));
     }
 
-    /**
-     * Check if the length of string is in the given range (inclusive).
-     *
-     * @return boolean
-     */
     private function isInRange(&$str, $min, $max) {
         $length = strlen($str);
-        return $length == 0 || (3 <= $min && $length <= $max);
+        return $length == 0 || ($min <= $length && $length <= $max);
     }
 
 }
