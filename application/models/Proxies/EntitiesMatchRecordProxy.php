@@ -198,10 +198,58 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getLastUpdated();
     }
 
+    public function prePersist()
+    {
+        $this->__load();
+        return parent::prePersist();
+    }
+
+    public function preUpdate()
+    {
+        $this->__load();
+        return parent::preUpdate();
+    }
+
+    public function setTitle($title)
+    {
+        $this->__load();
+        return parent::setTitle($title);
+    }
+
+    public function getTitle()
+    {
+        $this->__load();
+        return parent::getTitle();
+    }
+
+    public function setScoreA($scoreA)
+    {
+        $this->__load();
+        return parent::setScoreA($scoreA);
+    }
+
+    public function getScoreA()
+    {
+        $this->__load();
+        return parent::getScoreA();
+    }
+
+    public function setScoreB($scoreB)
+    {
+        $this->__load();
+        return parent::setScoreB($scoreB);
+    }
+
+    public function getScoreB()
+    {
+        $this->__load();
+        return parent::getScoreB();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'matchType', 'leaugeType', 'started', 'ended', 'canceled', 'location', 'latitude', 'longitude', 'created', 'lastUpdated');
+        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leaugeType', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated');
     }
 
     public function __clone()

@@ -92,7 +92,6 @@ class Sport extends Stadioom_REST_Controller {
         }
     }
 
-
     public function brand_get() {
         $accessToken = $this->get('accessToken');
 

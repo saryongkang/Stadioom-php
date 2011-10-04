@@ -36,6 +36,12 @@ class EntitiesBrandProxy extends \Entities\Brand implements \Doctrine\ORM\Proxy\
     }
     
     
+    public function toArray()
+    {
+        $this->__load();
+        return parent::toArray();
+    }
+
     public function getId()
     {
         $this->__load();

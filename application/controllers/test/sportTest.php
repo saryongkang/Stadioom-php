@@ -90,7 +90,6 @@ class SportTest extends Test_REST_Controller {
         Assert::assertInArray($result, 2, 'id', $this->sportId2);
     }
 
-
     public function testGetSponsorBrands() {
         // get brands sponsoring sport 1.
         $result = $this->runTest("get brands sponsoring sport " . $this->sportId1, "api/sport/brand", array('accessToken' => $this->accessToken, 'sportId' => $this->sportId1), 'GET');

@@ -347,4 +347,97 @@ class MatchRecord
     {
         return $this->lastUpdated;
     }
+
+    /**
+     * @prePersist
+     */
+    public function prePersist() {
+        $now = new \DateTime();
+        if ($this->created == null) {
+            $this->created = $now;
+        }
+        $this->lastUpdated = $now;
+    }
+
+    /**
+     * @preUpdate
+     */
+    public function preUpdate() {
+        $this->lastUpdated = new \DateTime();
+    }
+    /**
+     * @var string $title
+     */
+    private $title;
+
+    /**
+     * @var integer $scoreA
+     */
+    private $scoreA;
+
+    /**
+     * @var integer $scoreB
+     */
+    private $scoreB;
+
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string $title
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set scoreA
+     *
+     * @param integer $scoreA
+     */
+    public function setScoreA($scoreA)
+    {
+        $this->scoreA = $scoreA;
+    }
+
+    /**
+     * Get scoreA
+     *
+     * @return integer $scoreA
+     */
+    public function getScoreA()
+    {
+        return $this->scoreA;
+    }
+
+    /**
+     * Set scoreB
+     *
+     * @param integer $scoreB
+     */
+    public function setScoreB($scoreB)
+    {
+        $this->scoreB = $scoreB;
+    }
+
+    /**
+     * Get scoreB
+     *
+     * @return integer $scoreB
+     */
+    public function getScoreB()
+    {
+        return $this->scoreB;
+    }
 }

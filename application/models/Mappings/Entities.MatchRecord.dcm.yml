@@ -15,20 +15,30 @@ Entities\MatchRecord:
     brandId:
       type: integer
       nullable: true
+    title:
+      type: string
+      length: 64
+      nullable: true
     matchType:
-      type: integer # team or single
+      type: integer # 1(single), 2(team)
       nullable: false
     leaugeType:
-      type: integer # amature, pro(general), or specific league. 
+      type: integer # 1(amature), 2(pro), or 3(specific league). 
       nullable: true
-    started:
+    started:  #started date/time
       type: datetime
       nullable: true
-    ended:
-      type: datetime
+    ended:  #ended date/time
+      type: integer
       nullable: true
-    canceled:
-      type: datetime
+    canceled: #canceled data/time
+      type: integer
+      nullable: true
+    scoreA: #score of team A
+      type: integer
+      nullable: true
+    scoreB: #score of team B
+      type: integer
       nullable: true
     location:
       type: string
@@ -41,8 +51,11 @@ Entities\MatchRecord:
       type: integer
       nullable: true
     created:
-      type: datetime
-      nullable: false
+      type: integer
+      nullable: true
     lastUpdated:
-      type: datetime
-      nullable: false
+      type: integer
+      nullable: true
+  lifecycleCallbacks:
+    prePersist: [prePersist]
+    preUpdate: [preUpdate]
