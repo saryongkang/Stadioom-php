@@ -55,7 +55,7 @@ class BrandDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.id != 0 ORDER BY b.weight DESC');
+        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b ORDER BY b.weight DESC');
         return $q->getResult();
     }
 
@@ -63,7 +63,9 @@ class BrandDao extends CI_Model {
         if ($after == null || $after < 0) {
             $after = 0;
         }
-        return $this->em->getReponsitory('Entities\Brand')->findBy(array('latestRevision' > $after));
+
+        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.latestRevision > ' . $after);
+        return $q->getResult();
     }
 
     private function isInRange(&$str, $min, $max) {

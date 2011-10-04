@@ -1,0 +1,12 @@
+Entities\MatchRecordTeam:
+  type: entity
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    teamId:
+      type: integer
+      nullable: false
+    

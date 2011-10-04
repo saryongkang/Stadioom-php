@@ -55,7 +55,7 @@ class SportDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->em->createQuery('SELECT s FROM Entities\Sport s WHERE s.id != 0 ORDER BY s.weight DESC');
+        $q = $this->em->createQuery('SELECT s FROM Entities\Sport s ORDER BY s.weight DESC');
         return $q->getResult();
     }
 
@@ -63,7 +63,9 @@ class SportDao extends CI_Model {
         if ($after == null || $after < 0) {
             $after = 0;
         }
-        return $this->em->getReponsitory('Entities\Sport')->findBy(array('latestRevision' > $after));
+
+        $q = $this->em->createQuery('SELECT s FROM Entities\Sport s WHERE s.latestRevision > ' . $after);
+        return $q->getResult();
     }
 
     private function isInRange(&$str, $min, $max) {
