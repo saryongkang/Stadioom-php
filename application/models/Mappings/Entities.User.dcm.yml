@@ -47,7 +47,10 @@ Entities\User:
       dafault: 0
     created:
       type: datetime
-      nullable: false
+      nullable: true
     lastUpdated:
       type: datetime
-      nullable: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist: [prePersist]
+    preUpdate: [preUpdate]

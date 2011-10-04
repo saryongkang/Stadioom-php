@@ -63,7 +63,7 @@ class UserDao extends CI_Model {
                 || $fbInfo['fbId'] == null
                 || $fbInfo['fbAccessToken'] == null
                 || $fbInfo['fbExpires'] == NULL) {
-            throw new Exception("Insufficient data. fbId=".$fbInfo['fbId']." fbAccessToken=".$fbInfo['fbAccessToken']." fbExpires=". $fbInfo['fbExpires'], 400);
+            throw new Exception("Insufficient data. fbId=" . $fbInfo['fbId'] . " fbAccessToken=" . $fbInfo['fbAccessToken'] . " fbExpires=" . $fbInfo['fbExpires'], 400);
             //throw new Exception("Insufficient data.", 400);
         }
 
@@ -94,7 +94,7 @@ class UserDao extends CI_Model {
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
 
-                $this->persistUser($user);
+                $this->em->persist($user);
                 $this->em->flush();
             } else {
                 // create user account.
@@ -112,8 +112,7 @@ class UserDao extends CI_Model {
                     }
                 }
                 $user->setVerified(TRUE);
-                $user->setCreated(new DateTime());
-                $this->persistUser($user);
+                $this->em->persist($user);
                 $this->em->flush();
 
                 $user = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
@@ -141,7 +140,7 @@ class UserDao extends CI_Model {
             if (!$user->getFbAuthorized()) {
                 $user->setFbAuthorized(TRUE);
 
-                $this->persistUser($user);
+                $this->em->persist($user);
                 $this->em->flush();
             }
         }
@@ -170,7 +169,7 @@ class UserDao extends CI_Model {
         // Update authorized field in User table.
         if ($user->getFbAuthoried()) {
             $user->setFbAuthorized(FALSE);
-            $this->persistUser($user);
+            $this->em->persist($user);
             $this->em->flush();
         }
     }
@@ -188,7 +187,7 @@ class UserDao extends CI_Model {
         // Update authorized field in User table.
         if ($user->getFbAuthorized()) {
             $user->setFbAuthorized(FALSE);
-            $this->persistUser($user);
+            $this->em->persist($user);
             $this->em->flush();
         }
     }
@@ -236,7 +235,7 @@ class UserDao extends CI_Model {
             }
         }
         $this->em->flush();
-        
+
         return $result;
     }
 
@@ -328,9 +327,8 @@ class UserDao extends CI_Model {
             $user->setFbLinked(FALSE);
             $user->setFbAuthorized(FALSE);
             $user->setVerified(FALSE);
-            $user->setCreated(new DateTime());
 
-            $this->persistUser($user);
+            $this->em->persist($user);
             $this->em->flush();
 
             if ($this->config->item('user_verification_enabled')) {
@@ -436,7 +434,7 @@ class UserDao extends CI_Model {
             $user->setVerified(1);
 
             $this->em->beginTransaction();
-            $this->persistUser($user);
+            $this->em->persist($user);
             $this->em->remove($userVerification);
             $this->em->flush();
             $this->em->commit();
@@ -514,7 +512,7 @@ class UserDao extends CI_Model {
         $fbExpires = $currentDate->getTimeStamp() + $fbInfo['fbExpires'];
         $userFb->setFbExpires($fbExpires);
         $userFb->setGender($fbMe['gender']);
-        
+
 
         if (array_key_exists('locale', $fbMe)) {
             $locale = $fbMe['locale'];
@@ -564,10 +562,6 @@ class UserDao extends CI_Model {
         $this->em->flush();
     }
 
-    private function persistUser($user) {
-        $user->setLastUpdated(new DateTime());
-        $this->em->persist($user);
-    }
 }
 
 ?>

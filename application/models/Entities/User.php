@@ -5,8 +5,8 @@ namespace Entities;
 /**
  * Entities\User
  */
-class User
-{
+class User {
+
     /**
      * @var integer $id
      */
@@ -67,14 +67,12 @@ class User
      */
     private $lastUpdated;
 
-
     /**
      * Get id
      *
      * @return integer $id
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -83,8 +81,7 @@ class User
      *
      * @param string $fbId
      */
-    public function setFbId($fbId)
-    {
+    public function setFbId($fbId) {
         $this->fbId = $fbId;
     }
 
@@ -93,8 +90,7 @@ class User
      *
      * @return string $fbId
      */
-    public function getFbId()
-    {
+    public function getFbId() {
         return $this->fbId;
     }
 
@@ -103,8 +99,7 @@ class User
      *
      * @param boolean $fbLinked
      */
-    public function setFbLinked($fbLinked)
-    {
+    public function setFbLinked($fbLinked) {
         $this->fbLinked = $fbLinked;
     }
 
@@ -113,8 +108,7 @@ class User
      *
      * @return boolean $fbLinked
      */
-    public function getFbLinked()
-    {
+    public function getFbLinked() {
         return $this->fbLinked;
     }
 
@@ -123,8 +117,7 @@ class User
      *
      * @param boolean $fbAuthorized
      */
-    public function setFbAuthorized($fbAuthorized)
-    {
+    public function setFbAuthorized($fbAuthorized) {
         $this->fbAuthorized = $fbAuthorized;
     }
 
@@ -133,8 +126,7 @@ class User
      *
      * @return boolean $fbAuthorized
      */
-    public function getFbAuthorized()
-    {
+    public function getFbAuthorized() {
         return $this->fbAuthorized;
     }
 
@@ -143,8 +135,7 @@ class User
      *
      * @param string $password
      */
-    public function setPassword($password)
-    {
+    public function setPassword($password) {
         $this->password = $password;
     }
 
@@ -153,8 +144,7 @@ class User
      *
      * @return string $password
      */
-    public function getPassword()
-    {
+    public function getPassword() {
         return $this->password;
     }
 
@@ -163,8 +153,7 @@ class User
      *
      * @param string $name
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
     }
 
@@ -173,8 +162,7 @@ class User
      *
      * @return string $name
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -183,8 +171,7 @@ class User
      *
      * @param string $email
      */
-    public function setEmail($email)
-    {
+    public function setEmail($email) {
         $this->email = $email;
     }
 
@@ -193,8 +180,7 @@ class User
      *
      * @return string $email
      */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
 
@@ -203,8 +189,7 @@ class User
      *
      * @param string $gender
      */
-    public function setGender($gender)
-    {
+    public function setGender($gender) {
         $this->gender = $gender;
     }
 
@@ -213,8 +198,7 @@ class User
      *
      * @return string $gender
      */
-    public function getGender()
-    {
+    public function getGender() {
         return $this->gender;
     }
 
@@ -223,8 +207,7 @@ class User
      *
      * @param datetime $dob
      */
-    public function setDob($dob)
-    {
+    public function setDob($dob) {
         $this->dob = $dob;
     }
 
@@ -233,8 +216,7 @@ class User
      *
      * @return datetime $dob
      */
-    public function getDob()
-    {
+    public function getDob() {
         return $this->dob;
     }
 
@@ -243,8 +225,7 @@ class User
      *
      * @param boolean $verified
      */
-    public function setVerified($verified)
-    {
+    public function setVerified($verified) {
         $this->verified = $verified;
     }
 
@@ -253,8 +234,7 @@ class User
      *
      * @return boolean $verified
      */
-    public function getVerified()
-    {
+    public function getVerified() {
         return $this->verified;
     }
 
@@ -263,8 +243,7 @@ class User
      *
      * @param datetime $created
      */
-    public function setCreated($created)
-    {
+    public function setCreated($created) {
         $this->created = $created;
     }
 
@@ -273,8 +252,7 @@ class User
      *
      * @return datetime $created
      */
-    public function getCreated()
-    {
+    public function getCreated() {
         return $this->created;
     }
 
@@ -283,8 +261,7 @@ class User
      *
      * @param datetime $lastUpdated
      */
-    public function setLastUpdated($lastUpdated)
-    {
+    public function setLastUpdated($lastUpdated) {
         $this->lastUpdated = $lastUpdated;
     }
 
@@ -293,8 +270,26 @@ class User
      *
      * @return datetime $lastUpdated
      */
-    public function getLastUpdated()
-    {
+    public function getLastUpdated() {
         return $this->lastUpdated;
     }
+
+    /**
+     * @prePersist
+     */
+    public function prePersist() {
+        $now = new \DateTime();
+        if ($this->created == null) {
+            $this->created = $now;
+        }
+        $this->lastUpdated = $now;
+    }
+
+    /**
+     * @preUpdate
+     */
+    public function preUpdate() {
+        $this->lastUpdated = new \DateTime();
+    }
+
 }

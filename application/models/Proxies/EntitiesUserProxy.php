@@ -174,6 +174,18 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::getLastUpdated();
     }
 
+    public function prePersist()
+    {
+        $this->__load();
+        return parent::prePersist();
+    }
+
+    public function preUpdate()
+    {
+        $this->__load();
+        return parent::preUpdate();
+    }
+
 
     public function __sleep()
     {
