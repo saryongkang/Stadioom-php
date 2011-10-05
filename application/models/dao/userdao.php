@@ -444,6 +444,30 @@ class UserDao extends CI_Model {
 
         return FALSE;
     }
+    
+    public function find($id) {
+        $user = $this->em->find('Entities\User', $id);
+        if ($user == null) {
+            throw new Exception("Not Found.", 404);
+        }
+        
+        return $user;
+    }
+    
+    public function search($type, $keyword) {
+        $dql = 'select u from Entities\User u where';
+        if ($type == 'name') {
+            $dql = $dql . " u.name LIKE '%" . $keyword . "%'";
+        } else if ($type == 'email') {
+            $dql = $dql . " u.email LIKE '%" . $keyword . "%'";
+        } else {
+            $dql = $dql . " u.name LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%'";
+        }
+        
+        $q = $this->em->createQuery($dql);
+        $result = $q->getResult();
+        return $result;
+   }
 
     /**
      * Check if the email exists already in the DB

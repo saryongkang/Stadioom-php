@@ -1,51 +1,54 @@
 <?php
 
-require(APPPATH . '/libraries/REST_Controller.php');
+require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
-class User extends REST_Controller {
-    function registerPost_get() {
-        // create a new user object
-        $user = new Entities\User;
-        $user->setFbId($this->get('fbId'));
-        $user->setPassword(md5($this->get('password')));
-        $user->setName($this->get('name'));
-        $user->setEmail($this->get('email'));
-        $user->setGender($this->get('gender'));
-        $dob = new DateTime();
-        $dob->setTimestamp($this->get('dob'));
-        $user->setDob($dob);
-        $user->setCreated(new DateTime());
+class User extends Stadioom_REST_Controller {
 
-        $this->doctrine->em->persist($user);
-        $this->doctrine->em->flush();
+    private $filterKeys = array('password', 'verified');
 
-        $message = array('fbId' => $user->getFbId(), 'name' => $user->getName(), 'email' => $user->getEmail(), 'message' => 'ADDED!');
+    function __construct() {
+        parent::__construct();
 
-        $this->response($message, 200); // 200 being the HTTP response code
+        $this->load->model('dao/UserDao');
+
+        if (function_exists('force_ssl'))
+            remove_ssl();
     }
 
-    // REMIND (Wegra) it's a temporal API for assisting test.
-    function register_post() {
-        // create a new user object
-        $user = new Entities\User;
-        $user->setFbId($this->post('fbId'));
-        $user->setPassword(md5($this->post('password')));
-        $user->setName($this->post('name'));
-        $user->setEmail($this->post('email'));
-        $user->setGender($this->post('gender'));
-        $dob = new DateTime();
-        $dob->setTimestamp($this->get('dob'));
-        $user->setDob($dob);
-        $user->setCreated(new DateTime());
+    public function index_get() {
+        $userId = $this->get('id');
+        if ($userId == null) {
+            $this->responseError("'id' is required.", 400);
+        }
 
-        $this->doctrine->em->persist($user);
-        $this->doctrine->em->flush();
-
-
-        $message = array('fbId' => $user->getFbId(), 'name' => $user->getName(), 'email' => $user->getEmail(), 'message' => 'ADDED!');
-
-        $this->response($message, 200); // 200 being the HTTP response code
+        $user = $this->UserDao->find($userId);
+        $this->responseOk($this->filter($user->toArray(), $this->filterKeys));
     }
+
+    public function search_get() {
+        $type = $this->get('type');
+        $keyword = $this->get('keyword');
+        if ($keyword == null) {
+            $this->responseError("'keyword' is required.", 400);
+        }
+        if (strlen($keyword) < 3) {
+            $this->responseError("'keyword' should be longer than 2.", 400);
+        }
+        if ($type == null) {
+            $type = 'all';
+        }
+        if ($type != 'name' && $type != 'email' && $type != 'all') {
+            $this->responseError("Not supported type: " . $type, 400);
+        }
+
+        $users = $this->UserDao->search($type, $keyword);
+        $array = array();
+        foreach ($users as $user) {
+            array_push($array, $this->filter($user->toArray(), $this->filterKeys));
+        }
+        $this->responseOk($array);
+    }
+
 }
 
 ?>

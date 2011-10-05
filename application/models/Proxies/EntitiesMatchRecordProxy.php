@@ -78,6 +78,18 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getBrandId();
     }
 
+    public function setTitle($title)
+    {
+        $this->__load();
+        return parent::setTitle($title);
+    }
+
+    public function getTitle()
+    {
+        $this->__load();
+        return parent::getTitle();
+    }
+
     public function setMatchType($matchType)
     {
         $this->__load();
@@ -100,6 +112,30 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
     {
         $this->__load();
         return parent::getLeaugeType();
+    }
+
+    public function setTeamAId($teamAId)
+    {
+        $this->__load();
+        return parent::setTeamAId($teamAId);
+    }
+
+    public function getTeamAId()
+    {
+        $this->__load();
+        return parent::getTeamAId();
+    }
+
+    public function setTeamBId($teamBId)
+    {
+        $this->__load();
+        return parent::setTeamBId($teamBId);
+    }
+
+    public function getTeamBId()
+    {
+        $this->__load();
+        return parent::getTeamBId();
     }
 
     public function setStarted($started)
@@ -136,6 +172,30 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
     {
         $this->__load();
         return parent::getCanceled();
+    }
+
+    public function setScoreA($scoreA)
+    {
+        $this->__load();
+        return parent::setScoreA($scoreA);
+    }
+
+    public function getScoreA()
+    {
+        $this->__load();
+        return parent::getScoreA();
+    }
+
+    public function setScoreB($scoreB)
+    {
+        $this->__load();
+        return parent::setScoreB($scoreB);
+    }
+
+    public function getScoreB()
+    {
+        $this->__load();
+        return parent::getScoreB();
     }
 
     public function setLocation($location)
@@ -198,6 +258,54 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getLastUpdated();
     }
 
+    public function addTeamAStIds(\Entities\MatchRecordPlayerA $teamAStIds)
+    {
+        $this->__load();
+        return parent::addTeamAStIds($teamAStIds);
+    }
+
+    public function getTeamAStIds()
+    {
+        $this->__load();
+        return parent::getTeamAStIds();
+    }
+
+    public function addTeamAFbIds(\Entities\MatchRecordPlayerAFb $teamAFbIds)
+    {
+        $this->__load();
+        return parent::addTeamAFbIds($teamAFbIds);
+    }
+
+    public function getTeamAFbIds()
+    {
+        $this->__load();
+        return parent::getTeamAFbIds();
+    }
+
+    public function addTeamBStIds(\Entities\MatchRecordPlayerB $teamBStIds)
+    {
+        $this->__load();
+        return parent::addTeamBStIds($teamBStIds);
+    }
+
+    public function getTeamBStIds()
+    {
+        $this->__load();
+        return parent::getTeamBStIds();
+    }
+
+    public function addTeamBFbIds(\Entities\MatchRecordPlayerBFb $teamBFbIds)
+    {
+        $this->__load();
+        return parent::addTeamBFbIds($teamBFbIds);
+    }
+
+    public function getTeamBFbIds()
+    {
+        $this->__load();
+        return parent::getTeamBFbIds();
+    }
+
     public function prePersist()
     {
         $this->__load();
@@ -210,46 +318,16 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::preUpdate();
     }
 
-    public function setTitle($title)
+    public function toArray()
     {
         $this->__load();
-        return parent::setTitle($title);
-    }
-
-    public function getTitle()
-    {
-        $this->__load();
-        return parent::getTitle();
-    }
-
-    public function setScoreA($scoreA)
-    {
-        $this->__load();
-        return parent::setScoreA($scoreA);
-    }
-
-    public function getScoreA()
-    {
-        $this->__load();
-        return parent::getScoreA();
-    }
-
-    public function setScoreB($scoreB)
-    {
-        $this->__load();
-        return parent::setScoreB($scoreB);
-    }
-
-    public function getScoreB()
-    {
-        $this->__load();
-        return parent::getScoreB();
+        return parent::toArray();
     }
 
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leaugeType', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated');
+        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leaugeType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'teamAStIds', 'teamAFbIds', 'teamBStIds', 'teamBFbIds');
     }
 
     public function __clone()

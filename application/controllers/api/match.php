@@ -40,29 +40,58 @@ class Match extends Stadioom_REST_Controller {
             $match->setStarted($this->post('started'));
             $match->setEnded($this->post('ended'));
 
-            $match->setScoreA($scoreA);
-            $match->setScoreB($scoreB);
-            $match->setTitle($title);
+            $match->setScoreA($this->post('scoreA'));
+            $match->setScoreB($this->post('scoreB'));
+            $match->setTitle($this->post('title'));
 
             $this->post('shared');
-
-            $args = array(
-                'match' => $match,
-                'teamA' => $this->post('teamA'),
-                'teamB' => $this->post('teamB'),
-                'teamAFbIds' => $this->post('teamAFbIds'),
-                'teamAStIds' => $this->post('teamAStIds'),
-                'teamBFbIds' => $this->post('teamBFbIds'),
-                'teamBStIds' => $this->post('teamBStIds')
-            );
             
-            // add to dao.
-            $this->MatchDao->register($args);
+            $match->setTeamAId($this->post('teamA'));
+            $match->setTeamAId($this->post('teamB'));
+            
+            $memberIds = $this->post('teamAStIds');
+            if (is_array($memberIds)) {
+                foreach($memberIds as $id) {
+                    $member = new Entities\MatchRecordPlayerA();
+                    $member->setStadioomId($id);
+                    $match->addTeamAStIds($member);
+                    $member->setMatch($match);
+                }
+            }
+            $memberIds = $this->post('teamAFbIds');
+            if (is_array($memberIds)) {
+                foreach($memberIds as $id) {
+                    $member = new Entities\MatchRecordPlayerAFb();
+                    $member->setFbId($id);
+                    $match->addTeamAFbIds($member);
+                    $member->setMatch($match);
+                }
+            }
+            $memberIds = $this->post('teamBStIds');
+            if (is_array($memberIds)) {
+                foreach($memberIds as $id) {
+                    $member = new Entities\MatchRecordPlayerB();
+                    $member->setStadioomId($id);
+                    $match->addTeamBStIds($member);
+                    $member->setMatch($match);
+                }
+            }
+            $memberIds = $this->post('teamBFbIds');
+            if (is_array($memberIds)) {
+                foreach($memberIds as $id) {
+                    $member = new Entities\MatchRecordPlayerBFb();
+                    $member->setFbId($id);
+                    $match->addTeamBFbIds($member);
+                    $member->setMatch($match);
+                }
+            }
+
+            $matchId = $this->MatchDao->register($match);
+            
+            $this->responseOk($matchId);
         } catch (Exception $e) {
             $this->responseError($e);
         }
-
-        $this->responseError(new Exception("Not Implemented.", 501));
     }
 
     /**
@@ -91,12 +120,19 @@ class Match extends Stadioom_REST_Controller {
         try {
             $userId = $this->verifyToken($accessToken);
 
-            $sportId = $this->get('sportId');
-            $limit = $this->get('limit');
-            $since = $this->get('since');
-            $page = $this->get('page');
+            $matchId = $this->get('matchId');
+            if ($matchId != null) {
+                $match = $this->MatchDao->find($matchId);
+                $this->responseOk($match);
+            } else {
+                $sportId = $this->get('sportId');
+                $limit = $this->get('limit');
+                $since = $this->get('since');
+                $page = $this->get('page');
 
-            return $this->MatchDao->find($since, $limit, $page, $sportId);
+                $allMatches = $this->MatchDao->findAll($since, $limit, $page, $sportId);
+                $this->responseOk($allMatches);
+            }
         } catch (Exception $e) {
             $this->responseError($e);
         }

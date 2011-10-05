@@ -25,8 +25,14 @@ Entities\MatchRecord:
     leaugeType:
       type: integer # 1(amature), 2(pro), or 3(specific league). 
       nullable: true
+    teamAId:
+      type: integer
+      nullable: true
+    teamBId:
+      type: integer
+      nullable: true
     started:  #started date/time
-      type: datetime
+      type: integer
       nullable: true
     ended:  #ended date/time
       type: integer
@@ -56,6 +62,23 @@ Entities\MatchRecord:
     lastUpdated:
       type: integer
       nullable: true
+  oneToMany:
+    teamAStIds:
+      targetEntity: MatchRecordPlayerA
+      mappedBy: match
+      cascade: [all]
+    teamAFbIds:
+      targetEntity: MatchRecordPlayerAFb
+      mappedBy: match
+      cascade: [all]
+    teamBStIds:
+      targetEntity: MatchRecordPlayerB
+      mappedBy: match
+      cascade: [all]
+    teamBFbIds:
+      targetEntity: MatchRecordPlayerBFb
+      mappedBy: match
+      cascade: [all]
   lifecycleCallbacks:
     prePersist: [prePersist]
     preUpdate: [preUpdate]

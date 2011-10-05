@@ -28,6 +28,11 @@ class MatchRecord
     private $brandId;
 
     /**
+     * @var string $title
+     */
+    private $title;
+
+    /**
      * @var integer $matchType
      */
     private $matchType;
@@ -38,19 +43,39 @@ class MatchRecord
     private $leaugeType;
 
     /**
-     * @var datetime $started
+     * @var integer $teamAId
+     */
+    private $teamAId;
+
+    /**
+     * @var integer $teamBId
+     */
+    private $teamBId;
+
+    /**
+     * @var integer $started
      */
     private $started;
 
     /**
-     * @var datetime $ended
+     * @var integer $ended
      */
     private $ended;
 
     /**
-     * @var datetime $canceled
+     * @var integer $canceled
      */
     private $canceled;
+
+    /**
+     * @var integer $scoreA
+     */
+    private $scoreA;
+
+    /**
+     * @var integer $scoreB
+     */
+    private $scoreB;
 
     /**
      * @var string $location
@@ -68,16 +93,43 @@ class MatchRecord
     private $longitude;
 
     /**
-     * @var datetime $created
+     * @var integer $created
      */
     private $created;
 
     /**
-     * @var datetime $lastUpdated
+     * @var integer $lastUpdated
      */
     private $lastUpdated;
 
+    /**
+     * @var Entities\MatchRecordPlayerA
+     */
+    private $teamAStIds;
 
+    /**
+     * @var Entities\MatchRecordPlayerAFb
+     */
+    private $teamAFbIds;
+
+    /**
+     * @var Entities\MatchRecordPlayerB
+     */
+    private $teamBStIds;
+
+    /**
+     * @var Entities\MatchRecordPlayerBFb
+     */
+    private $teamBFbIds;
+
+    public function __construct()
+    {
+        $this->teamAStIds = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->teamAFbIds = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->teamBStIds = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->teamBFbIds = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -149,6 +201,26 @@ class MatchRecord
     }
 
     /**
+     * Set title
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string $title
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Set matchType
      *
      * @param integer $matchType
@@ -189,9 +261,49 @@ class MatchRecord
     }
 
     /**
+     * Set teamAId
+     *
+     * @param integer $teamAId
+     */
+    public function setTeamAId($teamAId)
+    {
+        $this->teamAId = $teamAId;
+    }
+
+    /**
+     * Get teamAId
+     *
+     * @return integer $teamAId
+     */
+    public function getTeamAId()
+    {
+        return $this->teamAId;
+    }
+
+    /**
+     * Set teamBId
+     *
+     * @param integer $teamBId
+     */
+    public function setTeamBId($teamBId)
+    {
+        $this->teamBId = $teamBId;
+    }
+
+    /**
+     * Get teamBId
+     *
+     * @return integer $teamBId
+     */
+    public function getTeamBId()
+    {
+        return $this->teamBId;
+    }
+
+    /**
      * Set started
      *
-     * @param datetime $started
+     * @param integer $started
      */
     public function setStarted($started)
     {
@@ -201,7 +313,7 @@ class MatchRecord
     /**
      * Get started
      *
-     * @return datetime $started
+     * @return integer $started
      */
     public function getStarted()
     {
@@ -211,7 +323,7 @@ class MatchRecord
     /**
      * Set ended
      *
-     * @param datetime $ended
+     * @param integer $ended
      */
     public function setEnded($ended)
     {
@@ -221,7 +333,7 @@ class MatchRecord
     /**
      * Get ended
      *
-     * @return datetime $ended
+     * @return integer $ended
      */
     public function getEnded()
     {
@@ -231,7 +343,7 @@ class MatchRecord
     /**
      * Set canceled
      *
-     * @param datetime $canceled
+     * @param integer $canceled
      */
     public function setCanceled($canceled)
     {
@@ -241,11 +353,51 @@ class MatchRecord
     /**
      * Get canceled
      *
-     * @return datetime $canceled
+     * @return integer $canceled
      */
     public function getCanceled()
     {
         return $this->canceled;
+    }
+
+    /**
+     * Set scoreA
+     *
+     * @param integer $scoreA
+     */
+    public function setScoreA($scoreA)
+    {
+        $this->scoreA = $scoreA;
+    }
+
+    /**
+     * Get scoreA
+     *
+     * @return integer $scoreA
+     */
+    public function getScoreA()
+    {
+        return $this->scoreA;
+    }
+
+    /**
+     * Set scoreB
+     *
+     * @param integer $scoreB
+     */
+    public function setScoreB($scoreB)
+    {
+        $this->scoreB = $scoreB;
+    }
+
+    /**
+     * Get scoreB
+     *
+     * @return integer $scoreB
+     */
+    public function getScoreB()
+    {
+        return $this->scoreB;
     }
 
     /**
@@ -311,7 +463,7 @@ class MatchRecord
     /**
      * Set created
      *
-     * @param datetime $created
+     * @param integer $created
      */
     public function setCreated($created)
     {
@@ -321,7 +473,7 @@ class MatchRecord
     /**
      * Get created
      *
-     * @return datetime $created
+     * @return integer $created
      */
     public function getCreated()
     {
@@ -331,7 +483,7 @@ class MatchRecord
     /**
      * Set lastUpdated
      *
-     * @param datetime $lastUpdated
+     * @param integer $lastUpdated
      */
     public function setLastUpdated($lastUpdated)
     {
@@ -341,7 +493,7 @@ class MatchRecord
     /**
      * Get lastUpdated
      *
-     * @return datetime $lastUpdated
+     * @return integer $lastUpdated
      */
     public function getLastUpdated()
     {
@@ -349,95 +501,137 @@ class MatchRecord
     }
 
     /**
+     * Add teamAStIds
+     *
+     * @param Entities\MatchRecordPlayerA $teamAStIds
+     */
+    public function addTeamAStIds(\Entities\MatchRecordPlayerA $teamAStIds)
+    {
+        $this->teamAStIds[] = $teamAStIds;
+    }
+
+    /**
+     * Get teamAStIds
+     *
+     * @return Doctrine\Common\Collections\Collection $teamAStIds
+     */
+    public function getTeamAStIds()
+    {
+        return $this->teamAStIds;
+    }
+
+    /**
+     * Add teamAFbIds
+     *
+     * @param Entities\MatchRecordPlayerAFb $teamAFbIds
+     */
+    public function addTeamAFbIds(\Entities\MatchRecordPlayerAFb $teamAFbIds)
+    {
+        $this->teamAFbIds[] = $teamAFbIds;
+    }
+
+    /**
+     * Get teamAFbIds
+     *
+     * @return Doctrine\Common\Collections\Collection $teamAFbIds
+     */
+    public function getTeamAFbIds()
+    {
+        return $this->teamAFbIds;
+    }
+
+    /**
+     * Add teamBStIds
+     *
+     * @param Entities\MatchRecordPlayerB $teamBStIds
+     */
+    public function addTeamBStIds(\Entities\MatchRecordPlayerB $teamBStIds)
+    {
+        $this->teamBStIds[] = $teamBStIds;
+    }
+
+    /**
+     * Get teamBStIds
+     *
+     * @return Doctrine\Common\Collections\Collection $teamBStIds
+     */
+    public function getTeamBStIds()
+    {
+        return $this->teamBStIds;
+    }
+
+    /**
+     * Add teamBFbIds
+     *
+     * @param Entities\MatchRecordPlayerBFb $teamBFbIds
+     */
+    public function addTeamBFbIds(\Entities\MatchRecordPlayerBFb $teamBFbIds)
+    {
+        $this->teamBFbIds[] = $teamBFbIds;
+    }
+
+    /**
+     * Get teamBFbIds
+     *
+     * @return Doctrine\Common\Collections\Collection $teamBFbIds
+     */
+    public function getTeamBFbIds()
+    {
+        return $this->teamBFbIds;
+    }
+    
+    /**
      * @prePersist
      */
     public function prePersist() {
         $now = new \DateTime();
+        $timestamp = $now->getTimestamp();
         if ($this->created == null) {
-            $this->created = $now;
+            $this->created = $timestamp;
         }
-        $this->lastUpdated = $now;
+        $this->lastUpdated = $timestamp;
     }
 
     /**
      * @preUpdate
      */
     public function preUpdate() {
-        $this->lastUpdated = new \DateTime();
-    }
-    /**
-     * @var string $title
-     */
-    private $title;
-
-    /**
-     * @var integer $scoreA
-     */
-    private $scoreA;
-
-    /**
-     * @var integer $scoreB
-     */
-    private $scoreB;
-
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
+        $now = new \DateTime();
+        $timestamp = $now->getTimestamp();
+        $this->lastUpdated = $timestamp;
     }
 
-    /**
-     * Get title
-     *
-     * @return string $title
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
+    public function toArray() {
+        $array = get_object_vars($this);
+        
+        $teamAStIds = array();
+        $teamAFbIds = array();
+        $teamBStIds = array();
+        $teamBFbIds = array();
+        
+        $stIds = $this->getTeamAStIds();
+        foreach($stIds as $stId) {
+            array_push($teamAStIds, $stId->getStadioomId());
+        }
+        $fbIds = $this->getTeamAFbIds();
+        foreach($fbIds as $fbId) {
+            array_push($teamAFbIds, $fbId->getFbId());
+        }
+        $stIds = $this->getTeamBStIds();
+        foreach($stIds as $stId) {
+            array_push($teamBStIds, $stId->getStadioomId());
+        }
+        $fbIds = $this->getTeamBFbIds();
+        foreach($fbIds as $fbId) {
+            array_push($teamBFbIds, $fbId->getFbId());
+        }
 
-    /**
-     * Set scoreA
-     *
-     * @param integer $scoreA
-     */
-    public function setScoreA($scoreA)
-    {
-        $this->scoreA = $scoreA;
+        $array['teamAStIds'] = $teamAStIds;
+        $array['teamAFbIds'] = $teamAFbIds;
+        $array['teamBStIds'] = $teamBStIds;
+        $array['teamBFbIds'] = $teamBFbIds;
+        
+        return $array;
     }
-
-    /**
-     * Get scoreA
-     *
-     * @return integer $scoreA
-     */
-    public function getScoreA()
-    {
-        return $this->scoreA;
-    }
-
-    /**
-     * Set scoreB
-     *
-     * @param integer $scoreB
-     */
-    public function setScoreB($scoreB)
-    {
-        $this->scoreB = $scoreB;
-    }
-
-    /**
-     * Get scoreB
-     *
-     * @return integer $scoreB
-     */
-    public function getScoreB()
-    {
-        return $this->scoreB;
-    }
+    
 }

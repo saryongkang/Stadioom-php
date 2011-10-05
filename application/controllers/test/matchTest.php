@@ -20,7 +20,7 @@ class MatchTest extends Test_REST_Controller {
         $result = $this->sendPost($this->config->item('base_url') . "api/auth/signUp", array('grantType' => 'authorization_code', 'code' => $grantCode, 'name' => 'test account #1', 'gender' => 'male', 'dob' => 1232123222));
         $result = $this->sendPost($this->config->item('base_url') . "api/auth/signIn", array('grantType' => 'authorization_code', 'code' => $grantCode));
         $this->accessToken = json_decode($result)->accessToken;
-        
+
         // add user 1 (team A)
         // add user 2 (team A)
         // add user 3 (team B)
@@ -47,21 +47,16 @@ class MatchTest extends Test_REST_Controller {
             'scoreB' => 2,
             'teamAStIds' => array('1', '2'),
             'teamBStIds' => array('3', '4')
-            );
-        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+        );
+//        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
         $result = $this->runTest("register a match with valid info. (me vs. user 3)", "api/match", $param);
-        
-        echo 'hello';
-        
-        
-        // register a match with valid info. ({me, user 1} vs. {user 3, 4})
-        
-        
-        // register a match with facebook IDs. ({me, user 1} vs. {user 3, fbId 1})
-        
-        // register a match with facebook IDs. ({me, fbId 1} vs. {fbId 2, 3})
+        Assert::assertTrue(intval($result) > 0);
 
-        
+
+
+        // register a match with valid info. ({me, user 1} vs. {user 3, 4})
+        // register a match with facebook IDs. ({me, user 1} vs. {user 3, fbId 1})
+        // register a match with facebook IDs. ({me, fbId 1} vs. {fbId 2, 3})
 //        // get sport 1
 //        $result = $this->runTest("get a sport info by ID #" . $this->sportId1, "api/sport", array('accessToken' => $this->accessToken, 'id' => $this->sportId1), 'GET');
 //        Assert::assertArray($result, 'id', $this->sportId1);
@@ -82,40 +77,39 @@ class MatchTest extends Test_REST_Controller {
 //        $result = $this->runTest("get a sport info by (invalid) ID #xyz", "api/sport", array('accessToken' => $this->accessToken, 'id' => 'xyz'), 'GET');
 //        Assert::assertError($result, 400);
     }
-    
+
     public function testRegister_N() {
         // register a match with invalid info. ({me} vs. {user 3, 4, 6})
-        
         // register a match with invalid sport ID. (me vs. user 3)
-        
         // register a match with unsupported sport ID. (me vs. user 3)
-        
         // register a match with invalid brand ID. (me vs. user 3)
-        
         // register a match with unsupported brand ID. (me vs. user 3)
     }
-    
+
     public function testGetList() {
         // pre: register 5 matches (sport ID = 1, date = 2011-10-01)
         // pre: register 9 matches (sport ID = 1, date = 2011-10-02)
         // pre: register 3 matches (sport ID = 1, date = 2011-10-03)
         // pre: register 3 matches (sport ID = 2, date = 2011-10-02)
-        
+        $param = array('accessToken' => $this->accessToken,
+            'matchId' => 2);
+        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+        $result = $this->runTest("get a match with id: " . $param['matchId'], "api/match", $param, 'GET');
+        Assert::assertArray($result, 'id', $param['matchId']);
+
+        $param = array('accessToken' => $this->accessToken,
+            'since' => 1317803729,
+            'sportId' => 1);
+        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 1)
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 2)
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 3)
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 4)
-        
         // get registered matches. (sport ID = 2, since = 2011-10-02, limit = 5, page = 1)
         // get registered matches. (sport ID = 2, since = 2011-10-02, limit = 5, page = 2)
-        
         // get registered matches. (sport ID = 2, since = 2011-10-03, limit = 5, page = 1)
-        
         // get registered matches. (sport ID = 2, limit = 5, page = 1)
-        
         // get registered matches. (sport ID = null, since = 2011-10-02, limit = 5, page = 2)
-        
-        
         // negatives..
         // get registered matches. (sport ID = 3, limit = 5, page = 1)
         // get registered matches. (sport ID = xyx, limit = 5, page = 1)
@@ -125,8 +119,8 @@ class MatchTest extends Test_REST_Controller {
         // get registered matches. (sport ID = 3, limit = 10000, page = 1)
         // get registered matches. (sport ID = 3, limit = 10000, page = 0)
         // get registered matches. (sport ID = 3, limit = 10000, page = -1)
-   }
-    
+    }
+
 //    public function testGetAll() {
 //        // get all sports
 //        $result = $this->runTest("get all sports", "api/sport", array('accessToken' => $this->accessToken), 'GET');

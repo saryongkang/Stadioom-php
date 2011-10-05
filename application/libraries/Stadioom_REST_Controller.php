@@ -318,6 +318,12 @@ class Assert {
     public static function fail() {
         throw new Exception("Assertion failed.");
     }
+    
+    public static function assertTrue($value) {
+        if (!$value) {
+            throw new Exception("expected: true, actual: " . $value);
+        }
+    }
 
     public static function assertArrayCount($result, $expectedCount) {
         $actual = json_decode($result);
