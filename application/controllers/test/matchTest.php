@@ -73,7 +73,7 @@ class MatchTest extends Test_REST_Controller {
                 array('fbId' => '112', 'name' => 'From FB: 112'),
                 array('fbId' => '122', 'name' => 'From FB: 122'))
         );
-        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+//        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
         $result = $this->runTest("register a match with valid info. (me vs. user 3)", "api/match", $param);
         Assert::assertTrue(intval($result) > 0);
 

@@ -135,6 +135,42 @@ class UserDao extends CI_Model {
             }
         } else {
             // already registered
+
+            if (!$user->getFbLinked()) {                // auto-generated.
+                // get data from FB.
+                $this->load->library('fb_connect');
+                $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
+
+                try {
+                    $fbMe = $this->fb_connect->api('/me', 'GET');
+                } catch (FacebookApiException $e) {
+                    throw new Exception("Failed to get authorized by Facebook.", 401, $e);
+                }
+
+                // add to UserFB table.
+                $this->storeUserFb($fbInfo, $fbMe);
+
+                // fill user data and persist it.
+                $user->setName($fbMe['first_name'] . ' ' . $fbMe['last_name']);
+                $user->setEmail($fbMe['email']);
+                $user->setGender($fbMe['gender']);
+                if (array_key_exists('birthday', $fbMe)) {
+                    $birthday = $fbMe['birthday'];
+                    if ($birthday != null) {
+                        $user->setDob(new DateTime($birthday));
+                    }
+                }
+                $user->setVerified(TRUE);
+                
+                // is the FB email exist in the User table?
+                $prevUser = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
+                if ($prevUser != null) {
+                    // TODO (critical????) merge data.
+                }
+
+                $user->setFbLinked(true);
+            }
+
             $result['id'] = $user->getId();
             $result['fullName'] = $user->getName();
             if (!$user->getFbAuthorized()) {
@@ -444,16 +480,16 @@ class UserDao extends CI_Model {
 
         return FALSE;
     }
-    
+
     public function find($id) {
         $user = $this->em->find('Entities\User', $id);
         if ($user == null) {
             throw new Exception("Not Found.", 404);
         }
-        
+
         return $user;
     }
-    
+
     public function search($type, $keyword) {
         $dql = 'select u from Entities\User u where';
         if ($type == 'name') {
@@ -463,11 +499,11 @@ class UserDao extends CI_Model {
         } else {
             $dql = $dql . " u.name LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%'";
         }
-        
+
         $q = $this->em->createQuery($dql);
         $result = $q->getResult();
         return $result;
-   }
+    }
 
     /**
      * Check if the email exists already in the DB
