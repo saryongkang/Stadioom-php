@@ -42,7 +42,11 @@ class Home extends CI_Controller {
             'redirect_uri' => 'https://stadioom.com/fb/session/login/'
         );
         
+        $data['loginUrl'] = $facebook->getLoginUrl($fbLoginData);
+        
         // Login or logout url will be needed depending on current user state.
+        
+        // CHANGE THIS!
         if ($data['fbUser']) {
             
            $data['logoutUrl'] = $facebook->getLogoutUrl();

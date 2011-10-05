@@ -76,3 +76,8 @@ body {
 .rfloat {
     float: right;
 }
+
+.tiny-img-square{
+    width: 20px;
+    height:20px;
+}

@@ -1,29 +1,23 @@
 
 <h2>New Match</h2>
 
-Total points: {$totalPoints} 
-<br />
-
-Select sport
-
 <form action="" class="form-stacked">
     <fieldset>
-      <legend>Example form legend</legend>
-      <div class="clearfix">
+      <legend>Register your match
+      </legend>
+<!--      <div class="clearfix">
         <label for="xlInput3">X-Large input</label>
         <div class="input">
           <input class="xlarge" id="xlInput3" name="xlInput3" size="30" type="text" />
         </div>
-      </div><!-- /clearfix -->
+      </div> /clearfix -->
       <div class="clearfix">
-        <label for="stackedSelect">Select</label>
+        <label for="stackedSelect">Select Sport</label>
         <div class="input">
           <select name="stackedSelect" id="stackedSelect">
-            <?php foreach ($sportsList as $sport):?>
 
-            <option><?php echo $sport['name'];?></option>
-            <input type="hidden" name="id" value="<?php echo $sport['id'];?>" />
-            
+            <?php foreach ($sportsList as $sport):?>
+            <option value="<?php echo $sport->getId(); ?>"><?php echo $sport->getName(); ?></option>
             <?php endforeach;?>
             
           </select>
@@ -36,14 +30,14 @@ Select sport
           <ul class="inputs-list">
             <li>
               <label>
-                <input type="checkbox" name="optionsShare" value="fb" />
-                <span>Facebook<img src="/assets/images/facebook-icon-small.jpg" /></span>
+                <input type="checkbox" name="optionsShare" value="fb" checked/>
+                <span><img src="/assets/images/social/facebook_16.png" />Facebook</span>
               </label>
             </li>
             <li>
               <label>
-                <input type="checkbox" name="optionsShare" value="twitter" />
-                <span>Twitter<img src="/assets/images/twitter-icon-small.png" /></span>
+                <input type="checkbox" name="optionsShare" value="twitter" checked/>
+                <span><img src="/assets/images/social/twitter_16.png" />Twitter</span>
               </label>
             </li>
           </ul>

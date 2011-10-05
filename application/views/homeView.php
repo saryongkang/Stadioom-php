@@ -1,29 +1,24 @@
 
 <div class="container">
 
-  <!-- Main hero unit for a primary marketing message or call to action -->
-
   <div class="row">
-      <div class="span8">
-          Logo goes here
+      <div id="emptySpace" class="span16">
+          &nbsp;
       </div>
-      <div class="span8 showgrid">
+  </div>
   
-          <?php if ($fbUser): ?>
-            <a href="<?php echo $logoutUrl; ?>">Logout</a>
-            <?php else: ?>
-            <div id="php-fb-connect">
-            Login using OAuth 2.0 handled by the PHP SDK:
+  <div class="row">
+      <div class="span9">
+          &nbsp;
+      </div>
+      <div class="span7 showgrid">
             <a href="<?php echo $loginUrl; ?>"><img src="assets/images/fb-connect-large.png" /> </a>
-          </div>
-            
-            <?php endif ?>
       </div>
   </div> <!-- row -->
 
   <!-- Example row of columns -->
   <div class="row">
-      <div class="span6">
+      <div class="span9">
           
 <!-- Necessary Scripts -->
 <div id="fb-root" > </div>
@@ -37,10 +32,10 @@
     
 
           <!-- FB Buttons and G+ -->
-          
-        <div id="social-buttons">
+        <div id="social-buttons" class="row">
+            <div class="span3"> &nbsp;</div>
             <div class="span1">
-                <div class="fb-like" data-href="http://facebook.com/pages/Stadioom/168539803210962" data-send="false" data-layout="box_count" data-width="100" data-show-faces="true"></div>
+                <div class="fb-like" data-href="http://facebook.com/pages/Stadioom/168539803210962" data-send="false" data-layout="box_count" data-width="50" data-show-faces="true"></div>
             </div>
             
             <!-- http://www.seedshock.com/fb/login -->
@@ -65,9 +60,10 @@
                   })();
                 </script>
             </div>
+            <div class="span3"> &nbsp;</div>
         </div>
       </div>
-        <div class="span10">
+        <div class="span7">
           <h2>Changing paradigms...</h2>
           <p>Stadioom is the ultimate way to bring competitive sports online.</p>
           <!-- <p><a class="btn" href="#">Read more &raquo;</a></p> -->
