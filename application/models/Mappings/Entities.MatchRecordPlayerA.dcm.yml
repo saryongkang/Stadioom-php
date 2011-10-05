@@ -1,0 +1,19 @@
+Entities\MatchRecordPlayerA:
+  type: entity
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+#    matchId:
+#      type: integer
+#      nullable: false
+    stadioomId:
+      type: integer
+      nullable: false
+  manyToOne:
+    match:
+      targetEntity: MatchRecord
+      inversedBy: teamAStIds
+    
