@@ -63,20 +63,12 @@ Entities\MatchRecord:
       type: integer
       nullable: true
   oneToMany:
-    teamAStIds:
-      targetEntity: MatchRecordPlayerA
+    memberIdsA:
+      targetEntity: MatchRecordMemberA
       mappedBy: match
       cascade: [all]
-    teamAFbIds:
-      targetEntity: MatchRecordPlayerAFb
-      mappedBy: match
-      cascade: [all]
-    teamBStIds:
-      targetEntity: MatchRecordPlayerB
-      mappedBy: match
-      cascade: [all]
-    teamBFbIds:
-      targetEntity: MatchRecordPlayerBFb
+    memberIdsB:
+      targetEntity: MatchRecordMemberB
       mappedBy: match
       cascade: [all]
   lifecycleCallbacks:

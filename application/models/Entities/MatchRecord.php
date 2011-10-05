@@ -5,8 +5,8 @@ namespace Entities;
 /**
  * Entities\MatchRecord
  */
-class MatchRecord
-{
+class MatchRecord {
+
     /**
      * @var integer $id
      */
@@ -103,40 +103,26 @@ class MatchRecord
     private $lastUpdated;
 
     /**
-     * @var Entities\MatchRecordPlayerA
+     * @var Entities\MatchRecordMemberA
      */
-    private $teamAStIds;
+    private $memberIdsA;
 
     /**
-     * @var Entities\MatchRecordPlayerAFb
+     * @var Entities\MatchRecordMemberB
      */
-    private $teamAFbIds;
+    private $memberIdsB;
 
-    /**
-     * @var Entities\MatchRecordPlayerB
-     */
-    private $teamBStIds;
-
-    /**
-     * @var Entities\MatchRecordPlayerBFb
-     */
-    private $teamBFbIds;
-
-    public function __construct()
-    {
-        $this->teamAStIds = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->teamAFbIds = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->teamBStIds = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->teamBFbIds = new \Doctrine\Common\Collections\ArrayCollection();
+    public function __construct() {
+        $this->memberIdsA = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->memberIdsB = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer $id
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -145,8 +131,7 @@ class MatchRecord
      *
      * @param integer $ownerId
      */
-    public function setOwnerId($ownerId)
-    {
+    public function setOwnerId($ownerId) {
         $this->ownerId = $ownerId;
     }
 
@@ -155,8 +140,7 @@ class MatchRecord
      *
      * @return integer $ownerId
      */
-    public function getOwnerId()
-    {
+    public function getOwnerId() {
         return $this->ownerId;
     }
 
@@ -165,8 +149,7 @@ class MatchRecord
      *
      * @param integer $sportId
      */
-    public function setSportId($sportId)
-    {
+    public function setSportId($sportId) {
         $this->sportId = $sportId;
     }
 
@@ -175,8 +158,7 @@ class MatchRecord
      *
      * @return integer $sportId
      */
-    public function getSportId()
-    {
+    public function getSportId() {
         return $this->sportId;
     }
 
@@ -185,8 +167,7 @@ class MatchRecord
      *
      * @param integer $brandId
      */
-    public function setBrandId($brandId)
-    {
+    public function setBrandId($brandId) {
         $this->brandId = $brandId;
     }
 
@@ -195,8 +176,7 @@ class MatchRecord
      *
      * @return integer $brandId
      */
-    public function getBrandId()
-    {
+    public function getBrandId() {
         return $this->brandId;
     }
 
@@ -205,8 +185,7 @@ class MatchRecord
      *
      * @param string $title
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
     }
 
@@ -215,8 +194,7 @@ class MatchRecord
      *
      * @return string $title
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
@@ -225,8 +203,7 @@ class MatchRecord
      *
      * @param integer $matchType
      */
-    public function setMatchType($matchType)
-    {
+    public function setMatchType($matchType) {
         $this->matchType = $matchType;
     }
 
@@ -235,8 +212,7 @@ class MatchRecord
      *
      * @return integer $matchType
      */
-    public function getMatchType()
-    {
+    public function getMatchType() {
         return $this->matchType;
     }
 
@@ -245,8 +221,7 @@ class MatchRecord
      *
      * @param integer $leaugeType
      */
-    public function setLeaugeType($leaugeType)
-    {
+    public function setLeaugeType($leaugeType) {
         $this->leaugeType = $leaugeType;
     }
 
@@ -255,8 +230,7 @@ class MatchRecord
      *
      * @return integer $leaugeType
      */
-    public function getLeaugeType()
-    {
+    public function getLeaugeType() {
         return $this->leaugeType;
     }
 
@@ -265,8 +239,7 @@ class MatchRecord
      *
      * @param integer $teamAId
      */
-    public function setTeamAId($teamAId)
-    {
+    public function setTeamAId($teamAId) {
         $this->teamAId = $teamAId;
     }
 
@@ -275,8 +248,7 @@ class MatchRecord
      *
      * @return integer $teamAId
      */
-    public function getTeamAId()
-    {
+    public function getTeamAId() {
         return $this->teamAId;
     }
 
@@ -285,8 +257,7 @@ class MatchRecord
      *
      * @param integer $teamBId
      */
-    public function setTeamBId($teamBId)
-    {
+    public function setTeamBId($teamBId) {
         $this->teamBId = $teamBId;
     }
 
@@ -295,8 +266,7 @@ class MatchRecord
      *
      * @return integer $teamBId
      */
-    public function getTeamBId()
-    {
+    public function getTeamBId() {
         return $this->teamBId;
     }
 
@@ -305,8 +275,7 @@ class MatchRecord
      *
      * @param integer $started
      */
-    public function setStarted($started)
-    {
+    public function setStarted($started) {
         $this->started = $started;
     }
 
@@ -315,8 +284,7 @@ class MatchRecord
      *
      * @return integer $started
      */
-    public function getStarted()
-    {
+    public function getStarted() {
         return $this->started;
     }
 
@@ -325,8 +293,7 @@ class MatchRecord
      *
      * @param integer $ended
      */
-    public function setEnded($ended)
-    {
+    public function setEnded($ended) {
         $this->ended = $ended;
     }
 
@@ -335,8 +302,7 @@ class MatchRecord
      *
      * @return integer $ended
      */
-    public function getEnded()
-    {
+    public function getEnded() {
         return $this->ended;
     }
 
@@ -345,8 +311,7 @@ class MatchRecord
      *
      * @param integer $canceled
      */
-    public function setCanceled($canceled)
-    {
+    public function setCanceled($canceled) {
         $this->canceled = $canceled;
     }
 
@@ -355,8 +320,7 @@ class MatchRecord
      *
      * @return integer $canceled
      */
-    public function getCanceled()
-    {
+    public function getCanceled() {
         return $this->canceled;
     }
 
@@ -365,8 +329,7 @@ class MatchRecord
      *
      * @param integer $scoreA
      */
-    public function setScoreA($scoreA)
-    {
+    public function setScoreA($scoreA) {
         $this->scoreA = $scoreA;
     }
 
@@ -375,8 +338,7 @@ class MatchRecord
      *
      * @return integer $scoreA
      */
-    public function getScoreA()
-    {
+    public function getScoreA() {
         return $this->scoreA;
     }
 
@@ -385,8 +347,7 @@ class MatchRecord
      *
      * @param integer $scoreB
      */
-    public function setScoreB($scoreB)
-    {
+    public function setScoreB($scoreB) {
         $this->scoreB = $scoreB;
     }
 
@@ -395,8 +356,7 @@ class MatchRecord
      *
      * @return integer $scoreB
      */
-    public function getScoreB()
-    {
+    public function getScoreB() {
         return $this->scoreB;
     }
 
@@ -405,8 +365,7 @@ class MatchRecord
      *
      * @param string $location
      */
-    public function setLocation($location)
-    {
+    public function setLocation($location) {
         $this->location = $location;
     }
 
@@ -415,8 +374,7 @@ class MatchRecord
      *
      * @return string $location
      */
-    public function getLocation()
-    {
+    public function getLocation() {
         return $this->location;
     }
 
@@ -425,8 +383,7 @@ class MatchRecord
      *
      * @param integer $latitude
      */
-    public function setLatitude($latitude)
-    {
+    public function setLatitude($latitude) {
         $this->latitude = $latitude;
     }
 
@@ -435,8 +392,7 @@ class MatchRecord
      *
      * @return integer $latitude
      */
-    public function getLatitude()
-    {
+    public function getLatitude() {
         return $this->latitude;
     }
 
@@ -445,8 +401,7 @@ class MatchRecord
      *
      * @param integer $longitude
      */
-    public function setLongitude($longitude)
-    {
+    public function setLongitude($longitude) {
         $this->longitude = $longitude;
     }
 
@@ -455,8 +410,7 @@ class MatchRecord
      *
      * @return integer $longitude
      */
-    public function getLongitude()
-    {
+    public function getLongitude() {
         return $this->longitude;
     }
 
@@ -465,8 +419,7 @@ class MatchRecord
      *
      * @param integer $created
      */
-    public function setCreated($created)
-    {
+    public function setCreated($created) {
         $this->created = $created;
     }
 
@@ -475,8 +428,7 @@ class MatchRecord
      *
      * @return integer $created
      */
-    public function getCreated()
-    {
+    public function getCreated() {
         return $this->created;
     }
 
@@ -485,8 +437,7 @@ class MatchRecord
      *
      * @param integer $lastUpdated
      */
-    public function setLastUpdated($lastUpdated)
-    {
+    public function setLastUpdated($lastUpdated) {
         $this->lastUpdated = $lastUpdated;
     }
 
@@ -495,91 +446,46 @@ class MatchRecord
      *
      * @return integer $lastUpdated
      */
-    public function getLastUpdated()
-    {
+    public function getLastUpdated() {
         return $this->lastUpdated;
     }
 
     /**
-     * Add teamAStIds
+     * Add memberIdsA
      *
-     * @param Entities\MatchRecordPlayerA $teamAStIds
+     * @param Entities\MatchRecordMemberA $memberIdsA
      */
-    public function addTeamAStIds(\Entities\MatchRecordPlayerA $teamAStIds)
-    {
-        $this->teamAStIds[] = $teamAStIds;
+    public function addMemberIdsA(\Entities\MatchRecordMemberA $memberIdsA) {
+        $this->memberIdsA[] = $memberIdsA;
     }
 
     /**
-     * Get teamAStIds
+     * Get memberIdsA
      *
-     * @return Doctrine\Common\Collections\Collection $teamAStIds
+     * @return Doctrine\Common\Collections\Collection $memberIdsA
      */
-    public function getTeamAStIds()
-    {
-        return $this->teamAStIds;
+    public function getMemberIdsA() {
+        return $this->memberIdsA;
     }
 
     /**
-     * Add teamAFbIds
+     * Add memberIdsB
      *
-     * @param Entities\MatchRecordPlayerAFb $teamAFbIds
+     * @param Entities\MatchRecordMemberB $memberIdsB
      */
-    public function addTeamAFbIds(\Entities\MatchRecordPlayerAFb $teamAFbIds)
-    {
-        $this->teamAFbIds[] = $teamAFbIds;
+    public function addMemberIdsB(\Entities\MatchRecordMemberB $memberIdsB) {
+        $this->memberIdsB[] = $memberIdsB;
     }
 
     /**
-     * Get teamAFbIds
+     * Get memberIdsB
      *
-     * @return Doctrine\Common\Collections\Collection $teamAFbIds
+     * @return Doctrine\Common\Collections\Collection $memberIdsB
      */
-    public function getTeamAFbIds()
-    {
-        return $this->teamAFbIds;
+    public function getMemberIdsB() {
+        return $this->memberIdsB;
     }
 
-    /**
-     * Add teamBStIds
-     *
-     * @param Entities\MatchRecordPlayerB $teamBStIds
-     */
-    public function addTeamBStIds(\Entities\MatchRecordPlayerB $teamBStIds)
-    {
-        $this->teamBStIds[] = $teamBStIds;
-    }
-
-    /**
-     * Get teamBStIds
-     *
-     * @return Doctrine\Common\Collections\Collection $teamBStIds
-     */
-    public function getTeamBStIds()
-    {
-        return $this->teamBStIds;
-    }
-
-    /**
-     * Add teamBFbIds
-     *
-     * @param Entities\MatchRecordPlayerBFb $teamBFbIds
-     */
-    public function addTeamBFbIds(\Entities\MatchRecordPlayerBFb $teamBFbIds)
-    {
-        $this->teamBFbIds[] = $teamBFbIds;
-    }
-
-    /**
-     * Get teamBFbIds
-     *
-     * @return Doctrine\Common\Collections\Collection $teamBFbIds
-     */
-    public function getTeamBFbIds()
-    {
-        return $this->teamBFbIds;
-    }
-    
     /**
      * @prePersist
      */
@@ -603,35 +509,23 @@ class MatchRecord
 
     public function toArray() {
         $array = get_object_vars($this);
-        
-        $teamAStIds = array();
-        $teamAFbIds = array();
-        $teamBStIds = array();
-        $teamBFbIds = array();
-        
-        $stIds = $this->getTeamAStIds();
-        foreach($stIds as $stId) {
-            array_push($teamAStIds, $stId->getStadioomId());
+
+        $memberIdsA = array();
+        $memberIdsB = array();
+
+        $stIds = $this->getMemberIdsA();
+        foreach ($stIds as $stId) {
+            array_push($memberIdsA, $stId->getUserId());
         }
-        $fbIds = $this->getTeamAFbIds();
-        foreach($fbIds as $fbId) {
-            array_push($teamAFbIds, $fbId->getFbId());
-        }
-        $stIds = $this->getTeamBStIds();
-        foreach($stIds as $stId) {
-            array_push($teamBStIds, $stId->getStadioomId());
-        }
-        $fbIds = $this->getTeamBFbIds();
-        foreach($fbIds as $fbId) {
-            array_push($teamBFbIds, $fbId->getFbId());
+        $stIds = $this->getMemberIdsB();
+        foreach ($stIds as $stId) {
+            array_push($memberIdsB, $stId->getUserId());
         }
 
-        $array['teamAStIds'] = $teamAStIds;
-        $array['teamAFbIds'] = $teamAFbIds;
-        $array['teamBStIds'] = $teamBStIds;
-        $array['teamBFbIds'] = $teamBFbIds;
-        
+        $array['memberIdsA'] = $memberIdsA;
+        $array['memberIdsB'] = $memberIdsB;
+
         return $array;
     }
-    
+
 }

@@ -258,52 +258,28 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getLastUpdated();
     }
 
-    public function addTeamAStIds(\Entities\MatchRecordPlayerA $teamAStIds)
+    public function addMemberIdsA(\Entities\MatchRecordMemberA $memberIdsA)
     {
         $this->__load();
-        return parent::addTeamAStIds($teamAStIds);
+        return parent::addMemberIdsA($memberIdsA);
     }
 
-    public function getTeamAStIds()
+    public function getMemberIdsA()
     {
         $this->__load();
-        return parent::getTeamAStIds();
+        return parent::getMemberIdsA();
     }
 
-    public function addTeamAFbIds(\Entities\MatchRecordPlayerAFb $teamAFbIds)
+    public function addMemberIdsB(\Entities\MatchRecordMemberB $memberIdsB)
     {
         $this->__load();
-        return parent::addTeamAFbIds($teamAFbIds);
+        return parent::addMemberIdsB($memberIdsB);
     }
 
-    public function getTeamAFbIds()
+    public function getMemberIdsB()
     {
         $this->__load();
-        return parent::getTeamAFbIds();
-    }
-
-    public function addTeamBStIds(\Entities\MatchRecordPlayerB $teamBStIds)
-    {
-        $this->__load();
-        return parent::addTeamBStIds($teamBStIds);
-    }
-
-    public function getTeamBStIds()
-    {
-        $this->__load();
-        return parent::getTeamBStIds();
-    }
-
-    public function addTeamBFbIds(\Entities\MatchRecordPlayerBFb $teamBFbIds)
-    {
-        $this->__load();
-        return parent::addTeamBFbIds($teamBFbIds);
-    }
-
-    public function getTeamBFbIds()
-    {
-        $this->__load();
-        return parent::getTeamBFbIds();
+        return parent::getMemberIdsB();
     }
 
     public function prePersist()
@@ -327,7 +303,7 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leaugeType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'teamAStIds', 'teamAFbIds', 'teamBStIds', 'teamBFbIds');
+        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leaugeType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'memberIdsA', 'memberIdsB');
     }
 
     public function __clone()

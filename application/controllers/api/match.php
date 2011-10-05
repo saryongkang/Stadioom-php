@@ -49,39 +49,21 @@ class Match extends Stadioom_REST_Controller {
             $match->setTeamAId($this->post('teamA'));
             $match->setTeamAId($this->post('teamB'));
             
-            $memberIds = $this->post('teamAStIds');
+            $memberIds = $this->post('memberIdsA');
             if (is_array($memberIds)) {
                 foreach($memberIds as $id) {
-                    $member = new Entities\MatchRecordPlayerA();
-                    $member->setStadioomId($id);
-                    $match->addTeamAStIds($member);
+                    $member = new Entities\MatchRecordMemberA();
+                    $member->setUserId($id);
+                    $match->addMemberIdsA($member);
                     $member->setMatch($match);
                 }
             }
-            $memberIds = $this->post('teamAFbIds');
+            $memberIds = $this->post('memberIdsB');
             if (is_array($memberIds)) {
                 foreach($memberIds as $id) {
-                    $member = new Entities\MatchRecordPlayerAFb();
-                    $member->setFbId($id);
-                    $match->addTeamAFbIds($member);
-                    $member->setMatch($match);
-                }
-            }
-            $memberIds = $this->post('teamBStIds');
-            if (is_array($memberIds)) {
-                foreach($memberIds as $id) {
-                    $member = new Entities\MatchRecordPlayerB();
-                    $member->setStadioomId($id);
-                    $match->addTeamBStIds($member);
-                    $member->setMatch($match);
-                }
-            }
-            $memberIds = $this->post('teamBFbIds');
-            if (is_array($memberIds)) {
-                foreach($memberIds as $id) {
-                    $member = new Entities\MatchRecordPlayerBFb();
-                    $member->setFbId($id);
-                    $match->addTeamBFbIds($member);
+                    $member = new Entities\MatchRecordMemberB();
+                    $member->setUserId($id);
+                    $match->addMemberIdsB($member);
                     $member->setMatch($match);
                 }
             }
@@ -128,9 +110,9 @@ class Match extends Stadioom_REST_Controller {
                 $sportId = $this->get('sportId');
                 $limit = $this->get('limit');
                 $since = $this->get('since');
-                $page = $this->get('page');
+                $startOffset = $this->get('startOffset');
 
-                $allMatches = $this->MatchDao->findAll($since, $limit, $page, $sportId);
+                $allMatches = $this->MatchDao->findAll($since, $startOffset, $limit, $sportId);
                 $this->responseOk($allMatches);
             }
         } catch (Exception $e) {

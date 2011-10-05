@@ -3,9 +3,9 @@
 namespace Entities;
 
 /**
- * Entities\MatchRecordPlayerB
+ * Entities\MatchRecordMemberB
  */
-class MatchRecordPlayerB
+class MatchRecordMemberB
 {
     /**
      * @var integer $id
@@ -13,9 +13,9 @@ class MatchRecordPlayerB
     private $id;
 
     /**
-     * @var integer $stadioomId
+     * @var integer $userId
      */
-    private $stadioomId;
+    private $userId;
 
     /**
      * @var Entities\MatchRecord
@@ -34,23 +34,23 @@ class MatchRecordPlayerB
     }
 
     /**
-     * Set stadioomId
+     * Set userId
      *
-     * @param integer $stadioomId
+     * @param integer $userId
      */
-    public function setStadioomId($stadioomId)
+    public function setUserId($userId)
     {
-        $this->stadioomId = $stadioomId;
+        $this->userId = $userId;
     }
 
     /**
-     * Get stadioomId
+     * Get userId
      *
-     * @return integer $stadioomId
+     * @return integer $userId
      */
-    public function getStadioomId()
+    public function getUserId()
     {
-        return $this->stadioomId;
+        return $this->userId;
     }
 
     /**
@@ -71,9 +71,5 @@ class MatchRecordPlayerB
     public function getMatch()
     {
         return $this->match;
-    }
-
-    public function toArray() {
-        return get_object_vars($this);
     }
 }
