@@ -63,7 +63,7 @@
                       <div id='leftmenu' class="span4">
                         <ul>
                             <li><a href="#">My Sport Card</a></li>
-                            <li><a href="match/create">New Match</a></li>
+                            <li><a href="/match/create">New Match</a></li>
                             <li><a href="#">Challenge Friends</a></li>
                         </ul>
                       </div>

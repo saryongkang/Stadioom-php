@@ -1,4 +1,5 @@
 <?php
+include('facebook.php');
 
 class Fb_connect extends Facebook {
 

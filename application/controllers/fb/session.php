@@ -14,42 +14,63 @@ class Session extends CI_Controller {
     function login(){
         $this->load->helper('url');
         
-        
-        $facebook = new $this->facebook(array(
-          'appId' => '200987663288876',
-          'secret' => '6d3dd0e7aa9dae300920ec05552bddee',
-        ));
-        
+        $this->load->library('fb_connect');
+        $param['redirect_uri']=site_url("fb/session/login");
+	    //redirect($this->fb_connect->getLoginUrl($param));
         // Get User ID
-        $data['fbId'] = $facebook->getUser();
-
-        if ($data['fbId']) {
-
-          try {
-            // Proceed knowing you have a logged in user who's authenticated.
-            $user_profile = $facebook->api('/me');
-            $data['fbAccessToken'] = $facebook->getAccessToken();
-            //$data['fbExpires'] = $facebook->getSession()->expires;
-            $data['fbExpires'] = '0';
+        
+          if ($this->fb_connect->user_id){
+            $retry=true;
+            $meAddress = '/me';
+            $data['fbId'] = $fb_uid = $this->fb_connect->user_id;
             
-            if ($this->_checkFBUserDB($data)){
+            while(true){
+              try {
+                // Proceed knowing you have a logged in user who's authenticated.
+                $data['fbAccessToken'] = $this->fb_connect->getAccessToken();
+
+                //echo "fbToken: ".$data['fbAccessToken'];
                 
-                //Properly logged and check in, redirect to the main app
-                redirect('main', 'refresh');
                 
-            }else{
-                redirect('home/loginDBErr', 'refresh');
-            }
-            
-          } catch ( FacebookApiException $e) {
-            error_log($e);
-            $data['fbUserID'] = null;
-            redirect('home/loginErr', 'refresh');
-          }
-          
+                $user_profile = $this->fb_connect->api($meAddress);
+
+                $data['fbExpires'] = '0';
+
+                if ($this->_checkFBUserDB($data)){
+
+                    //Properly logged and check in, redirect to the main app
+                    redirect('main', 'refresh');
+
+                }else{
+                    redirect('home/loginDBErr', 'refresh');
+                }
+
+              } catch ( FacebookApiException $e) {
+                
+                if($retry==true){
+                    //Probably the key is expired, set to null and renew
+                    $this->fb_connect->setAccessToken(null);
+                    $retry=false;
+                    //$meAddress = '/'.$data['fbId'];
+                    echo " Renewing token <br>";
+                //Give up and redirect home with error messange
+                }else{
+                    error_log($e);
+                    $data['fbId'] = null;
+                    echo 'LoginFBError: ' .$e->getMessage();
+                    echo '<br /> We gave up';
+                    
+                    $this->load->library('session');
+                    $this->session->sess_destroy();
+                    redirect('/home', 'refresh');
+                }
+                
+              }
+            } //endWhile
+
         }else{
-            print_r($data);
-            //redirect('home/loginFbErr', 'refresh');
+            //echo "There is no FB User logged in / Redirect to Login";
+            redirect('/home', 'refresh');
         }
 
         //getAccessToken()
@@ -85,7 +106,7 @@ class Session extends CI_Controller {
 //        }else{
 //            echo "Oops! There was an error logging you in!";
 //        }
-    }
+    }//end Login function
     
     private function _checkFBUserDB($data){
                 //getAccessToken()

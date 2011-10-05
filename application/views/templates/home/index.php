@@ -24,6 +24,9 @@
                 <div id="topbarContainer" class="container">
                     <div class="row">
                         <div class="span12">
+                            <div class="logo">
+                                <img id="stadioomLogo" src="/assets/images/stadioom-logo.png"/>
+                            </div>
 <!--                            <a class="brand" href="#"><?php echo $site_name ?></a>--> &nbsp;
                         </div>
                         <div>
@@ -58,7 +61,7 @@
 	<section id="footer">
 		<div class="container center">
                     <footer>
-                        <p>&copy;<?php echo $site_name ?> by  <img class="miniseedshock-logo" src="/assets/images/SeedShock_log0_mini.jpg" />  <?php echo $company_name ?> 2011</p>
+                        <p>&copy;<?php echo $site_name ?> by  <img class="miniseedshock-logo-home-bnw" src="/assets/images/seedlogo_logo_mini_bnw.png" />  <?php echo $company_name ?> 2011</p>
                     </footer>
 		</div>
 		

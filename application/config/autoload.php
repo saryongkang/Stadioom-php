@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('facebook','doctrine','template','session','curl');
+$autoload['libraries'] = array('doctrine','template','session','curl');
 
 
 /*

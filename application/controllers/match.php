@@ -17,7 +17,9 @@ class Match extends CI_Controller {
         $this->load->model('dao/SportDao');
         $data['sportsList'] = $this->SportDao->getAll();
         
-        
+        $this->template->add_css('tdfriendselector');
+        $this->template->add_js('tdfriendselector');
+                
         $this->template->add_css('main');
         $this->template->set_content('createMatchView', $data);
         $this->template->build('main');
