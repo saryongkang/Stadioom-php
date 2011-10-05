@@ -120,10 +120,22 @@ class EntitiesSportProxy extends \Entities\Sport implements \Doctrine\ORM\Proxy\
         return parent::getWeight();
     }
 
+    public function setPriority($priority)
+    {
+        $this->__load();
+        return parent::setPriority($priority);
+    }
+
+    public function getPriority()
+    {
+        $this->__load();
+        return parent::getPriority();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'description', 'weight', 'firstRevision', 'latestRevision', 'updateFlag');
+        return array('__isInitialized__', 'id', 'name', 'description', 'priority', 'firstRevision', 'latestRevision', 'updateFlag');
     }
 
     public function __clone()

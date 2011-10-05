@@ -176,4 +176,29 @@ class Sport
     {
         return $this->weight;
     }
+    /**
+     * @var integer $priority
+     */
+    private $priority;
+
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer $priority
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
 }
