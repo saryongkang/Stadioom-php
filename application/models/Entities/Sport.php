@@ -23,11 +23,6 @@ class Sport
     private $description;
 
     /**
-     * @var integer $weight
-     */
-    private $weight;
-
-    /**
      * @var integer $firstRevision
      */
     private $firstRevision;
@@ -98,26 +93,6 @@ class Sport
     }
 
     /**
-     * Set weight
-     *
-     * @param integer $weight
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return integer $weight
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
      * Set firstRevision
      *
      * @param integer $firstRevision
@@ -175,5 +150,30 @@ class Sport
     public function getUpdateFlag()
     {
         return $this->updateFlag;
+    }
+    /**
+     * @var integer $weight
+     */
+    private $weight;
+
+
+    /**
+     * Set weight
+     *
+     * @param integer $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * Get weight
+     *
+     * @return integer $weight
+     */
+    public function getWeight()
+    {
+        return $this->weight;
     }
 }

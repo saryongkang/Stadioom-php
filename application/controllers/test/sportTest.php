@@ -28,19 +28,19 @@ class SportTest extends Test_REST_Controller {
         $this->accessToken = json_decode($result)->accessToken;
 
         // add sport 1, 2, 3.
-        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_1', 'desc' => 'Sport for testing_1 with higher weight', 'weight' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_1', 'desc' => 'Sport for testing_1 with higher priority', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
         $this->sportId1 = json_decode($result);
-        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_2', 'desc' => 'Sport for testing_2 with lower weight', 'weight' => 1, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_2', 'desc' => 'Sport for testing_2 with lower priority', 'priority' => 1, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
         $this->sportId2 = json_decode($result);
-        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_3', 'desc' => 'Sport for testing_3 with mid weight', 'weight' => 50, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $this->accessToken, 'name' => 'sport_3', 'desc' => 'Sport for testing_3 with mid priority', 'priority' => 50, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
         $this->sportId3 = json_decode($result);
         
         // add brand 1, 2, 3.
-        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $this->accessToken, 'name' => 'brand_1', 'desc' => 'Brand for testing_1 with higher weight', 'weight' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $this->accessToken, 'name' => 'brand_1', 'desc' => 'Brand for testing_1 with higher priority', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
         $this->brandId1 = json_decode($result);
-        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $this->accessToken, 'name' => 'brand_2', 'desc' => 'Brand for testing_2 with lower weight', 'weight' => 1, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $this->accessToken, 'name' => 'brand_2', 'desc' => 'Brand for testing_2 with lower priority', 'priority' => 1, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
         $this->brandId2 = json_decode($result);
-        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $this->accessToken, 'name' => 'brand_3', 'desc' => 'Brand for testing_2 with mid weight', 'weight' => 50, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $this->accessToken, 'name' => 'brand_3', 'desc' => 'Brand for testing_2 with mid priority', 'priority' => 50, 'firstRevision' => 1, 'latestRevision' => 2, 'updateFlag' => '2'));
         $this->brandId3 = json_decode($result);
 
         // map brand 1 to sport 1.

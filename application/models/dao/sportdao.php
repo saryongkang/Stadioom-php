@@ -55,7 +55,7 @@ class SportDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->em->createQuery('SELECT s FROM Entities\Sport s ORDER BY s.weight DESC');
+        $q = $this->em->createQuery('SELECT s FROM Entities\Sport s ORDER BY s.priority DESC');
         return $q->getResult();
     }
 

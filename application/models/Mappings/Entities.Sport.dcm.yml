@@ -18,7 +18,7 @@ Entities\Sport:
       type: string
       length: 500
       nullable: true
-    weight:
+    priority:
       type: integer
       nullable: false
     firstRevision:

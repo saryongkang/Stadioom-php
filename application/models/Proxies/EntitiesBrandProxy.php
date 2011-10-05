@@ -72,18 +72,6 @@ class EntitiesBrandProxy extends \Entities\Brand implements \Doctrine\ORM\Proxy\
         return parent::getDescription();
     }
 
-    public function setWeight($weight)
-    {
-        $this->__load();
-        return parent::setWeight($weight);
-    }
-
-    public function getWeight()
-    {
-        $this->__load();
-        return parent::getWeight();
-    }
-
     public function setFirstRevision($firstRevision)
     {
         $this->__load();
@@ -120,10 +108,22 @@ class EntitiesBrandProxy extends \Entities\Brand implements \Doctrine\ORM\Proxy\
         return parent::getUpdateFlag();
     }
 
+    public function setPriority($priority)
+    {
+        $this->__load();
+        return parent::setPriority($priority);
+    }
+
+    public function getPriority()
+    {
+        $this->__load();
+        return parent::getPriority();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'description', 'weight', 'firstRevision', 'latestRevision', 'updateFlag');
+        return array('__isInitialized__', 'id', 'name', 'description', 'priority', 'firstRevision', 'latestRevision', 'updateFlag');
     }
 
     public function __clone()

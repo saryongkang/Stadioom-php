@@ -72,18 +72,6 @@ class EntitiesSportProxy extends \Entities\Sport implements \Doctrine\ORM\Proxy\
         return parent::getDescription();
     }
 
-    public function setWeight($weight)
-    {
-        $this->__load();
-        return parent::setWeight($weight);
-    }
-
-    public function getWeight()
-    {
-        $this->__load();
-        return parent::getWeight();
-    }
-
     public function setFirstRevision($firstRevision)
     {
         $this->__load();
@@ -118,6 +106,18 @@ class EntitiesSportProxy extends \Entities\Sport implements \Doctrine\ORM\Proxy\
     {
         $this->__load();
         return parent::getUpdateFlag();
+    }
+
+    public function setWeight($weight)
+    {
+        $this->__load();
+        return parent::setWeight($weight);
+    }
+
+    public function getWeight()
+    {
+        $this->__load();
+        return parent::getWeight();
     }
 
 

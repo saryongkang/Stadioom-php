@@ -24,7 +24,7 @@ class Sport extends Stadioom_REST_Controller {
             $sport = new Entities\Sport();
             $sport->setName($this->post('name'));
             $sport->setDescription($this->post('desc'));
-            $sport->setWeight($this->post('weight'));
+            $sport->setPriority($this->post('priority'));
             $sport->setFirstRevision($this->post('firstRevision'));
             $sport->setLatestRevision($this->post('latestRevision'));
             $sport->setUpdateFlag($this->post('updateFlag'));
@@ -59,7 +59,7 @@ class Sport extends Stadioom_REST_Controller {
             $sportId = $this->get('id');
             if ($sportId == null) {
                 
-                // TODO returns list ordered by weight.
+                // TODO returns list ordered by priority.
                 $allSports = $this->SportDao->getAll();
                 $array = array();
                 foreach ($allSports as $sport) {

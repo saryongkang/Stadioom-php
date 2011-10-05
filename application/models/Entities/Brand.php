@@ -23,11 +23,6 @@ class Brand
     private $description;
 
     /**
-     * @var integer $weight
-     */
-    private $weight;
-
-    /**
      * @var integer $firstRevision
      */
     private $firstRevision;
@@ -97,26 +92,6 @@ class Brand
     }
 
     /**
-     * Set weight
-     *
-     * @param integer $weight
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return integer $weight
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
      * Set firstRevision
      *
      * @param integer $firstRevision
@@ -174,5 +149,30 @@ class Brand
     public function getUpdateFlag()
     {
         return $this->updateFlag;
+    }
+    /**
+     * @var integer $priority
+     */
+    private $priority;
+
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer $priority
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 }

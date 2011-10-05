@@ -55,7 +55,7 @@ class BrandDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b ORDER BY b.weight DESC');
+        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b ORDER BY b.priority DESC');
         return $q->getResult();
     }
 
