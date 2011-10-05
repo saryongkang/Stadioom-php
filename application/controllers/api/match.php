@@ -110,9 +110,9 @@ class Match extends Stadioom_REST_Controller {
                 $sportId = $this->get('sportId');
                 $limit = $this->get('limit');
                 $since = $this->get('since');
-                $startOffset = $this->get('startOffset');
+                $firstOffset = $this->get('firstOffset');
 
-                $allMatches = $this->MatchDao->findAll($since, $startOffset, $limit, $sportId);
+                $allMatches = $this->MatchDao->findAll($since, $firstOffset, $limit, $sportId);
                 $this->responseOk($allMatches);
             }
         } catch (Exception $e) {

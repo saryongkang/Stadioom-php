@@ -122,14 +122,14 @@ class MatchTest extends Test_REST_Controller {
             'since' => 1317803729,
             'sportId' => 1,
             'limit' => 20,
-            'startOffset' => 0);
+            'firstOffset' => 0);
         $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
         
         $param = array('accessToken' => $this->accessToken,
             'since' => 1317803729,
 //            'sportId' => 1, // every sports
             'limit' => 20,
-            'startOffset' => 0);
+            'firstOffset' => 0);
         $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 1)
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 2)

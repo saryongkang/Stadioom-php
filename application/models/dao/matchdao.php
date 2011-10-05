@@ -29,21 +29,21 @@ class MatchDao extends CI_Model {
         return $match->toArray();
     }
 
-    public function findAll($since, $startOffset, $limit, $sportId) {
+    public function findAll($since, $firstOffset, $limit, $sportId) {
         if ($limit == null || $limit < 10) {
             $limit = 10;    // minimum limit is 20.
         } else if ($limit > 200) {
             $limit = 200;   // maximum limit is 200.
         }
-        
+
         if ($since == null) {
             $since = new DateTime();
             $since = $since->sub(new DateInterval('P1M'));   // a month ago.
             $since = $since->getTimestamp();
         }
 
-        if ($startOffset == null || $startOffset < 0) {
-            $startOffset = 0;  // default page is 0.
+        if ($firstOffset == null || $firstOffset < 0) {
+            $firstOffset = 0;  // default page is 0.
         }
 
         // TODO: apply 'page' and 'limit'.
@@ -54,7 +54,7 @@ class MatchDao extends CI_Model {
         $dql = $dql . ' ORDER BY m.lastUpdated DESC';
         $q = $this->em->createQuery($dql);
         $q->setMaxResults($limit);
-        $q->setFirstResult($startOffset);
+        $q->setFirstResult($firstOffset);
         $result = $q->getResult();
         $allMatches = array();
         if (is_array($result)) {
@@ -77,6 +77,7 @@ class MatchDao extends CI_Model {
         $this->em->remove($match);
         $this->em->flush();
     }
+
 }
 
 ?>
