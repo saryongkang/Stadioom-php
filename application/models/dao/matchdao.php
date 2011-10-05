@@ -11,16 +11,64 @@ class MatchDao extends CI_Model {
         $this->em = $this->doctrine->em;
     }
 
-    public function register($match) {
+    public function register($match, $memberFbIdsA, $memberFbIdsB) {
+        $this->complete($match, $memberFbIdsA, $memberFbIdsB);
+
         $matchType = $match->getMatchType();
 
-        if ($matchType == 1) { // single match
+//        if ($matchType == 1) { // single match
             $this->em->persist($match);
             $this->em->flush();
             return $match->getId();
-        } else {    // team match
-            // TODO implement...
-            throw new Exception("Not Implemented.", 501);
+//        } else {    // team match
+//            // TODO implement...
+//            throw new Exception("Not Implemented.", 501);
+//        }
+    }
+
+    public function complete(&$match, &$memberFbIdsA, &$memberFbIdsB) {
+        if (is_array($memberFbIdsA)) {
+            foreach ($memberFbIdsA as $member) {
+                $fbId = $member['fbId'];
+                $name = $member['name'];
+                $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
+                if ($user == null) {
+                    $user = new Entities\User();
+                    $user->setFbId($fbId);
+                    $user->setName($name);
+                    $user->setFbLinked(false);
+                    $user->setFbAuthorized(false);
+                    $user->setVerified(false);
+                    
+                    $this->em->persist($user);
+                    $this->em->flush();
+                }
+                $newMember = new Entities\MatchRecordMemberA();
+                $newMember->setUserId($user->getId());
+                $newMember->setMatch($match);
+                $match->addMemberIdsA($newMember);
+            }
+        }
+        if (is_array($memberFbIdsB)) {
+            foreach ($memberFbIdsB as $member) {
+                $fbId = $member['fbId'];
+                $name = $member['name'];
+                $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
+                if ($user == null) {
+                    $user = new Entities\User();
+                    $user->setFbId($fbId);
+                    $user->setName($name);
+                    $user->setFbLinked(false);
+                    $user->setFbAuthorized(false);
+                    $user->setVerified(false);
+                    $this->em->persist($user);
+                    $this->em->flush();
+                }
+                $newMember = new Entities\MatchRecordMemberB();
+                $newMember->setUserId($user->getId());
+                $newMember->setMatch($match);
+                $match->addMemberIdsB($newMember);
+            }
         }
     }
 

@@ -67,8 +67,11 @@ class Match extends Stadioom_REST_Controller {
                     $member->setMatch($match);
                 }
             }
+            
+            $memberFbIdsA = $this->post('memberFbIdsA');
+            $memberFbIdsB = $this->post('memberFbIdsB');
 
-            $matchId = $this->MatchDao->register($match);
+            $matchId = $this->MatchDao->register($match, $memberFbIdsA, $memberFbIdsB);
             
             $this->responseOk($matchId);
         } catch (Exception $e) {

@@ -1,9 +1,5 @@
 Entities\User:
   type: entity
-  uniqueConstraints:
-    email_index:
-      columns:
-       - email
   fields:
     id:
       type: integer
@@ -33,7 +29,7 @@ Entities\User:
     email:
       type: string
       length: 255
-      nullable: false
+      nullable: true
     gender:
       type: string
       length: 20

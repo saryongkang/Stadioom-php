@@ -52,27 +52,31 @@ class MatchTest extends Test_REST_Controller {
         $result = $this->runTest("register a match with valid info. (me vs. user 3)", "api/match", $param);
         Assert::assertTrue(intval($result) > 0);
 
-        
+
         // register a match with valid info. (me vs. user 3)
         $param = array('accessToken' => $this->accessToken,
             'sportId' => 2,
             'brandId' => 2,
             'title' => 'test-sponsored match',
-            'matchType' => 1, // single
+            'matchType' => 2, // single
             'leagueType' => 1, // amature
             'started' => 12312312,
             'ended' => 12312999,
             'scoreA' => 4,
             'scoreB' => 2,
             'memberIdsA' => array('10', '20'),
-            'memberFbIdsA' => array('213', '342'),
+            'memberFbIdsA' => array(
+                array('fbId' => '213', 'name' => 'From FB: 213'),
+                array('fbId' => '342', 'name' => 'From FB: 342')),
             'memberIdsB' => array('30', '40'),
-            'memberFbIdsB' => array('112', '122')
+            'memberFbIdsB' => array(
+                array('fbId' => '112', 'name' => 'From FB: 112'),
+                array('fbId' => '122', 'name' => 'From FB: 122'))
         );
-//        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
         $result = $this->runTest("register a match with valid info. (me vs. user 3)", "api/match", $param);
         Assert::assertTrue(intval($result) > 0);
-        
+
 
 
         // register a match with valid info. ({me, user 1} vs. {user 3, 4})
@@ -124,7 +128,7 @@ class MatchTest extends Test_REST_Controller {
             'limit' => 20,
             'firstOffset' => 0);
         $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
-        
+
         $param = array('accessToken' => $this->accessToken,
             'since' => 1317803729,
 //            'sportId' => 1, // every sports
