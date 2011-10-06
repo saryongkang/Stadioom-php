@@ -7,18 +7,15 @@ require(APPPATH . '/libraries/REST_Controller.php');
  */
 class Stadioom_REST_Controller extends REST_Controller {
 
-    private $DEFAULT_SUCCEED_MSG = "OK";
-
     private function ex2Array($e) {
         return array('error_code' => $e->getCode(), 'error_msg' => $e->getMessage());
     }
 
     protected function responseOk($res = null) {
-        if ($res != null) {
-            $this->response($res, 200);
+        if ($res == null) {
+            $res = array();
         }
-        $this->response($this->DEFAULT_SUCCEED_MSG, 200);
-        $this->response(array(), 200);
+        $this->response($res, 200);
     }
 
     protected function responseError($e) {

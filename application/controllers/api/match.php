@@ -144,7 +144,8 @@ class Match extends Stadioom_REST_Controller {
                     'memberId' => $this->get('memberId'));
 
                 $allMatches = $this->MatchDao->findAll($options);
-                $this->responseOk($allMatches);
+                $data = array('data' => $allMatches);
+                $this->responseOk($data);
             }
         } catch (Exception $e) {
             $this->responseError($e);
