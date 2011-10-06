@@ -94,9 +94,9 @@ class Match extends Stadioom_REST_Controller {
             $sharedInfo->setTargetMedia($sharedTarget);
             $sharedInfo->setLink($this->post('link'));
             $sharedInfo->setComment($this->post('comment'));
-            
+
             $sharedId = $this->MatchDao->shared($sharedInfo);
-            
+
             $this->responseOk($sharedId);
         } catch (Exception $e) {
             $this->responseError($e);
@@ -159,6 +159,18 @@ class Match extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
         $this->responseError(new Exception("Not Implemented.", 501));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Internal API
+    ////////////////////////////////////////////////////////////////////////////
+    public function lastMatch_get() {
+        try {
+            $result = $this->MatchDao->lastMatch();
+            $this->responseOk($result->toArray());
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
     }
 
 }

@@ -195,6 +195,23 @@ class MatchDao extends CI_Model {
         $this->em->flush();
     }
 
+    public function lastMatch() {
+        $dql = 'SELECT m FROM Entities\MatchRecord m';
+        $dql = $dql . ' ORDER BY m.lastUpdated DESC';
+        $q = $this->em->createQuery($dql);
+        $q->setMaxResults(1);
+        $result = $q->getResult();
+        return $result[0];
+    }
+
+    public function lastMatchAsArray() {
+        $dql = 'SELECT m FROM Entities\MatchRecord m';
+        $dql = $dql . ' ORDER BY m.lastUpdated DESC';
+        $q = $this->em->createQuery($dql);
+        $q->setMaxResults(1);
+        $result = $q->getResult();
+        return $result[0]->toArray();
+    }
 }
 
 ?>
