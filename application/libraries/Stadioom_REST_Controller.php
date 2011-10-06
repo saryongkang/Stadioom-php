@@ -18,6 +18,7 @@ class Stadioom_REST_Controller extends REST_Controller {
             $this->response($res, 200);
         }
         $this->response($this->DEFAULT_SUCCEED_MSG, 200);
+        $this->response(array(), 200);
     }
 
     protected function responseError($e) {

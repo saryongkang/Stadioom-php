@@ -642,7 +642,18 @@ class UserDao extends CI_Model {
         $this->em->persist($userFb);
         $this->em->flush();
     }
-
+    
+    public function getLatestMatches($userId, $maxNumber) {
+        $dql = "SELECT m, a, b";
+        $dql = $dql . " FROM Entities\MatchRecord m";
+        $dql = $dql . " JOIN m.memberIdsA a JOIN m.memberIdsB b";
+        $dql = $dql . " WHERE a.userId = " . $userId . " OR b.userId = " . $userId;
+        $dql = $dql . ' ORDER BY m.lastUpdated DESC';
+        $q = $this->em->createQuery($dql);
+        $q->setMaxResults($maxNumber);
+        $result = $q->getResult();
+        return $result;
+    }
 }
 
 ?>

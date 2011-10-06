@@ -22,7 +22,7 @@ Entities\MatchRecord:
     matchType:
       type: integer # 1(single), 2(team)
       nullable: false
-    leaugeType:
+    leagueType:
       type: integer # 1(amature), 2(pro), or 3(specific league). 
       nullable: true
     teamAId:

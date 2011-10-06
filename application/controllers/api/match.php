@@ -70,9 +70,11 @@ class Match extends Stadioom_REST_Controller {
 
             $memberFbIdsA = $this->post('memberFbIdsA');
             $memberFbIdsB = $this->post('memberFbIdsB');
+            $fbAccessToken = $this->post('fbAccessToken');
 
-            $matchId = $this->MatchDao->register($match, $memberFbIdsA, $memberFbIdsB);
+            $matchId = $this->MatchDao->register($match, $memberFbIdsA, $memberFbIdsB, $fbAccessToken);
 
+            error_log("OK");
             $this->responseOk($matchId);
         } catch (Exception $e) {
             $this->responseError($e);
@@ -134,12 +136,14 @@ class Match extends Stadioom_REST_Controller {
                 $match = $this->MatchDao->find($matchId);
                 $this->responseOk($match);
             } else {
-                $sportId = $this->get('sportId');
-                $limit = $this->get('limit');
-                $since = $this->get('since');
-                $firstOffset = $this->get('firstOffset');
+                $options = array('since' => $this->get('since'),
+                    'firstOffset' => $this->get('firstOffset'),
+                    'limit' => $this->get('limit'),
+                    'sportId' => $this->get('sportId'),
+                    'ownerId' => $this->get('ownerId'),
+                    'memberId' => $this->get('memberId'));
 
-                $allMatches = $this->MatchDao->findAll($since, $firstOffset, $limit, $sportId);
+                $allMatches = $this->MatchDao->findAll($options);
                 $this->responseOk($allMatches);
             }
         } catch (Exception $e) {
@@ -159,18 +163,6 @@ class Match extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
         $this->responseError(new Exception("Not Implemented.", 501));
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Internal API
-    ////////////////////////////////////////////////////////////////////////////
-    public function lastMatch_get() {
-        try {
-            $result = $this->MatchDao->lastMatch();
-            $this->responseOk($result->toArray());
-        } catch (Exception $e) {
-            $this->responseError($e);
-        }
     }
 
 }

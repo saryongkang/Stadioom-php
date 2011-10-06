@@ -13,6 +13,7 @@ class REST_Controller extends CI_Controller {
 	protected $_delete_args = array();
 	protected $_args = array();
 	protected $_allow = TRUE;
+        private $controller_method = NULL;
 
 	// List all supported methods, the first will be the default format
 	protected $_supported_formats = array(
@@ -153,6 +154,7 @@ class REST_Controller extends CI_Controller {
 		}
 
 		$controller_method = $object_called . '_' . $this->request->method;
+                $this->controller_method = $controller_method;
 
 		// Do we want to log this method (if allowed by config)?
 		$log_method = ! (isset($this->methods[$controller_method]['log']) AND $this->methods[$controller_method]['log'] == FALSE);
@@ -204,7 +206,9 @@ class REST_Controller extends CI_Controller {
 		}
 
 		// And...... GO!
+                $this->log('Started..');
 		call_user_func_array(array($this, $controller_method), $arguments);
+                $this->log('Ended..');
 	}
 
 	/*
@@ -470,8 +474,9 @@ class REST_Controller extends CI_Controller {
             if (config_item('rest_log_to_php_error')) {
                 // INSERTED BY WEGRA.
                 error_log('uri: [' . $this->request->method . '] ' . $this->uri->uri_string());
-                error_log('params: ' . $this->arrayToString($this->_args));
-                error_log('from [IP]: ' . $this->input->ip_address() . "\n");
+                error_log('params: ' . $this->paramToString($this->_args));
+                error_log('from [IP]: ' . $this->input->ip_address());
+                error_log('user agent: ' . $this->input->user_agent());
             } else {
 		return $this->rest->db->insert(config_item('rest_logs_table'), array(
 			'uri' => $this->uri->uri_string(),
@@ -485,6 +490,12 @@ class REST_Controller extends CI_Controller {
             }
 	}
 
+        protected function log($message) {
+            if (config_item('rest_log_to_php_error')) {
+                error_log('['. $this->controller_method . '] ' . $message);
+            }
+        }
+        
 	/*
 	 * Log request
 	 *
@@ -791,7 +802,7 @@ class REST_Controller extends CI_Controller {
 
         
 
-    protected function arrayToString($array) {
+    protected function paramToString($array) {
         if ($array == NULL) {
             return "NULL";
         }
@@ -806,8 +817,8 @@ class REST_Controller extends CI_Controller {
             $value = $array[$key];
             if (is_array($value)) {
                 $result = $result . $key . ": { ";
-                $result = $result . $this->arrayToString($value);
-                $result = $result . " }";
+                $result = $result . $this->paramToString($value);
+                $result = $result . "} ";
             } else {
                 $result = $result . $key . ": '" . $array[$key] . "' ";
             }

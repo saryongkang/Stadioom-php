@@ -102,16 +102,16 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getMatchType();
     }
 
-    public function setLeaugeType($leaugeType)
+    public function setLeagueType($leagueType)
     {
         $this->__load();
-        return parent::setLeaugeType($leaugeType);
+        return parent::setLeagueType($leagueType);
     }
 
-    public function getLeaugeType()
+    public function getLeagueType()
     {
         $this->__load();
-        return parent::getLeaugeType();
+        return parent::getLeagueType();
     }
 
     public function setTeamAId($teamAId)
@@ -294,16 +294,10 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::preUpdate();
     }
 
-    public function toArray()
-    {
-        $this->__load();
-        return parent::toArray();
-    }
-
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leaugeType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'memberIdsA', 'memberIdsB');
+        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leagueType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'memberIdsA', 'memberIdsB');
     }
 
     public function __clone()
