@@ -108,18 +108,6 @@ class EntitiesSportProxy extends \Entities\Sport implements \Doctrine\ORM\Proxy\
         return parent::getUpdateFlag();
     }
 
-    public function setWeight($weight)
-    {
-        $this->__load();
-        return parent::setWeight($weight);
-    }
-
-    public function getWeight()
-    {
-        $this->__load();
-        return parent::getWeight();
-    }
-
     public function setPriority($priority)
     {
         $this->__load();

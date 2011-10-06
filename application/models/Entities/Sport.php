@@ -151,31 +151,7 @@ class Sport
     {
         return $this->updateFlag;
     }
-    /**
-     * @var integer $weight
-     */
-    private $weight;
 
-
-    /**
-     * Set weight
-     *
-     * @param integer $weight
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return integer $weight
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
     /**
      * @var integer $priority
      */
