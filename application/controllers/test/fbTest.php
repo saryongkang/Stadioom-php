@@ -16,7 +16,7 @@ class FbTest extends Test_REST_Controller {
     public function all_get() {
         try {
             $result = $this->runTest("connect with an 'invalid' Facebook account.", "api/fb/connect", array('fbId' => '111', 'fbAccessToken' => 'bypass me.', 'fbExpires' => 0));
-            Assert::assertArray($result, 'error_code', 401);
+            Assert::assertError($result, 401);
             echo '=> PASSED.<br><br>';
 
             // get valid Facebook test account.
@@ -40,48 +40,48 @@ class FbTest extends Test_REST_Controller {
             $accessToken = json_decode($result)->accessToken;
 
             $result = $this->runTest("deauthorize with an 'invalid' accessToken", "api/fb/deauthorize", array('accessToken' => 'invalid_token'));
-            Assert::assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("deauthorize with a valid registered fbId", "api/fb/deauthorize", array('accessToken' => $accessToken));
-            Assert::assertEquals($result, 'OK');
+            Assert::assertEmpty($result);
             echo '=> PASSED.<br><br>';
 
 
             $result = $this->runTest("invite an 'invalid' accessToken", "api/fb/invite", array('accessToken' => 'invalid_token', 'inviteeFbIds' => array('123', '456')));
-            Assert::assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite an 'invalid' fbId", "api/fb/invite", array('accessToken' => $accessToken,
                 'inviteeFbIds' => array('invalid.fb.id')));
-            Assert::assertArray($result, 'invalid.fb.id', 'invalid ID.');
+            Assert::assertData($result, 'invalid.fb.id', 'invalid ID.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite an already registered' fbId -> already registered", "api/fb/invite", array('accessToken' => $accessToken,
                 'inviteeFbIds' => array($testUser['fbId'])));
-            Assert::assertArray($result, $testUser['fbId'], 'already registered.');
+            Assert::assertData($result, $testUser['fbId'], 'already registered.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite a new fbId", "api/fb/invite", array('accessToken' => $accessToken,
                 'inviteeFbIds' => array('123')));
-            Assert::assertArray($result, '123', 'invitation sent.');
+            Assert::assertData($result, '123', 'invitation sent.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite nobody", "api/fb/invite", array('accessToken' => $accessToken
                     ));
-            Assert::assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite all of them", "api/fb/invite", array('accessToken' => $accessToken,
                 'inviteeFbIds' => array($testUser['fbId'], 'invalid.fb.id', '123')));
-            Assert::assertArray($result, 'invalid.fb.id', 'invalid ID.');
-            Assert::assertArray($result, $testUser['fbId'], 'already registered.');
-            Assert::assertArray($result, '123', 'invitation sent.');
+            Assert::assertData($result, 'invalid.fb.id', 'invalid ID.');
+            Assert::assertData($result, $testUser['fbId'], 'already registered.');
+            Assert::assertData($result, '123', 'invitation sent.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite all of them with an 'invalid' access token ", "api/fb/invite", array('accessToken' => 'invalid.addess.token',
                 'inviteeFbIds' => array($testUser['fbId'], 'invalid.fb.id', '123')));
-            Assert::assertArray($result, 'error_code', 400);
+            Assert::assertError($result, 400);
             echo '=> PASSED.<br><br>';
 
             echo '| =============================================================================<br>';

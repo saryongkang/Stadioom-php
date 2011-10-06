@@ -85,22 +85,22 @@ class SportTest extends Test_REST_Controller {
     public function testGetAll() {
         // get all sports
         $result = $this->runTest("get all sports", "api/sport", array('accessToken' => $this->accessToken), 'GET');
-        Assert::assertInArray($result, 0, 'id', $this->sportId1);
-        Assert::assertInArray($result, 1, 'id', $this->sportId3);
-        Assert::assertInArray($result, 2, 'id', $this->sportId2);
+        Assert::assertInData($result, 0, 'id', $this->sportId1);
+        Assert::assertInData($result, 1, 'id', $this->sportId3);
+        Assert::assertInData($result, 2, 'id', $this->sportId2);
     }
 
     public function testGetSponsorBrands() {
         // get brands sponsoring sport 1.
         $result = $this->runTest("get brands sponsoring sport " . $this->sportId1, "api/sport/brand", array('accessToken' => $this->accessToken, 'sportId' => $this->sportId1), 'GET');
         Assert::assertArrayCount($result, 2);
-        Assert::assertContainsInArray($result, 'id', $this->brandId1);
-        Assert::assertContainsInArray($result, 'id', $this->brandId2);
+        Assert::assertContainsInData($result, 'id', $this->brandId1);
+        Assert::assertContainsInData($result, 'id', $this->brandId2);
 
         // get brands sponsoring sport 2.
         $result = $this->runTest("get brands sponsoring sport " . $this->sportId2, "api/sport/brand", array('accessToken' => $this->accessToken, 'sportId' => $this->sportId2), 'GET');
         Assert::assertArrayCount($result, 1);
-        Assert::assertContainsInArray($result, 'id', $this->brandId2);
+        Assert::assertContainsInData($result, 'id', $this->brandId2);
 
         // get brands sponsoring sport 3.
         $result = $this->runTest("get brands sponsoring sport" . $this->sportId3, "api/sport/brand", array('accessToken' => $this->accessToken, 'sportId' => $this->sportId3), 'GET');
@@ -111,6 +111,7 @@ class SportTest extends Test_REST_Controller {
     public function testDelta() {
         $result = $this->runTest("get all sports modified after revision 0", "api/sport/delta", array('accessToken' => $this->accessToken, 'after' => 0), 'GET');
         $jsonDecoded = json_decode($result);
+        $jsonDecoded = $jsonDecoded->data;
         foreach ($jsonDecoded as $element) {
             if ($element->latestRevision <= 0) {
                 Assert::fail();
@@ -119,6 +120,7 @@ class SportTest extends Test_REST_Controller {
         
         $result = $this->runTest("get all sports modified after revision 1", "api/sport/delta", array('accessToken' => $this->accessToken, 'after' => 1), 'GET');
         $jsonDecoded = json_decode($result);
+        $jsonDecoded = $jsonDecoded->data;
         foreach ($jsonDecoded as $element) {
             if ($element->latestRevision <= 1) {
                 Assert::fail();
@@ -127,6 +129,7 @@ class SportTest extends Test_REST_Controller {
         
         $result = $this->runTest("get all sports modified after revision 2", "api/sport/delta", array('accessToken' => $this->accessToken, 'after' => 2), 'GET');
         $jsonDecoded = json_decode($result);
+        $jsonDecoded = $jsonDecoded->data;
         foreach ($jsonDecoded as $element) {
             if ($element->latestRevision <= 2) {
                 Assert::fail();

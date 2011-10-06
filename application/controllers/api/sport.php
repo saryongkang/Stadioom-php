@@ -3,6 +3,7 @@
 require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class Sport extends Stadioom_REST_Controller {
+
     private $filterKeys = array('firstRevision', 'latestRevision', 'updateFlag');
 
     function __construct() {
@@ -10,7 +11,7 @@ class Sport extends Stadioom_REST_Controller {
 
         $this->load->model('dao/SportDao');
         $this->load->model('dao/BrandSportMapDao');
-        
+
         if (function_exists('force_ssl'))
             remove_ssl();
     }
@@ -58,17 +59,18 @@ class Sport extends Stadioom_REST_Controller {
 
             $sportId = $this->get('id');
             if ($sportId == null) {
-                
+
                 // TODO returns list ordered by priority.
                 $allSports = $this->SportDao->getAll();
                 $array = array();
                 foreach ($allSports as $sport) {
                     array_push($array, $this->filter($sport->toArray(), $this->filterKeys));
                 }
-                $this->responseOk($array);
+                $data = array("data" => $array);
+                $this->responseOk($data);
             } else {
                 $sport = $this->SportDao->find($sportId);
-                
+
                 $this->responseOk($this->filter($sport->toArray(), $this->filterKeys));
             }
         } catch (Exception $e) {
@@ -86,7 +88,8 @@ class Sport extends Stadioom_REST_Controller {
             foreach ($allSports as $sport) {
                 array_push($array, $sport->toArray());
             }
-            $this->responseOk($array);
+            $data = array("data" => $array);
+            $this->responseOk($data);
         } catch (Exception $e) {
             $this->responseError($e);
         }
@@ -107,7 +110,8 @@ class Sport extends Stadioom_REST_Controller {
             if ($array == null) {
                 $this->responseError(new Exception("Not Found.", 404));
             }
-            $this->responseOk($array);
+            $data = array("data" => $array);
+            $this->responseOk($data);
         } catch (Exception $e) {
             $this->responseError($e);
         }
@@ -142,6 +146,7 @@ class Sport extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
     }
+
 }
 
 ?>

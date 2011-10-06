@@ -282,15 +282,46 @@ class Assert {
         }
     }
 
-    public static function assertInArray($result, $index, $key, $value) {
+    public static function assertData($result, $key, $value) {
         $json = json_decode($result);
-        if ($json[$index]->$key != $value) {
-            throw new Exception("[index:" . $index . "] [key:" . $key . "] expected:" . $value . ", actual:" . $json[$index]->$key);
+        $json = $json->data;
+        if ($json->$key != $value) {
+            throw new Exception("[key:" . $key . "] expected:" . $value . ", actual:" . $json->$key);
+        }
+    }
+
+    public static function assertEmpty($result) {
+        $decoded = json_decode($result);
+        if (count($decoded) != 0) {
+            throw new Exception("expected: 'empty', actual: " . $decoded);
+        }
+    }
+
+    public static function assertInData($result, $index, $key, $value) {
+        $json = json_decode($result);
+        $data = $json->data;
+        $entity = $data[$index];
+        if ($entity == null) {
+            throw new Exception("empty array");
+        }
+        if ($entity->$key != $value) {
+            throw new Exception("[index:" . $index . "] [key:" . $key . "] expected:" . $value . ", actual:" . $entity->$key);
         }
     }
 
     public static function assertContainsInArray($result, $key, $value) {
         $json = json_decode($result);
+        foreach ($json as $element) {
+            if ($element->$key == $value) {
+                return;
+            }
+        }
+        throw new Exception("[key:" . $key . "] expected:" . $value);
+    }
+
+    public static function assertContainsInData($result, $key, $value) {
+        $json = json_decode($result);
+        $json = $json->data;
         foreach ($json as $element) {
             if ($element->$key == $value) {
                 return;
@@ -312,11 +343,11 @@ class Assert {
             throw new Exception("[key] expected:" . $expected . ", actual:" . $actual);
         }
     }
-    
+
     public static function fail() {
         throw new Exception("Assertion failed.");
     }
-    
+
     public static function assertTrue($value) {
         if (!$value) {
             throw new Exception("expected: true, actual: " . $value);
@@ -325,6 +356,7 @@ class Assert {
 
     public static function assertArrayCount($result, $expectedCount) {
         $actual = json_decode($result);
+        $actual = $actual->data;
         if ($expectedCount != count($actual)) {
             throw new Exception("Expected count:" . $expectedCount . ", actual:" . count($actual));
         }

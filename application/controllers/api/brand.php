@@ -65,7 +65,9 @@ class Brand extends Stadioom_REST_Controller {
                 foreach ($allSports as $brand) {
                     array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
                 }
-                $this->responseOk($array);
+                
+                $data = array("data" => $array);
+                $this->responseOk($data);
             } else {
                 $brand = $this->BrandDao->find($brandId);
 
@@ -86,7 +88,8 @@ class Brand extends Stadioom_REST_Controller {
             foreach ($allSports as $brand) {
                 array_push($array, $brand->toArray());
             }
-            $this->responseOk($array);
+            $data = array("data" => $array);
+            $this->responseOk($data);
         } catch (Exception $e) {
             $this->responseError($e);
         }
@@ -108,7 +111,9 @@ class Brand extends Stadioom_REST_Controller {
             if ($array == null) {
                 $this->responseError(new Exception("Not Found.", 404));
             }
-            $this->responseOk($array);
+            
+            $data = array("data" => $array);
+            $this->responseOk($data);
         } catch (Exception $e) {
             $this->responseError($e);
         }

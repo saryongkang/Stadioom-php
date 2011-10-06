@@ -6,9 +6,10 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
  * Contains stuffs for just testing.
  */
 class AuthTest extends Test_REST_Controller {
+
     public function __construct() {
         parent::__construct();
-        
+
 //        force_ssl();
         if (function_exists('force_ssl'))
             remove_ssl();
@@ -63,7 +64,7 @@ class AuthTest extends Test_REST_Controller {
                 'name' => $testUser1['name'],
                 'gender' => 'male',
                 'dob' => 1232123222));
-            Assert::assertEquals($result, 'OK');
+            Assert::assertEmpty($result);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode($testUser2['email'], $testUser2['password']);
@@ -72,7 +73,7 @@ class AuthTest extends Test_REST_Controller {
                 'name' => $testUser2['name'],
                 'gender' => 'male',
                 'dob' => 1232123222));
-            Assert::assertEquals($result, 'OK');
+            Assert::assertEmpty($result);
             echo '=> PASSED.<br><br>';
 
             $grantCode = $this->generateGrantCode($testUser2['email'], $testUser2['password']);
@@ -114,17 +115,17 @@ class AuthTest extends Test_REST_Controller {
 
             $result = $this->runTest("invite an 'invalid' email", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array('invalid.email.com')));
-            Assert::assertArray($result, 'invalid.email.com', 'invalid email.');
+            Assert::assertData($result, 'invalid.email.com', 'invalid email.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite a valid email_2 (already registered)", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array($testUser2['email']), 'invitationMessage' => 'This is a custom message for test.'));
-            Assert::assertArray($result, $testUser2['email'], 'already registered.');
+            Assert::assertData($result, $testUser2['email'], 'already registered.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite a valid email_3", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array($testUser3['email']), 'invitationMessage' => 'This is a custom message for test.'));
-            Assert::assertArray($result, $testUser3['email'], 'invitation sent.');
+            Assert::assertData($result, $testUser3['email'], 'invitation sent.');
             echo '=> PASSED.<br><br>';
 
             $result = $this->runTest("invite nobody", "api/auth/invite", array('accessToken' => $accessToken,
@@ -134,9 +135,9 @@ class AuthTest extends Test_REST_Controller {
 
             $result = $this->runTest("invite all of them", "api/auth/invite", array('accessToken' => $accessToken,
                 'inviteeEmails' => array($testUser2['email'], 'invalid.email.com', 'xegra.lee@gmail.com'), 'invitationMessage' => 'This is a custom message for test.'));
-            Assert::assertArray($result, 'invalid.email.com', 'invalid email.');
-            Assert::assertArray($result, $testUser2['email'], 'already registered.');
-            Assert::assertArray($result, 'xegra.lee@gmail.com', 'invitation sent.');
+            Assert::assertData($result, 'invalid.email.com', 'invalid email.');
+            Assert::assertData($result, $testUser2['email'], 'already registered.');
+            Assert::assertData($result, 'xegra.lee@gmail.com', 'invitation sent.');
             echo '=> PASSED.<br><br>';
 
             echo '| =============================================================================<br>';

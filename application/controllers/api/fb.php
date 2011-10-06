@@ -62,7 +62,9 @@ class Fb extends Stadioom_REST_Controller {
             $invitorId = $this->verifyToken($accessToken);
 
             $result = $this->UserDao->fbInvite($invitorId, $this->post('inviteeFbIds'));
-            $this->responseOk($result);
+            
+            $data = array("data" => $result);
+            $this->responseOk($data);
         } catch (Exception $e) {
             $this->responseError($e);
         }

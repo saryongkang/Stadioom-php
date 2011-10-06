@@ -87,22 +87,22 @@ class BrandTest extends Test_REST_Controller {
     public function testGetAll() {
         // get all brands
         $result = $this->runTest("get all sports", "api/brand", array('accessToken' => $this->accessToken), 'GET');
-        Assert::assertInArray($result, 0, 'id', $this->brandId1);
-        Assert::assertInArray($result, 1, 'id', $this->brandId3);
-        Assert::assertInArray($result, 2, 'id', $this->brandId2);
+        Assert::assertInData($result, 0, 'id', $this->brandId1);
+        Assert::assertInData($result, 1, 'id', $this->brandId3);
+        Assert::assertInData($result, 2, 'id', $this->brandId2);
     }
 
     public function testGetSponsoredSports() {
         // get sports sponsored by brand 1.
         $result = $this->runTest("get sports sponsored by brand " . $this->brandId1, "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId1), 'GET');
         Assert::assertArrayCount($result, 1);
-        Assert::assertContainsInArray($result, 'id', $this->sportId1);
+        Assert::assertContainsInData($result, 'id', $this->sportId1);
 
         // get sports sponsored by brand 2.
         $result = $this->runTest("get sports sponsored by brand " . $this->brandId2, "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId2), 'GET');
         Assert::assertArrayCount($result, 2);
-        Assert::assertContainsInArray($result, 'id', $this->sportId1);
-        Assert::assertContainsInArray($result, 'id', $this->sportId2);
+        Assert::assertContainsInData($result, 'id', $this->sportId1);
+        Assert::assertContainsInData($result, 'id', $this->sportId2);
 
         // get sports sponsored by brand 3.
         $result = $this->runTest("get sports sponsored by brand" . $this->brandId3, "api/brand/sport", array('accessToken' => $this->accessToken, 'brandId' => $this->brandId3), 'GET');
@@ -112,6 +112,7 @@ class BrandTest extends Test_REST_Controller {
     public function testDelta() {
         $result = $this->runTest("get all brands modified after revision 0", "api/brand/delta", array('accessToken' => $this->accessToken, 'after' => 0), 'GET');
         $jsonDecoded = json_decode($result);
+        $jsonDecoded = $jsonDecoded->data;
         foreach ($jsonDecoded as $element) {
             if ($element->latestRevision <= 0) {
                 Assert::fail();
@@ -120,6 +121,7 @@ class BrandTest extends Test_REST_Controller {
         
         $result = $this->runTest("get all brands modified after revision 1", "api/brand/delta", array('accessToken' => $this->accessToken, 'after' => 1), 'GET');
         $jsonDecoded = json_decode($result);
+        $jsonDecoded = $jsonDecoded->data;
         foreach ($jsonDecoded as $element) {
             if ($element->latestRevision <= 1) {
                 Assert::fail();
@@ -128,6 +130,7 @@ class BrandTest extends Test_REST_Controller {
         
         $result = $this->runTest("get all brands modified after revision 2", "api/brand/delta", array('accessToken' => $this->accessToken, 'after' => 2), 'GET');
         $jsonDecoded = json_decode($result);
+        $jsonDecoded = $jsonDecoded->data;
         foreach ($jsonDecoded as $element) {
             if ($element->latestRevision <= 2) {
                 Assert::fail();
