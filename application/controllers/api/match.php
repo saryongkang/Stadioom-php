@@ -45,13 +45,13 @@ class Match extends Stadioom_REST_Controller {
             $match->setTitle($this->post('title'));
 
             $this->post('shared');
-            
+
             $match->setTeamAId($this->post('teamA'));
             $match->setTeamAId($this->post('teamB'));
-            
+
             $memberIds = $this->post('memberIdsA');
             if (is_array($memberIds)) {
-                foreach($memberIds as $id) {
+                foreach ($memberIds as $id) {
                     $member = new Entities\MatchRecordMemberA();
                     $member->setUserId($id);
                     $match->addMemberIdsA($member);
@@ -60,20 +60,44 @@ class Match extends Stadioom_REST_Controller {
             }
             $memberIds = $this->post('memberIdsB');
             if (is_array($memberIds)) {
-                foreach($memberIds as $id) {
+                foreach ($memberIds as $id) {
                     $member = new Entities\MatchRecordMemberB();
                     $member->setUserId($id);
                     $match->addMemberIdsB($member);
                     $member->setMatch($match);
                 }
             }
-            
+
             $memberFbIdsA = $this->post('memberFbIdsA');
             $memberFbIdsB = $this->post('memberFbIdsB');
 
             $matchId = $this->MatchDao->register($match, $memberFbIdsA, $memberFbIdsB);
-            
+
             $this->responseOk($matchId);
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    public function share_post() {
+        $accessToken = $this->post('accessToken');
+        try {
+            $userId = $this->verifyToken($accessToken);
+
+            $sharedInfo = new Entities\MatchRecordShare();
+            $sharedInfo->setSharedBy($userId);
+            $sharedInfo->setMatchId($this->post('matchId'));
+            $sharedTarget = $this->post('targetMedia');
+            if ($sharedTarget == null) {
+                $sharedTarget = 'Facebook';
+            }
+            $sharedInfo->setTargetMedia($sharedTarget);
+            $sharedInfo->setLink($this->post('link'));
+            $sharedInfo->setComment($this->post('comment'));
+            
+            $sharedId = $this->MatchDao->shared($sharedInfo);
+            
+            $this->responseOk($sharedId);
         } catch (Exception $e) {
             $this->responseError($e);
         }

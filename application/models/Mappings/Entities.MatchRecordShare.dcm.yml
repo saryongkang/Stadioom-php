@@ -1,0 +1,26 @@
+Entities\MatchRecordShare:
+  type: entity
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    sharedBy:
+      type: integer
+      nullable: false
+    matchId:
+      type: integer
+      nullable: false
+    targetMedia:
+      type: string
+      length: 20
+      nullable: false
+    link:
+      type: string
+      length: 255
+      nullable: true
+    comment:
+      type: string
+      length: 200
+      nullable: true

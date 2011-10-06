@@ -14,16 +14,17 @@ class MatchDao extends CI_Model {
     public function register($match, $memberFbIdsA, $memberFbIdsB) {
         $this->complete($match, $memberFbIdsA, $memberFbIdsB);
 
-        $matchType = $match->getMatchType();
-
-//        if ($matchType == 1) { // single match
         $this->em->persist($match);
         $this->em->flush();
         return $match->getId();
-//        } else {    // team match
-//            // TODO implement...
-//            throw new Exception("Not Implemented.", 501);
-//        }
+    }
+    
+    public function shared($sharedInfo) {
+        // TODO check input.
+        
+        $this->em->persist($sharedInfo);
+        $this->em->flush();
+        return $sharedInfo->getId();
     }
 
     //    public function fbtest($fbInfo) {
