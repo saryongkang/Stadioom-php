@@ -18,6 +18,7 @@ if (!defined('BASEPATH'))
   |
  */
 $config['base_url'] = 'http://stadioomtest.com/';
+$config['base_ssl_url'] = 'https://stadioomtest.com/';
 
 /*
   |--------------------------------------------------------------------------

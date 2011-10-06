@@ -382,7 +382,7 @@ $config['email_from_display_name'] = 'SeedShock';
 $config['email_bcc'] = 'wegra.lee@gmail.com';
 
 $config['test_account'] = 'test@seedshock.com';
-$config['test_account_password'] = 'password';
+$config['test_account_password'] = 'pesdwhrc';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
