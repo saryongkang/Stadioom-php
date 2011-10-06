@@ -5,12 +5,17 @@ namespace Entities;
 /**
  * Entities\Brand
  */
-class Brand
-{
+class Brand {
+
     /**
      * @var integer $id
      */
     private $id;
+
+    /**
+     * @var string $stringId
+     */
+    private $stringId;
 
     /**
      * @var string $name
@@ -46,8 +51,7 @@ class Brand
      *
      * @return integer $id
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -56,8 +60,7 @@ class Brand
      *
      * @param string $name
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
     }
 
@@ -66,8 +69,7 @@ class Brand
      *
      * @return string $name
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -76,8 +78,7 @@ class Brand
      *
      * @param string $description
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
     }
 
@@ -86,8 +87,7 @@ class Brand
      *
      * @return string $description
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -96,8 +96,7 @@ class Brand
      *
      * @param integer $firstRevision
      */
-    public function setFirstRevision($firstRevision)
-    {
+    public function setFirstRevision($firstRevision) {
         $this->firstRevision = $firstRevision;
     }
 
@@ -106,8 +105,7 @@ class Brand
      *
      * @return integer $firstRevision
      */
-    public function getFirstRevision()
-    {
+    public function getFirstRevision() {
         return $this->firstRevision;
     }
 
@@ -116,8 +114,7 @@ class Brand
      *
      * @param integer $latestRevision
      */
-    public function setLatestRevision($latestRevision)
-    {
+    public function setLatestRevision($latestRevision) {
         $this->latestRevision = $latestRevision;
     }
 
@@ -126,8 +123,7 @@ class Brand
      *
      * @return integer $latestRevision
      */
-    public function getLatestRevision()
-    {
+    public function getLatestRevision() {
         return $this->latestRevision;
     }
 
@@ -136,8 +132,7 @@ class Brand
      *
      * @param integer $updateFlag
      */
-    public function setUpdateFlag($updateFlag)
-    {
+    public function setUpdateFlag($updateFlag) {
         $this->updateFlag = $updateFlag;
     }
 
@@ -146,23 +141,21 @@ class Brand
      *
      * @return integer $updateFlag
      */
-    public function getUpdateFlag()
-    {
+    public function getUpdateFlag() {
         return $this->updateFlag;
     }
+
     /**
      * @var integer $priority
      */
     private $priority;
-
 
     /**
      * Set priority
      *
      * @param integer $priority
      */
-    public function setPriority($priority)
-    {
+    public function setPriority($priority) {
         $this->priority = $priority;
     }
 
@@ -171,8 +164,26 @@ class Brand
      *
      * @return integer $priority
      */
-    public function getPriority()
-    {
+    public function getPriority() {
         return $this->priority;
     }
+
+    /**
+     * Set stringId
+     *
+     * @param string $stringId
+     */
+    public function setStringId($stringId) {
+        $this->stringId = $stringId;
+    }
+
+    /**
+     * Get stringId
+     *
+     * @return string $stringId
+     */
+    public function getStringId() {
+        return $this->stringId;
+    }
+
 }

@@ -23,6 +23,7 @@ class Brand extends Stadioom_REST_Controller {
             $userId = $this->verifyToken($accessToken);
 
             $brand = new Entities\Brand();
+            $brand->setStringId($this->post('stringId'));
             $brand->setName($this->post('name'));
             $brand->setDescription($this->post('desc'));
             $brand->setPriority($this->post('priority'));

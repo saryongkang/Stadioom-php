@@ -120,10 +120,22 @@ class EntitiesBrandProxy extends \Entities\Brand implements \Doctrine\ORM\Proxy\
         return parent::getPriority();
     }
 
+    public function setStringId($stringId)
+    {
+        $this->__load();
+        return parent::setStringId($stringId);
+    }
+
+    public function getStringId()
+    {
+        $this->__load();
+        return parent::getStringId();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'description', 'priority', 'firstRevision', 'latestRevision', 'updateFlag');
+        return array('__isInitialized__', 'id', 'stringId', 'name', 'description', 'priority', 'firstRevision', 'latestRevision', 'updateFlag');
     }
 
     public function __clone()

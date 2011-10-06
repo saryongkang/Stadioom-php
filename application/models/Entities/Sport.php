@@ -13,6 +13,11 @@ class Sport
     private $id;
 
     /**
+     * @var string $stringId
+     */
+    private $stringId;
+
+    /**
      * @var string $name
      */
     private $name;
@@ -176,5 +181,25 @@ class Sport
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * Set stringId
+     *
+     * @param string $stringId
+     */
+    public function setStringId($stringId)
+    {
+        $this->stringId = $stringId;
+    }
+
+    /**
+     * Get stringId
+     *
+     * @return string $stringId
+     */
+    public function getStringId()
+    {
+        return $this->stringId;
     }
 }

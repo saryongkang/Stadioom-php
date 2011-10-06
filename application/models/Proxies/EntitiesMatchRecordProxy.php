@@ -294,6 +294,12 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::preUpdate();
     }
 
+    public function toArray()
+    {
+        $this->__load();
+        return parent::toArray();
+    }
+
 
     public function __sleep()
     {

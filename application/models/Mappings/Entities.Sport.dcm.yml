@@ -3,6 +3,7 @@ Entities\Sport:
   uniqueConstraints:
     email_index:
       columns:
+       - stringId
        - name
   fields:
     id:
@@ -10,6 +11,10 @@ Entities\Sport:
       id: true
       generator:
         strategy: AUTO
+    stringId:
+      type: string
+      length: 32
+      nullable: false
     name:
       type: string
       length: 32

@@ -23,6 +23,7 @@ class Sport extends Stadioom_REST_Controller {
             $userId = $this->verifyToken($accessToken);
 
             $sport = new Entities\Sport();
+            $sport->setStringId($this->post('stringId'));
             $sport->setName($this->post('name'));
             $sport->setDescription($this->post('desc'));
             $sport->setPriority($this->post('priority'));
