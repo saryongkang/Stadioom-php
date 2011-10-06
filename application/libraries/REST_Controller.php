@@ -467,6 +467,12 @@ class REST_Controller extends CI_Controller {
 
 	protected function _log_request($authorized = FALSE)
 	{
+            if (config_item('rest_log_to_php_error')) {
+                // INSERTED BY WEGRA.
+                error_log('uri: [' . $this->request->method . '] ' . $this->uri->uri_string());
+                error_log('params: ' . $this->arrayToString($this->_args));
+                error_log('from [IP]: ' . $this->input->ip_address() . "\n");
+            } else {
 		return $this->rest->db->insert(config_item('rest_logs_table'), array(
 			'uri' => $this->uri->uri_string(),
 			'method' => $this->request->method,
@@ -476,6 +482,7 @@ class REST_Controller extends CI_Controller {
 			'time' => function_exists('now') ? now() : time(),
 			'authorized' => $authorized
 		));
+            }
 	}
 
 	/*
@@ -781,4 +788,31 @@ class REST_Controller extends CI_Controller {
 	{
 		return $this->get('callback') . '(' . json_encode($data) . ')';
 	}
+
+        
+
+    protected function arrayToString($array) {
+        if ($array == NULL) {
+            return "NULL";
+        }
+        if (!is_array($array)) {
+            return $array;
+        }
+
+        $result = '';
+
+        $keys = array_keys($array);
+        foreach ($keys as $key) {
+            $value = $array[$key];
+            if (is_array($value)) {
+                $result = $result . $key . ": { ";
+                $result = $result . $this->arrayToString($value);
+                $result = $result . " }";
+            } else {
+                $result = $result . $key . ": '" . $array[$key] . "' ";
+            }
+        }
+
+        return $result;
+    }
 }

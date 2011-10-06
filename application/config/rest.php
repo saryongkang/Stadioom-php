@@ -192,7 +192,8 @@ $config['rest_logs_table'] = 'logs';
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 |
 */
-$config['rest_enable_logging'] = FALSE;
+$config['rest_enable_logging'] = TRUE;
+$config['rest_log_to_php_error'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
