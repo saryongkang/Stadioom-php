@@ -256,7 +256,7 @@ class MatchDao extends CI_Model {
         return $allMatches;
     }
 
-    public function delete($matchId, $userId) {
+    public function deleteMatch($matchId, $userId) {
         $match = $this->em->find('Entities\MatchRecord', $matchId);
         if ($match == null) {
             throw new Exception("Not Found.", 404);

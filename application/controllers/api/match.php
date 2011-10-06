@@ -115,7 +115,7 @@ class Match extends Stadioom_REST_Controller {
             $userId = $this->verifyToken($accessToken);
             $matchId = $this->delete('matchId');
 
-            $this->MatchDao->delete($matchId, $userId);
+            $this->MatchDao->deleteMatch($matchId, $userId);
         } catch (Exception $e) {
             $this->responseError($e);
         }
