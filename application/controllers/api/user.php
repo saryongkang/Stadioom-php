@@ -25,6 +25,19 @@ class User extends Stadioom_REST_Controller {
         $this->responseOk($this->filter($user->toArray(), $this->filterKeys));
     }
 
+    public function me_get() {
+        $accessToken = $this->get('accessToken');
+
+        try {
+            $userId = $this->verifyToken($accessToken);
+
+            $user = $this->UserDao->find($userId);
+            $this->responseOk($this->filter($user->toArray(), $this->filterKeys));
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
     public function search_get() {
         $type = $this->get('type');
         $keyword = $this->get('keyword');

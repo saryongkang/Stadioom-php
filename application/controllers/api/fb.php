@@ -27,6 +27,21 @@ class Fb extends Stadioom_REST_Controller {
         }
     }
 
+    public function test_get() {
+//        $fbId = $this->post('fbId');
+        $fbId = '649290919';
+//        $fbAccessToken = $this->post('fbAccessToken');
+        $fbAccessToken = 'AAAC2zBZAGSiwBACtBgX0BEsBZAdL37VHp9fHxwGgcglC5vpioPzZC1ElpwaEVx0cIN5ZB7I0PvxARYWUfmjRMrDFHGdSdecZD';
+
+        $fbInfo = array('fbId' => $fbId, 'fbAccessToken' => $fbAccessToken);
+
+        try {
+            $result = $this->UserDao->fbtest($fbInfo);
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
     public function deauthorize_post() {
         $accessToken = $this->post('accessToken');
 

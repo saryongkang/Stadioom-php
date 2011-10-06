@@ -10,6 +10,23 @@ class UserDao extends CI_Model {
 
         $this->em = $this->doctrine->em;
     }
+    
+    public function fbtest($fbInfo) {
+        $this->load->library('fb_connect');
+        $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
+        try {
+            $fbMe = $this->fb_connect->api('/me', 'GET');
+            $fbFriends = $this->fb_connect->api('/me/friends');
+            foreach($fbFriends['data'] as $fbFriend) {
+                $friend = $this->fb_connect->api('/' . $fbFriend['id']);
+                $friendName = $friend['name'];
+            }
+            
+        } catch (FacebookApiException $e) {
+            throw new Exception("Failed to get authorized by Facebook.", 401, $e);
+        }
+    }
+
 
     /**
      * Check if the email is valid or not.
@@ -161,7 +178,7 @@ class UserDao extends CI_Model {
                     }
                 }
                 $user->setVerified(TRUE);
-                
+
                 // is the FB email exist in the User table?
                 $prevUser = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
                 if ($prevUser != null) {
@@ -564,13 +581,17 @@ class UserDao extends CI_Model {
     private function storeUserFb($fbInfo, $fbMe) {
         // TODO: check duplication first.
         // add Facebook user info to UserFB table.
-        $userFb = new Entities\UserFb();
+        $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbInfo['fbId']);
+        if ($userFb == null) {
+            $userFb = new Entities\UserFb();
+        }
         // TODO: deside what info should be included.
         $userFb->setFbId($fbInfo['fbId']);
         $userFb->setFbAccessToken($fbInfo['fbAccessToken']);
         $currentDate = new DateTime();
         $fbExpires = $currentDate->getTimeStamp() + $fbInfo['fbExpires'];
         $userFb->setFbExpires($fbExpires);
+        $userFb->setName($fbMe['name']);
         $userFb->setGender($fbMe['gender']);
 
 
