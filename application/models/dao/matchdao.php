@@ -124,6 +124,9 @@ class MatchDao extends CI_Model {
 
     public function find($matchId) {
         $match = $this->em->find('Entities\MatchRecord', $matchId);
+        if ($match == null) {
+            throw new Exception("Not Found", 404);
+        }
         return $match->toArray();
     }
 
