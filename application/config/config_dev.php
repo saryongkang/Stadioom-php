@@ -17,7 +17,7 @@ if (!defined('BASEPATH'))
   | path to your installation.
   |
  */
-$config['base_url'] = 'http://stadioom:8080/';
+$config['base_url'] = 'http://stadioomtest.com/';
 
 /*
   |--------------------------------------------------------------------------
@@ -379,6 +379,9 @@ $config['email_charset'] = 'utf-8';
 $config['email_from'] = 'stadioom@seedshock.com';
 $config['email_from_display_name'] = 'SeedShock';
 $config['email_bcc'] = 'wegra.lee@gmail.com';
+
+$config['test_account'] = 'test@seedshock.com';
+$config['test_account_password'] = 'pesdwhrc';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
