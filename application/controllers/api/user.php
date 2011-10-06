@@ -16,13 +16,19 @@ class User extends Stadioom_REST_Controller {
     }
 
     public function index_get() {
-        $userId = $this->get('id');
-        if ($userId == null) {
-            $this->responseError("'id' is required.", 400);
-        }
+        $accessToken = $this->get('accessToken');
 
-        $user = $this->UserDao->find($userId);
-        $this->responseOk($this->filter($user->toArray(), $this->filterKeys));
+        try {
+            $userId = $this->get('id');
+            if ($userId == null) {
+                $this->responseError("'id' is required.", 400);
+            }
+
+            $user = $this->UserDao->find($userId);
+            $this->responseOk($this->filter($user->toArray(), $this->filterKeys));
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
     }
 
     public function me_get() {
