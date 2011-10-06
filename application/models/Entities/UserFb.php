@@ -282,4 +282,29 @@ class UserFb
     {
         return $this->favorite_teams;
     }
+    /**
+     * @var string $name
+     */
+    private $name;
+
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

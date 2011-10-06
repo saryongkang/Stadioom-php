@@ -9,10 +9,14 @@ Entities\UserFb:
     fbAccessToken:
       type: string
       length: 400
-      nullable: false
+      nullable: true
     fbExpires:
       type: integer
-      nullable: false
+      nullable: true
+    name:
+      type: string
+      length: 100
+      nullable: true
     gender:
       type: string
       length: 20
