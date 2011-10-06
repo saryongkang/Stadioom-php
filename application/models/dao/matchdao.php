@@ -17,32 +17,78 @@ class MatchDao extends CI_Model {
         $matchType = $match->getMatchType();
 
 //        if ($matchType == 1) { // single match
-            $this->em->persist($match);
-            $this->em->flush();
-            return $match->getId();
+        $this->em->persist($match);
+        $this->em->flush();
+        return $match->getId();
 //        } else {    // team match
 //            // TODO implement...
 //            throw new Exception("Not Implemented.", 501);
 //        }
     }
 
+    //    public function fbtest($fbInfo) {
+//        $this->load->library('fb_connect');
+//        $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
+//        try {
+//            $fbMe = $this->fb_connect->api('/me', 'GET');
+//            $fbFriends = $this->fb_connect->api('/me/friends');
+//            foreach($fbFriends['data'] as $fbFriend) {
+//                $friend = $this->fb_connect->api('/' . $fbFriend['id']);
+//                $friendName = $friend['name'];
+//            }
+//            
+//        } catch (FacebookApiException $e) {
+//            throw new Exception("Failed to get authorized by Facebook.", 401, $e);
+//        }
+//    }
+//
+
     public function complete(&$match, &$memberFbIdsA, &$memberFbIdsB) {
         if (is_array($memberFbIdsA)) {
-            foreach ($memberFbIdsA as $member) {
-                $fbId = $member['fbId'];
-                $name = $member['name'];
+            $me = $this->em->find('Entities\User', $match->getOwnerId());
+            $myFbInfo = $this->em->getRepository('Entities\UserFb')->findOneByFbId($me->getFbId());
+            $fbAccessToken = $myFbInfo->getFbAccessToken();
+            
+            $this->load->library('fb_connect');
+            $this->fb_connect->setAccessToken($fbAccessToken);
+                    
+            foreach ($memberFbIdsA as $fbId) {
                 $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
                 if ($user == null) {
                     $user = new Entities\User();
+
+                    try {
+                        $myFbInfo = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
+                        $fbFriend = $this->fb_connect->api('/' . $fbId);
+                    } catch (FacebookApiException $e) {
+                        throw new Exception("Failed to get authorized by Facebook.", 401, $e);
+                    }
+
+                    // fill user table
                     $user->setFbId($fbId);
-                    $user->setName($name);
+                    $user->setName($fbFriend['name']);
+                    $user->setGender($fbFriend['gender']);
                     $user->setFbLinked(false);
                     $user->setFbAuthorized(false);
                     $user->setVerified(false);
-                    
+
                     $this->em->persist($user);
+
+                    // fill user fb table.
+                    $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
+                    if ($userFb == null) {
+                        $userFb = new Entities\UserFb();
+                        $userFb->setFbId($fbId);
+                    }
+                    $userFb->setName($fbFriend['name']);
+                    $userFb->setGender($fbFriend['gender']);
+                    $userFb->setLocale($fbFriend['locale']);
+
+                    $this->em->persist($userFb);
+                    
                     $this->em->flush();
                 }
+
                 $newMember = new Entities\MatchRecordMemberA();
                 $newMember->setUserId($user->getId());
                 $newMember->setMatch($match);
@@ -50,20 +96,42 @@ class MatchDao extends CI_Model {
             }
         }
         if (is_array($memberFbIdsB)) {
-            foreach ($memberFbIdsB as $member) {
-                $fbId = $member['fbId'];
-                $name = $member['name'];
+            foreach ($memberFbIdsB as $fbId) {
                 $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
                 if ($user == null) {
                     $user = new Entities\User();
+
+                    try {
+                        $fbFriend = $this->fb_connect->api('/' . $fbId);
+                    } catch (FacebookApiException $e) {
+                        throw new Exception("Failed to get authorized by Facebook.", 401, $e);
+                    }
+
+                    // fill user table
                     $user->setFbId($fbId);
-                    $user->setName($name);
+                    $user->setName($fbFriend['name']);
+                    $user->setGender($fbFriend['gender']);
                     $user->setFbLinked(false);
                     $user->setFbAuthorized(false);
                     $user->setVerified(false);
+
                     $this->em->persist($user);
+
+                    // fill user fb table.
+                    $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
+                    if ($userFb == null) {
+                        $userFb = new Entities\UserFb();
+                        $userFb->setFbId($fbId);
+                    }
+                    $userFb->setName($fbFriend['name']);
+                    $userFb->setGender($fbFriend['gender']);
+                    $userFb->setLocale($fbFriend['locale']);
+
+                    $this->em->persist($userFb);
+                    
                     $this->em->flush();
                 }
+                
                 $newMember = new Entities\MatchRecordMemberB();
                 $newMember->setUserId($user->getId());
                 $newMember->setMatch($match);
