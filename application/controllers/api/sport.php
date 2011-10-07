@@ -9,8 +9,7 @@ class Sport extends Stadioom_REST_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model('dao/SportDao');
-        $this->load->model('dao/BrandSportMapDao');
+        $this->load->model('dao/BrandSportDao');
 
 //        if (function_exists('force_ssl'))
 //            remove_ssl();
@@ -31,7 +30,7 @@ class Sport extends Stadioom_REST_Controller {
             $sport->setLatestRevision($this->post('latestRevision'));
             $sport->setUpdateFlag($this->post('updateFlag'));
 
-            $result = $this->SportDao->add($sport);
+            $result = $this->BrandSportDao->addSport($sport);
             $this->responseOk($result);
         } catch (Exception $e) {
             $this->responseError($e);
@@ -46,7 +45,7 @@ class Sport extends Stadioom_REST_Controller {
 
             $id = $this->delete('id');
 
-            $result = $this->SportDao->remove($id);
+            $result = $this->BrandSportDao->removeSport($id);
             $this->responseOk($result);
         } catch (Exception $e) {
             $this->responseError($e);
@@ -62,7 +61,7 @@ class Sport extends Stadioom_REST_Controller {
             if ($sportId == null) {
 
                 // TODO returns list ordered by priority.
-                $allSports = $this->SportDao->getAll();
+                $allSports = $this->BrandSportDao->getAllSports();
                 $array = array();
                 foreach ($allSports as $sport) {
                     array_push($array, $this->filter($sport->toArray(), $this->filterKeys));
@@ -70,7 +69,7 @@ class Sport extends Stadioom_REST_Controller {
                 $data = array("data" => $array);
                 $this->responseOk($data);
             } else {
-                $sport = $this->SportDao->find($sportId);
+                $sport = $this->BrandSportDao->getSport($sportId);
 
                 $this->responseOk($this->filter($sport->toArray(), $this->filterKeys));
             }
@@ -84,7 +83,7 @@ class Sport extends Stadioom_REST_Controller {
         try {
             $userId = $this->verifyToken($accessToken);
             $after = $this->get('after');
-            $allSports = $this->SportDao->findAfter($after);
+            $allSports = $this->BrandSportDao->findSportsAfter($after);
             $array = array();
             foreach ($allSports as $sport) {
                 array_push($array, $sport->toArray());
@@ -105,46 +104,15 @@ class Sport extends Stadioom_REST_Controller {
             }
 
             $sportId = $this->get('id');
-            $brands = $this->BrandSportMapDao->findSponsorsOf($sportId);
+            $brands = $this->BrandSportDao->findAllSponsorsOf($sportId);
+            
             $array = array();
             foreach ($brands as $brand) {
                 array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
             }
-            if ($array == null) {
-                $this->responseError(new Exception("Not Found.", 404));
-            }
+            
             $data = array("data" => $array);
             $this->responseOk($data);
-        } catch (Exception $e) {
-            $this->responseError($e);
-        }
-    }
-
-    public function brand_post() {
-        $accessToken = $this->post('accessToken');
-
-        try {
-            $userId = $this->verifyToken($accessToken);
-
-            $brandId = $this->post('brandId');
-            $sportId = $this->post('sportId');
-            $this->BrandSportMapDao->link($brandId, $sportId);
-            $this->responseOk();
-        } catch (Exception $e) {
-            $this->responseError($e);
-        }
-    }
-
-    public function brand_delete() {
-        $accessToken = $this->delete('accessToken');
-
-        try {
-            $userId = $this->verifyToken($accessToken);
-
-            $brandId = $this->delete('brandId');
-            $sportId = $this->delete('sportId');
-            $this->BrandSportMapDao->unlink($brandId, $sportId);
-            $this->responseOk();
         } catch (Exception $e) {
             $this->responseError($e);
         }

@@ -186,4 +186,33 @@ class Brand {
         return $this->stringId;
     }
 
+    /**
+     * @var Entities\Sport
+     */
+    private $sports;
+
+    public function __construct()
+    {
+        $this->sports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add sports
+     *
+     * @param Entities\Sport $sports
+     */
+    public function addSports(\Entities\Sport $sports)
+    {
+        $this->sports[] = $sports;
+    }
+
+    /**
+     * Get sports
+     *
+     * @return Doctrine\Common\Collections\Collection $sports
+     */
+    public function getSports()
+    {
+        return $this->sports;
+    }
 }

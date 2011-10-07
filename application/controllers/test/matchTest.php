@@ -52,15 +52,15 @@ class MatchTest extends Test_REST_Controller {
 
     public function afterClass() {
         // delete all matches registered during this test.
-        if (is_array($this->matchIds) && count($this->matchIds) > 0) {
-            foreach ($this->matchIds as $matchId) {
-                $this->MatchDao->deleteMatch($matchId, $this->me->getId());
-            }
-        }
-
-        // delete temporal 'me';
-        $q = $this->em->createQuery("DELETE FROM Entities\User u WHERE u.id = " . $this->me->getId());
-        $q->execute();
+//        if (is_array($this->matchIds) && count($this->matchIds) > 0) {
+//            foreach ($this->matchIds as $matchId) {
+//                $this->MatchDao->deleteMatch($matchId, $this->me->getId());
+//            }
+//        }
+//
+//        // delete temporal 'me';
+//        $q = $this->em->createQuery("DELETE FROM Entities\User u WHERE u.id = " . $this->me->getId());
+//        $q->execute();
     }
 
     public function testRegisterSingle_StadioomUser_get() {
@@ -74,13 +74,14 @@ class MatchTest extends Test_REST_Controller {
             'ended' => $this->now,
             'scoreA' => 4,
             'scoreB' => 2,
-            'memberIdsA' => array($this->me->getId()),
-            'memberIdsB' => array($this->testUsers[0]->getId())
+            'memberFbIdsB' => array('649290919'),
+            'memberFbIdsB' => array('100000155192872'),
         );
+        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
         $result = $this->runTest("me vs. user 1.", "api/match", $param);
         $result = json_decode($result);
         Assert::assertTrue($result->id > 0);
-        
+
         array_push($this->matchIds, $result->id);
 
 //        // user 1 vs. user 2.

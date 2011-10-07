@@ -12,6 +12,21 @@ class Bra extends Stadioom_REST_Controller {
         $this->load->library('doctrine');
     }
 
+    public function fb_get() {
+        $json = '{
+   "id": "795500108",
+   "name": "Alan Ramos",
+   "first_name": "Alan",
+   "last_name": "Ramos",
+   "link": "https://www.facebook.com/alan196",
+   "username": "alan196",
+   "gender": "male",
+   "locale": "es_LA"
+}';
+        $decode = json_decode($json);
+        echo "hello";
+    }
+
     public function create_get() {
         $bra = new Entities\Bra();
         $bra->setName("SeedShock");
@@ -61,13 +76,13 @@ class Bra extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
     }
-    
+
     public function brands_get() {
         try {
             $sportId = $this->get('sportId');
             if ($sportId != null) {
                 $q = $this->doctrine->em->createQuery("SELECT b, s FROM Entities\Bra b JOIN b.spos s WHERE s.id = " . $sportId);
-                
+
                 $bras = $q->getResult();
                 $array = array();
                 foreach ($bras as $bra) {
@@ -85,15 +100,15 @@ class Bra extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
     }
-    
+
     public function sports_get() {
         try {
             $brandId = $this->get('brandId');
             if ($brandId != null) {
                 $bra = $this->doctrine->em->find("Entities\Bra", $brandId);
-                
+
                 $spos = $bra->getSpos();
-                
+
                 $array = array();
                 foreach ($spos as $spo) {
                     array_push($array, $spo->toArray());

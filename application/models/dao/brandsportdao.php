@@ -168,7 +168,7 @@ class BrandSportDao extends CI_Model {
     public function link($brandId, $sportIds) {
         $brand = $this->em->find("Entities\Brand", $brandId);
         $sports = array();
-        if (count($sportsIds) > 0) {
+        if (count($sportIds) > 0) {
             $q = $this->em->createQuery("SELECT s FROM Entities\Sport s WHERE s.id IN (" . implode(",", $sportIds) . ")");
             $sports = $q->getResult();
         }
@@ -176,7 +176,7 @@ class BrandSportDao extends CI_Model {
         $linkedSports = $brand->getSports();
         $linkedSports->clear();
         foreach ($sports as $sport) {
-            $linkedSports->addSports($sport);
+            $brand->addSports($sport);
         }
 
         $this->em->flush();
