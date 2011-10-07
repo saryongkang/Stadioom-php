@@ -11,12 +11,62 @@ class MatchDao extends CI_Model {
         $this->em = $this->doctrine->em;
     }
 
+    /**
+     * Registers a new match.
+     * 
+     * @param Entities\MatchRecord $match
+     * @param array $memberFbIdsA
+     * @param array $memberFbIdsB 
+     * @param string $fbAccessToken 
+     */
     public function register($match, $memberFbIdsA, $memberFbIdsB, $fbAccessToken) {
+        $this->validateMatch($match, $memberFbIdsA, $memberFbIdsB);
+
         $this->complete($match, $memberFbIdsA, $memberFbIdsB, $fbAccessToken);
 
         $this->em->persist($match);
         $this->em->flush();
         return $match->getId();
+    }
+
+    /**
+     * Verify the inputs.
+     * 
+     * @param Entities\MatchRecord $match
+     * @param array $memberFbIdsA
+     * @param array $memberFbIdsB 
+     */
+    private function validateMatch($match, $memberFbIdsA, $memberFbIdsB) {
+        $matchType = $match->getMatchType();
+
+        if ($matchType == 1) { // single match
+            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
+            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
+
+            if ($numA != 1 || $numB != 1) {
+                throw new Exception("Number of both teams' members should be 1, but " . $numA . " and " . $numB, 400);
+            }
+        } else if ($matchType == 2) { // team match
+            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
+            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
+
+            if ($numA < 1 || $numB < 1) {
+                throw new Exception("Number of both teams' members should be greater than 0, but " . $numA . " and " . $numB, 400);
+            }
+        } else {
+            throw new Exception("Unsupported match type: " . $match->getMatchType(), 400);
+        }
+        
+//        // team A and team B should exclusive.
+//        
+//        // all member's are registered?
+//        $members = count($match->getMemberIdsA());
+//        // make IN (...) statement, than get count, then compare with total required numbers.
+//        foreach ($members as $member) {
+//            $q = $this->em->createQuery("SELECT u FROM Entities\User WHERE id = " . $member->getId());
+//            $users = $q->getResult();
+//            if (count($users) == )
+//        }
     }
 
     public function shared($sharedInfo) {
@@ -261,15 +311,14 @@ class MatchDao extends CI_Model {
 
     public function deleteMatch($matchId, $userId) {
         $match = $this->em->find('Entities\MatchRecord', $matchId);
-        if ($match == null) {
-            throw new Exception("Not Found.", 404);
-        }
-        if ($match->getOwnerId() != $userId) {
-            throw new Exception("Forbidden. You have no permission to delete this match.", 403);
-        }
+        if ($match != null) {
+            if ($match->getOwnerId() != $userId) {
+                throw new Exception("Forbidden. You have no permission to delete this match.", 403);
+            }
 
-        $this->em->remove($match);
-        $this->em->flush();
+            $this->em->remove($match);
+            $this->em->flush();
+        }
     }
 
 }
