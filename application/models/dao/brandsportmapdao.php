@@ -37,9 +37,19 @@ class BrandSportMapDao extends CI_Model {
         $result = array();
         $q = $this->doctrine->em->createQuery('SELECT m FROM Entities\BrandSportMap m WHERE m.sportId = ' . $sportId);
         $maps = $q->getResult();
-        foreach ($maps as $map) {
-            $brand = $this->doctrine->em->getRepository('Entities\Brand')->findOneBy(array('id' => $map->getBrandId()));
-            array_push($result, $brand);
+        
+        $count = count($maps);
+        if ($count != 0) {
+            $dql = "SELECT b FROM Entities\Brand b WHERE b.id IN (";
+            for ($i = 1; $i <= $count; $i++) {
+                $dql = $dql . $i;
+                if ($i < $count) {
+                    $dql = $dql . ", ";
+                }
+            }
+            $dql = $dql . ")";
+            $q = $this->doctrine->em->createQuery($dql);
+            $result = $q->getResult();
         }
         
         return $result;
@@ -53,9 +63,19 @@ class BrandSportMapDao extends CI_Model {
         $result = array();
         $q = $this->doctrine->em->createQuery('SELECT m FROM Entities\BrandSportMap m WHERE m.brandId = ' . $brandId);
         $maps = $q->getResult();
-        foreach ($maps as $map) {
-            $sport = $this->doctrine->em->getRepository('Entities\Sport')->findOneBy(array('id' => $map->getSportId()));
-            array_push($result, $sport);
+        
+        $count = count($maps);
+        if ($count != 0) {
+            $dql = "SELECT s FROM Entities\Sport s WHERE s.id IN (";
+            for ($i = 1; $i <= $count; $i++) {
+                $dql = $dql . $i;
+                if ($i < $count) {
+                    $dql = $dql . ", ";
+                }
+            }
+            $dql = $dql . ")";
+            $q = $this->doctrine->em->createQuery($dql);
+            $result = $q->getResult();
         }
         
         return $result;
