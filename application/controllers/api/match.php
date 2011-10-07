@@ -41,7 +41,7 @@ class Match extends Stadioom_REST_Controller {
             $this->post('shared');
 
             $match->setTeamAId($this->post('teamA'));
-            $match->setTeamAId($this->post('teamB'));
+            $match->setTeamBId($this->post('teamB'));
 
             $memberIds = $this->post('memberIdsA');
             if (is_array($memberIds)) {
