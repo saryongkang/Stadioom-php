@@ -79,9 +79,8 @@ class UserDao extends CI_Model {
         if ($fbInfo === NULL
                 || $fbInfo['fbId'] == null
                 || $fbInfo['fbAccessToken'] == null
-                || $fbInfo['fbExpires'] == NULL) {
+                || $fbInfo['fbExpires'] === NULL) {
             throw new Exception("Insufficient data. fbId=" . $fbInfo['fbId'] . " fbAccessToken=" . $fbInfo['fbAccessToken'] . " fbExpires=" . $fbInfo['fbExpires'], 400);
-            //throw new Exception("Insufficient data.", 400);
         }
 
         $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbInfo['fbId']);
@@ -643,6 +642,14 @@ class UserDao extends CI_Model {
         $this->em->flush();
     }
     
+    /**
+     * Returns the latest matches the specfied user has played.
+     * (ordered by the last updated time (desc).)
+     * 
+     * @param integer $userId The ID of the user who's played the matches.
+     * @param integer $maxNumber The maximum number of result.
+     * @return array of Entities\MatchRecord 
+     */
     public function getLatestMatches($userId, $maxNumber) {
         $dql = "SELECT m, a, b";
         $dql = $dql . " FROM Entities\MatchRecord m";
