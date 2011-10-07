@@ -19,10 +19,10 @@ class MatchDao extends CI_Model {
      * @param array $memberFbIdsB 
      * @param string $fbAccessToken 
      */
-    public function register($match, $memberFbIdsA, $memberFbIdsB, $fbAccessToken) {
+    public function register($match, $memberFbIdsA, $memberFbIdsB) {
         $this->validateMatch($match, $memberFbIdsA, $memberFbIdsB);
 
-        $this->complete($match, $memberFbIdsA, $memberFbIdsB, $fbAccessToken);
+        $this->complete($match, $memberFbIdsA, $memberFbIdsB);
 
         $this->em->persist($match);
         $this->em->flush();
@@ -38,7 +38,6 @@ class MatchDao extends CI_Model {
      */
     private function validateMatch($match, $memberFbIdsA, $memberFbIdsB) {
 //        $matchType = $match->getMatchType();
-
 //        if ($matchType == 1) { // single match
 //            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
 //            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
@@ -56,7 +55,6 @@ class MatchDao extends CI_Model {
 //        } else {
 //            throw new Exception("Unsupported match type: " . $match->getMatchType(), 400);
 //        }
-        
 //        // team A and team B should exclusive.
 //        
 //        // all member's are registered?
@@ -77,31 +75,21 @@ class MatchDao extends CI_Model {
         return $sharedInfo->getId();
     }
 
-    public function complete(&$match, &$memberFbIdsA, &$memberFbIdsB, $fbAccessToken) {
+    public function complete(&$match, &$memberFbIdsA, &$memberFbIdsB) {
         if (is_array($memberFbIdsA)) {
             $me = $this->em->find('Entities\User', $match->getOwnerId());
-//            $myFbInfo = $this->em->getRepository('Entities\UserFb')->findOneByFbId($me->getFbId());
-//            $fbAccessToken = $myFbInfo->getFbAccessToken();
-
-            $this->load->library('fb_connect');
-            $this->fb_connect->setAccessToken($fbAccessToken);
-
             foreach ($memberFbIdsA as $fbId) {
                 $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
                 if ($user == null) {
                     $user = new Entities\User();
 
-                    try {
-                        $myFbInfo = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
-                        $fbFriend = $this->fb_connect->api('/' . $fbId);
-                    } catch (FacebookApiException $e) {
-                        throw new Exception("Failed to get authorized by Facebook.", 401, $e);
-                    }
+                    $fbFriend = file_get_contents("http://graph.facebook.com/" . $fbId);
+                    $fbFriend = json_decode($fbFriend);
 
                     // fill user table
                     $user->setFbId($fbId);
-                    $user->setName($fbFriend['name']);
-                    $user->setGender($fbFriend['gender']);
+                    $user->setName($fbFriend->name);
+                    $user->setGender($fbFriend->gender);
                     $user->setFbLinked(false);
                     $user->setFbAuthorized(false);
                     $user->setVerified(false);
@@ -114,9 +102,9 @@ class MatchDao extends CI_Model {
                         $userFb = new Entities\UserFb();
                         $userFb->setFbId($fbId);
                     }
-                    $userFb->setName($fbFriend['name']);
-                    $userFb->setGender($fbFriend['gender']);
-                    $userFb->setLocale($fbFriend['locale']);
+                    $userFb->setName($fbFriend->name);
+                    $userFb->setGender($fbFriend->gender);
+                    $userFb->setLocale($fbFriend->locale);
 
                     $this->em->persist($userFb);
                 }
@@ -133,16 +121,13 @@ class MatchDao extends CI_Model {
                 if ($user == null) {
                     $user = new Entities\User();
 
-                    try {
-                        $fbFriend = $this->fb_connect->api('/' . $fbId);
-                    } catch (FacebookApiException $e) {
-                        throw new Exception("Failed to get authorized by Facebook.", 401, $e);
-                    }
+                    $fbFriend = file_get_contents("http://graph.facebook.com/" . $fbId);
+                    $fbFriend = json_decode($fbFriend);
 
                     // fill user table
                     $user->setFbId($fbId);
-                    $user->setName($fbFriend['name']);
-                    $user->setGender($fbFriend['gender']);
+                    $user->setName($fbFriend->name);
+                    $user->setGender($fbFriend->gender);
                     $user->setFbLinked(false);
                     $user->setFbAuthorized(false);
                     $user->setVerified(false);
@@ -155,9 +140,9 @@ class MatchDao extends CI_Model {
                         $userFb = new Entities\UserFb();
                         $userFb->setFbId($fbId);
                     }
-                    $userFb->setName($fbFriend['name']);
-                    $userFb->setGender($fbFriend['gender']);
-                    $userFb->setLocale($fbFriend['locale']);
+                    $userFb->setName($fbFriend->name);
+                    $userFb->setGender($fbFriend->gender);
+                    $userFb->setLocale($fbFriend->locale);
 
                     $this->em->persist($userFb);
                 }
