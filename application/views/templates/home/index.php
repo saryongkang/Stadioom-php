@@ -8,7 +8,7 @@
     <meta property="og:title"       content="Stadioom - Connecting Sports"> 
 	<title><?php echo $site_title?> - <?php echo $site_name?></title>
         <!-- fav and touch icons -->
-        <link rel="shortcut icon" href="/images/favicon.ico">
+        <link rel="shortcut icon" href="/images/favicon_stad.ico">
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
         <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">
         <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">

@@ -1,0 +1,63 @@
+/* 
+    Document   : match
+    Created on : Oct 6, 2011, 7:42:50 PM
+    Author     : noru
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+.inline{
+    display:inline;
+}
+
+.inline > div{
+    display:inline;
+}
+
+#sendMatch{
+    
+}
+
+.teamName{
+    background-color: #222;
+    color:#FFF;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-left: 4px;
+}
+
+.teamDesc{
+    margin-bottom: 10px;
+}
+
+.sponsorSelect{
+    color: #999;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    /*standard banner width is 468 */
+    /*standard banner height is 60 */ 
+    width:400px;
+    height:91px;
+    
+    /*direct resize of original standard banner */
+/*    width:390px; 
+    height:50px; */
+    background-color: #F0F0F0;
+    border-width: 2px;
+    border-color: #999;
+    border-style: dotted;
+}
+
+.sponsorSelect p{
+    font-size: 24px;
+}

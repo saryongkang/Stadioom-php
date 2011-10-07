@@ -1,6 +1,6 @@
 <?php
 
-class Match extends CI_Controller {
+class Match extends FBAuth_Controller {
     
     function __construct() {
         parent::__construct();
@@ -19,7 +19,11 @@ class Match extends CI_Controller {
         
         $this->template->add_css('tdfriendselector');
         $this->template->add_js('tdfriendselector');
-                
+        $this->template->add_js('jquery.iphone-switch');
+        $this->template->add_js('bootstrap/bootstrap-modal');
+        
+        $this->template->add_css('match');
+        
         $this->template->add_css('main');
         $this->template->set_content('createMatchView', $data);
         $this->template->build('main');
