@@ -20,7 +20,11 @@ class Brand extends Stadioom_REST_Controller {
     public function index_post() {
         $accessToken = $this->post('accessToken');
         try {
-            $userId = $this->verifyToken($accessToken);
+            if ($this->input->ip_address() != '127.0.0.1') {
+                $userId = $this->verifyToken($accessToken);
+            } else {
+                $userId = $this->post('userId');
+            }
 
             $brand = new Entities\Brand();
             $brand->setStringId($this->post('stringId'));
@@ -66,7 +70,7 @@ class Brand extends Stadioom_REST_Controller {
                 foreach ($allSports as $brand) {
                     array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
                 }
-                
+
                 $data = array("data" => $array);
                 $this->responseOk($data);
             } else {
@@ -100,7 +104,7 @@ class Brand extends Stadioom_REST_Controller {
         $accessToken = $this->get('accessToken');
 
         try {
-           if ($this->input->ip_address() != '127.0.0.1') {
+            if ($this->input->ip_address() != '127.0.0.1') {
                 $userId = $this->verifyToken($accessToken);
             }
 
@@ -114,7 +118,7 @@ class Brand extends Stadioom_REST_Controller {
             if ($array == null) {
                 $this->responseError(new Exception("Not Found.", 404));
             }
-            
+
             $data = array("data" => $array);
             $this->responseOk($data);
         } catch (Exception $e) {
