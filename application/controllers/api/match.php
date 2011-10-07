@@ -68,8 +68,7 @@ class Match extends Stadioom_REST_Controller {
 
             $matchId = $this->MatchDao->register($match, $memberFbIdsA, $memberFbIdsB, $fbAccessToken);
 
-            error_log("OK");
-            $this->responseOk($matchId);
+            $this->responseOk(array("id" => $matchId));
         } catch (Exception $e) {
             $this->responseError($e);
         }
@@ -93,7 +92,7 @@ class Match extends Stadioom_REST_Controller {
 
             $sharedId = $this->MatchDao->shared($sharedInfo);
 
-            $this->responseOk($sharedId);
+            $this->responseOk(array("id" => $sharedId));
         } catch (Exception $e) {
             $this->responseError($e);
         }

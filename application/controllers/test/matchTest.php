@@ -78,8 +78,10 @@ class MatchTest extends Test_REST_Controller {
             'memberIdsB' => array($this->testUsers[0]->getId())
         );
         $result = $this->runTest("me vs. user 1.", "api/match", $param);
-        Assert::assertTrue(intval($result) > 0);
-        array_push($this->matchIds, $result);
+        $result = json_decode($result);
+        Assert::assertTrue($result->id > 0);
+        
+        array_push($this->matchIds, $result->id);
 
         // user 1 vs. user 2.
         $param = array('accessToken' => $this->accessToken,
@@ -95,8 +97,10 @@ class MatchTest extends Test_REST_Controller {
             'memberIdsB' => array($this->testUsers[1]->getId())
         );
         $result = $this->runTest("user 1 vs. user 2.", "api/match", $param);
-        Assert::assertTrue(intval($result) > 0);
-        array_push($this->matchIds, $result);
+        $result = json_decode($result);
+        Assert::assertTrue($result->id > 0);
+        
+        array_push($this->matchIds, $result->id);
     }
 
 //    public function testRegisterSingle_StadioomUser_N_get() {
