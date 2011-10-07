@@ -119,10 +119,10 @@ class Match extends Stadioom_REST_Controller {
      * Returns a list of registered matches or the specified match.
      */
     public function index_get() {
-        $accessToken = $this->get('accessToken');
+//        $accessToken = $this->get('accessToken');
 
         try {
-            $userId = $this->verifyToken($accessToken);
+//            $userId = $this->verifyToken($accessToken);
 
             $matchId = $this->get('matchId');
             if ($matchId != null) {
