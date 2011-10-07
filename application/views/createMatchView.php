@@ -179,7 +179,7 @@
               <h3>Match Sponsor</h3>
             </div>
             <div class="modal-body">
-                <div id="#sponsors-list">
+                <div id="sponsors-list">
                 <p>For all sponsors...</p>
                 </div>
             </div>

@@ -26,15 +26,16 @@ sponsorPicsFolder='/assets/images/sponsors/';
 sponsorBannersFolder=sponsorPicsFolder+'banners/';
 
 updatePlayersDiv = function (){
-    jQuery.getJSON('/api/brand/sport?id='+window.selectedSportId, function(data) {
-      window.sponsors = data;
-      $('#sponsors-list').text('');
-      console.log (data);
+    jQuery.getJSON('/api/sport/brands?id='+window.selectedSportId, function(sponsors) {
+      window.sponsors = sponsors.data;
+      sponsors=sponsors.data;
+      //console.log(sponsors.length);
+      $('#sponsors-list').html('');
 
-    //  for (i = 0, len = data.length; i < len; i += 1) {
-    //        $("#sponsors-list").append('<div class="sponsor-item"><img src="'+sponsorBannersFolder+'" /> ' +TDFriendSelector.getFriendById(playersIds[i])['name']+ '</div>');
-    //        console.log(TDFriendSelector.getFriendById(playersIds[i]));
-    //    }
+     for (i = 0, len = sponsors.length; i < len; i += 1) {
+         imageString = window.sponsorBannersFolder+sponsors[i].stringId+'_banner'+'.png';
+           $("#sponsors-list").append('<div class="sponsor-item"><img src="'+imageString+'" /> ' + '</div>');
+     }
 
     });
 };
@@ -43,7 +44,7 @@ updatePlayersDiv();
 
 $("#sportSelect").change(function() {
     window.selectedSportId = this.value;
-    updatePlayersDiv();
+    window.updatePlayersDiv();
 });
 
 
