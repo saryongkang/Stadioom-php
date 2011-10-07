@@ -4,51 +4,115 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class MatchTest extends Test_REST_Controller {
 
-    protected $accessToken = 0;
-    private $testUser1;
-    private $testUser2;
-    private $testUser3;
-    private $testUser4;
+    private $em;
+    private $accessToken = 0;
+    private $me = NULL;
+    private $meFb = NULL;
+    private $testUsers = array();
+    private $testUsersFb = array();
+    private $matchIds = array();
 
     function __construct() {
         parent::__construct();
+        $this->load->library('doctrine');
+        $this->em = $this->doctrine->em;
+
+        $this->load->model('dao/MatchDao');
         if (function_exists('force_ssl'))
             remove_ssl();
     }
 
     public function beforeClass() {
         // sign in with test account.
-        $testAccountEmail = $this->config->item('test_account');
-        $testAccountPassword = $this->config->item('test_account_password');
-        $grantCode = $this->generateGrantCode($testAccountEmail, $testAccountPassword);
-        $result = $this->sendPost($this->config->item('base_url') . "api/fb/connect", array('fbId' => '649290919', 'fbAccessToken' => 'AAAC2zBZAGSiwBACtBgX0BEsBZAdL37VHp9fHxwGgcglC5vpioPzZC1ElpwaEVx0cIN5ZB7I0PvxARYWUfmjRMrDFHGdSdecZD', 'fbExpires' => 0));
+        $this->meFb = $this->createTestUser();
+        $param = array('fbId' => $this->meFb['fbId'], 'fbAccessToken' => $this->meFb['fbAccessToken'], 'fbExpires' => 0);
+        $result = $this->sendPost($this->config->item('base_url') . "api/fb/connect", $param);
         $this->accessToken = json_decode($result)->accessToken;
-        
-//        $result = $this->sendGet($this->config->item('base_url') . "api/user/me", array('accessToken' => $this->accessToken));
 
-//        $this->testUser1 = $this->createTestUser();
-//        $this->testUser2 = $this->createTestUser();
-//        $this->testUser3 = $this->createTestUser();
-//        $this->testUser4 = $this->createTestUser();
+        $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.email = '" . $this->meFb['email'] . "'");
+        $user = $q->getResult();
+        $this->me = $user[0];
 
-        // add users (1, 2 for Team A, 3, 4 for Team B)
-//        $result = $this->sendPost("api/auth/signUp", array('grantType' => 'authorization_code', 'code' => $this->generateGrantCode($this->testUser1['email'], $this->testUser1['password']), 'name' => $this->testUser1['name'], 'gender' => 'male', 'dob' => 1232123222));
-//        $result = $this->sendPost("api/fb/connect", array('fbId' => $this->testUser2['fbId'], 'fbAccessToken' => $this->testUser2['fbAccessToken'], 'fbExpires' => 0));
-//        $result = $this->sendPost("api/auth/signUp", array('grantType' => 'authorization_code', 'code' => $this->generateGrantCode($this->testUser1['email'], $this->testUser1['password']), 'name' => $this->testUser1['name'], 'gender' => 'male', 'dob' => 1232123222));
-//        $result = $this->sendPost("api/fb/connect", array('fbId' => $this->testUser4['fbId'], 'fbAccessToken' => $this->testUser4['fbAccessToken'], 'fbExpires' => 0));
+        // get test users;
+        for ($i = 1; $i <= 4; $i++) {
+            $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.name = '" . 'testUser' . $i . "'");
+            $user = $q->getResult();
+            array_push($this->testUsers, $user[0]);
+
+            $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.name = '" . 'testUserFb' . $i . "'");
+            $user = $q->getResult();
+            array_push($this->testUsersFb, $user[0]);
+        }
     }
 
     public function afterClass() {
-        // TODO deregister users.
-    }
-    
-    public function testLastMatch_get() {
-//        $param = array();
-//        $result = $this->runTest('Get Last Match', $this->config->item('base_url') . "api/match/lastMatch", $param, 'GET');
+        // delete all matches registered during this test.
+        foreach($this->matchIds as $matchId) {
+            $this->MatchDao->deleteMatch($matchId, $this->me->getId());
+        }
+        
+        // delete temporal 'me';
+        $q = $this->em->createQuery("DELETE FROM Entities\User u WHERE u.id = " . $this->me->getId());
+        $q->execute();
     }
 
-    public function testRegister() {
+    public function testRegisterSingle_StadioomUser_get() {
+        // me vs. user 1.
+        $now = new DateTime();
+        $now = $now->getTimestamp();
+        $param = array('accessToken' => $this->accessToken,
+            'sportId' => 1,
+            'brandId' => 2,
+            'title' => 'valid test match..',
+            'matchType' => 1, // single
+            'leagueType' => 1, // amature
+            'started' => $now,
+            'ended' => $now,
+            'scoreA' => 4,
+            'scoreB' => 2,
+            'memberIdsA' => array($this->me->getId()),
+            'memberIdsB' => array($this->testUsers[0]->getId())
+        );
+        $result = $this->runTest("me vs. user 1.", "api/match", $param);
+        Assert::assertTrue(intval($result) > 0);
+        array_push($this->matchIds, $result);
+        
+        // user 1 vs. user 2.
+        $param = array('accessToken' => $this->accessToken,
+            'sportId' => 1,
+            'brandId' => 2,
+            'title' => 'valid test match..',
+            'matchType' => 1, // single
+            'leagueType' => 1, // amature
+            'started' => $now,
+            'ended' => $now,
+            'scoreA' => 4,
+            'scoreB' => 2,
+            'memberIdsA' => array($this->testUsers[0]->getId()),
+            'memberIdsB' => array($this->testUsers[1]->getId())
+        );
+        $result = $this->runTest("user 1 vs. user 2.", "api/match", $param);
+        Assert::assertTrue(intval($result) > 0);
+        array_push($this->matchIds, $result);
+    }
 
+    public function testRegisterSingle_StadioomUser_N_get() {
+        // me vs. empty.
+        // ghost vs. me.
+        // me vs. user 1. (invalid sport)
+        
+        // me vs. user 1 (ended with scores)
+        // me vs. user 1 (scored before being started).
+        
+        // me vs. user 1, 2
+    }
+
+    public function testRegisterTeam_StadioomUsers_get() {
+        // {me, user 1} vs. {user 2, 3}
+        // {user 1, user 2} vs. {user 3, 4}
+    }
+
+//    public function testRegister() {
 //        $param = array('accessToken' => $this->accessToken,
 //            'sportId' => 2,
 //            'brandId' => 2,
@@ -65,9 +129,8 @@ class MatchTest extends Test_REST_Controller {
 ////        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
 //        $result = $this->runTest("register a match with valid info. (me vs. user 3)", "api/match", $param);
 //        Assert::assertTrue(intval($result) > 0);
-//        }
-    }
-        // register a match with valid info. (me vs. user 3)
+//    }
+    // register a match with valid info. (me vs. user 3)
 //        $param = array('accessToken' => $this->accessToken,
 //            'sportId' => 2,
 //            'brandId' => 2,
@@ -97,7 +160,7 @@ class MatchTest extends Test_REST_Controller {
 ////        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
 //        $result = $this->runTest("register a match with valid info. (me vs. user 3)", "api/match", $param);
 //        Assert::assertTrue(intval($result) > 0);
-        // register a match with valid info. (me vs. user 3)
+    // register a match with valid info. (me vs. user 3)
 //        $param = array('accessToken' => $this->accessToken,
 //            'sportId' => 2,
 //            'brandId' => 2,
@@ -120,11 +183,9 @@ class MatchTest extends Test_REST_Controller {
 ////        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
 //        $result = $this->runTest("register a match with valid info. (me vs. user 3)", "api/match", $param);
 //        Assert::assertTrue(intval($result) > 0);
-
-
-        // register a match with valid info. ({me, user 1} vs. {user 3, 4})
-        // register a match with facebook IDs. ({me, user 1} vs. {user 3, fbId 1})
-        // register a match with facebook IDs. ({me, fbId 1} vs. {fbId 2, 3})
+    // register a match with valid info. ({me, user 1} vs. {user 3, 4})
+    // register a match with facebook IDs. ({me, user 1} vs. {user 3, fbId 1})
+    // register a match with facebook IDs. ({me, fbId 1} vs. {fbId 2, 3})
 //        // get sport 1
 //        $result = $this->runTest("get a sport info by ID #" . $this->sportId1, "api/sport", array('accessToken' => $this->accessToken, 'id' => $this->sportId1), 'GET');
 //        Assert::assertArray($result, 'id', $this->sportId1);
@@ -183,44 +244,47 @@ class MatchTest extends Test_REST_Controller {
         // register a match with invalid brand ID. (me vs. user 3)
         // register a match with unsupported brand ID. (me vs. user 3)
     }
+    
+//    public function testGetList_get() {
+//        $param = array('accessToken' => $this->accessToken,
+//            'matchId' => 2);
+//        $result = $this->runTest("get a match with id: " . $param['matchId'], "api/match", $param, 'GET');
+//        Assert::assertArray($result, 'id', $param['matchId']);
+//
+//        $param = array('accessToken' => $this->accessToken,
+//            'since' => 1317803729,
+//            'sportId' => 1,
+//            'limit' => 20,
+//            'firstOffset' => 0);
+//        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
+//
+//        $param = array('accessToken' => $this->accessToken,
+//            'since' => 1317803729,
+////            'sportId' => 1, // every sports
+//            'limit' => 20,
+//            'firstOffset' => 0);
+//        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
+//
+//        $param = array('accessToken' => $this->accessToken,
+////            'sportId' => 1, // every sports
+//            'limit' => 20,
+//            'ownerId' => 3,
+//            'firstOffset' => 0);
+//        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
+//
+//        $param = array('accessToken' => $this->accessToken,
+////            'sportId' => 1, // every sports
+//            'limit' => 20,
+//            'memberId' => 2,
+//            'firstOffset' => 0);
+//        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
+//    }
 
     public function testGetList() {
         // pre: register 5 matches (sport ID = 1, date = 2011-10-01)
         // pre: register 9 matches (sport ID = 1, date = 2011-10-02)
         // pre: register 3 matches (sport ID = 1, date = 2011-10-03)
         // pre: register 3 matches (sport ID = 2, date = 2011-10-02)
-        $param = array('accessToken' => $this->accessToken,
-            'matchId' => 2);
-        $result = $this->runTest("get a match with id: " . $param['matchId'], "api/match", $param, 'GET');
-        Assert::assertArray($result, 'id', $param['matchId']);
-
-        $param = array('accessToken' => $this->accessToken,
-            'since' => 1317803729,
-            'sportId' => 1,
-            'limit' => 20,
-            'firstOffset' => 0);
-        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
-
-        $param = array('accessToken' => $this->accessToken,
-            'since' => 1317803729,
-//            'sportId' => 1, // every sports
-            'limit' => 20,
-            'firstOffset' => 0);
-        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
-
-        $param = array('accessToken' => $this->accessToken,
-//            'sportId' => 1, // every sports
-            'limit' => 20,
-            'ownerId' => 3,
-            'firstOffset' => 0);
-        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
-
-        $param = array('accessToken' => $this->accessToken,
-//            'sportId' => 1, // every sports
-            'limit' => 20,
-            'memberId' => 2,
-            'firstOffset' => 0);
-        $result = $this->runTest("get all matches since : " . $param['since'], "api/match", $param, 'GET');
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 1)
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 2)
         // get registered matches. (sport ID = 1, since = 2011-10-02, limit = 5, page = 3)
@@ -240,4 +304,5 @@ class MatchTest extends Test_REST_Controller {
         // get registered matches. (sport ID = 3, limit = 10000, page = 0)
         // get registered matches. (sport ID = 3, limit = 10000, page = -1)
     }
+
 }
