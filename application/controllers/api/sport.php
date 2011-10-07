@@ -12,8 +12,8 @@ class Sport extends Stadioom_REST_Controller {
         $this->load->model('dao/SportDao');
         $this->load->model('dao/BrandSportMapDao');
 
-        if (function_exists('force_ssl'))
-            remove_ssl();
+//        if (function_exists('force_ssl'))
+//            remove_ssl();
     }
 
     // only for testing purpose.
@@ -96,7 +96,7 @@ class Sport extends Stadioom_REST_Controller {
         }
     }
 
-    public function brand_get() {
+    public function brands_get() {
         $accessToken = $this->get('accessToken');
 
         try {
