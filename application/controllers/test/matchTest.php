@@ -63,123 +63,117 @@ class MatchTest extends Test_REST_Controller {
         $q->execute();
     }
 
-//    public function testRegisterSingle_StadioomUser_get() {
-//        // me vs. user 1.
-//        $param = array('accessToken' => $this->accessToken,
-//            'sportId' => 1,
-//            'brandId' => 2,
-//            'title' => 'valid test match..',
-//            'matchType' => 1, // single
-//            'leagueType' => 1, // amature
-//            'started' => $this->now,
-//            'ended' => $this->now,
-//            'scoreA' => 4,
-//            'scoreB' => 2,
-//            'memberIdsA' => array($this->me->getId()),
-//            'memberIdsB' => array($this->testUsers[0]->getId())
-//        );
-//        $result = $this->runTest("me vs. user 1.", "api/match", $param);
-//        Assert::assertTrue(intval($result) > 0);
-//        array_push($this->matchIds, $result);
-//
-//        // user 1 vs. user 2.
-//        $param = array('accessToken' => $this->accessToken,
-//            'sportId' => 1,
-//            'brandId' => 2,
-//            'title' => 'valid test match..',
-//            'matchType' => 1, // single
-//            'leagueType' => 2, // pro
-//            'started' => $this->now,
-//            'ended' => $this->now,
-//            'scoreA' => 0,
-//            'scoreB' => 3,
-//            'memberIdsA' => array($this->testUsers[0]->getId()),
-//            'memberIdsB' => array($this->testUsers[1]->getId())
-//        );
-//        $result = $this->runTest("user 1 vs. user 2.", "api/match", $param);
-//        Assert::assertTrue(intval($result) > 0);
-//        array_push($this->matchIds, $result);
-//    }
-
-    public function testRegisterSingle_StadioomUser_N_get() {
-        // me vs. nobody.
+    public function testRegisterSingle_StadioomUser_get() {
+        // me vs. user 1.
         $param = array('accessToken' => $this->accessToken,
             'sportId' => 1,
             'brandId' => 2,
             'title' => 'valid test match..',
-            'matchType' => 1, // single
             'leagueType' => 1, // amature
             'started' => $this->now,
             'ended' => $this->now,
             'scoreA' => 4,
             'scoreB' => 2,
             'memberIdsA' => array($this->me->getId()),
-            'memberIdsB' => array()
+            'memberIdsB' => array($this->testUsers[0]->getId())
         );
-        $result = $this->runTest("me vs. nobody(empty array).", "api/match", $param);
-        Assert::assertError($result, 400);
+        $result = $this->runTest("me vs. user 1.", "api/match", $param);
+        Assert::assertTrue(intval($result) > 0);
         array_push($this->matchIds, $result);
-        
-        // me vs. nobody.
+
+        // user 1 vs. user 2.
         $param = array('accessToken' => $this->accessToken,
             'sportId' => 1,
             'brandId' => 2,
             'title' => 'valid test match..',
-            'matchType' => 1, // single
-            'leagueType' => 1, // amature
+            'leagueType' => 2, // pro
             'started' => $this->now,
             'ended' => $this->now,
-            'scoreA' => 4,
-            'scoreB' => 2,
-            'memberIdsA' => array($this->me->getId())
+            'scoreA' => 0,
+            'scoreB' => 3,
+            'memberIdsA' => array($this->testUsers[0]->getId()),
+            'memberIdsB' => array($this->testUsers[1]->getId())
         );
-        $result = $this->runTest("me vs. nobody(missing).", "api/match", $param);
-        Assert::assertError($result, 400);
+        $result = $this->runTest("user 1 vs. user 2.", "api/match", $param);
+        Assert::assertTrue(intval($result) > 0);
         array_push($this->matchIds, $result);
-
-        // nobody vs. me.
-        $param = array('accessToken' => $this->accessToken,
-            'sportId' => 1,
-            'brandId' => 2,
-            'title' => 'valid test match..',
-            'matchType' => 1, // single
-            'leagueType' => 1, // amature
-            'started' => $this->now,
-            'ended' => $this->now,
-            'scoreA' => 4,
-            'scoreB' => 2,
-            'memberIdsA' => array(),
-            'memberIdsB' => array($this->me->getId())
-        );
-        $result = $this->runTest("nobody(empty array) vs. me.", "api/match", $param);
-        Assert::assertError($result, 400);
-        
-        // nobody vs. me.
-        array_push($this->matchIds, $result);
-                $param = array('accessToken' => $this->accessToken,
-            'sportId' => 1,
-            'brandId' => 2,
-            'title' => 'valid test match..',
-            'matchType' => 1, // single
-            'leagueType' => 1, // amature
-            'started' => $this->now,
-            'ended' => $this->now,
-            'scoreA' => 4,
-            'scoreB' => 2,
-            'memberIdsB' => array($this->me->getId())
-        );
-        $result = $this->runTest("nobody(missing) vs. me.", "api/match", $param);
-        Assert::assertError($result, 400);
-        array_push($this->matchIds, $result);
-
-        // ghost vs. me.
-        // me vs. me.
-        // me vs. user 1. (invalid sport)
-        // me vs. user 1. (negative scores)
-        // me vs. user 1 (ended with scores)
-        // me vs. user 1 (scored before being started).
-        // me vs. user 1, 2
     }
+
+//    public function testRegisterSingle_StadioomUser_N_get() {
+//        // me vs. nobody.
+//        $param = array('accessToken' => $this->accessToken,
+//            'sportId' => 1,
+//            'brandId' => 2,
+//            'title' => 'valid test match..',
+//            'leagueType' => 1, // amature
+//            'started' => $this->now,
+//            'ended' => $this->now,
+//            'scoreA' => 4,
+//            'scoreB' => 2,
+//            'memberIdsA' => array($this->me->getId()),
+//            'memberIdsB' => array()
+//        );
+//        $result = $this->runTest("me vs. nobody(empty array).", "api/match", $param);
+//        Assert::assertError($result, 400);
+//        array_push($this->matchIds, $result);
+//        
+//        // me vs. nobody.
+//        $param = array('accessToken' => $this->accessToken,
+//            'sportId' => 1,
+//            'brandId' => 2,
+//            'title' => 'valid test match..',
+//            'leagueType' => 1, // amature
+//            'started' => $this->now,
+//            'ended' => $this->now,
+//            'scoreA' => 4,
+//            'scoreB' => 2,
+//            'memberIdsA' => array($this->me->getId())
+//        );
+//        $result = $this->runTest("me vs. nobody(missing).", "api/match", $param);
+//        Assert::assertError($result, 400);
+//        array_push($this->matchIds, $result);
+//
+//        // nobody vs. me.
+//        $param = array('accessToken' => $this->accessToken,
+//            'sportId' => 1,
+//            'brandId' => 2,
+//            'title' => 'valid test match..',
+//            'leagueType' => 1, // amature
+//            'started' => $this->now,
+//            'ended' => $this->now,
+//            'scoreA' => 4,
+//            'scoreB' => 2,
+//            'memberIdsA' => array(),
+//            'memberIdsB' => array($this->me->getId())
+//        );
+//        $result = $this->runTest("nobody(empty array) vs. me.", "api/match", $param);
+//        Assert::assertError($result, 400);
+//        
+//        // nobody vs. me.
+//        array_push($this->matchIds, $result);
+//                $param = array('accessToken' => $this->accessToken,
+//            'sportId' => 1,
+//            'brandId' => 2,
+//            'title' => 'valid test match..',
+//            'leagueType' => 1, // amature
+//            'started' => $this->now,
+//            'ended' => $this->now,
+//            'scoreA' => 4,
+//            'scoreB' => 2,
+//            'memberIdsB' => array($this->me->getId())
+//        );
+//        $result = $this->runTest("nobody(missing) vs. me.", "api/match", $param);
+//        Assert::assertError($result, 400);
+//        array_push($this->matchIds, $result);
+//
+//        // ghost vs. me.
+//        // me vs. me.
+//        // me vs. user 1. (invalid sport)
+//        // me vs. user 1. (negative scores)
+//        // me vs. user 1 (ended with scores)
+//        // me vs. user 1 (scored before being started).
+//        // me vs. user 1, 2
+//    }
 
     public function testRegisterTeam_StadioomUsers_get() {
         // {me, user 1} vs. {user 2, 3}

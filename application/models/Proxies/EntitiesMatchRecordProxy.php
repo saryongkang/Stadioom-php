@@ -90,18 +90,6 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getTitle();
     }
 
-    public function setMatchType($matchType)
-    {
-        $this->__load();
-        return parent::setMatchType($matchType);
-    }
-
-    public function getMatchType()
-    {
-        $this->__load();
-        return parent::getMatchType();
-    }
-
     public function setLeagueType($leagueType)
     {
         $this->__load();
@@ -303,7 +291,7 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'matchType', 'leagueType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'memberIdsA', 'memberIdsB');
+        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'leagueType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'memberIdsA', 'memberIdsB');
     }
 
     public function __clone()

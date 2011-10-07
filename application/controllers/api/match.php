@@ -22,11 +22,6 @@ class Match extends Stadioom_REST_Controller {
         try {
             $userId = $this->verifyToken($accessToken);
 
-            $matchType = $this->post('matchType');
-            if ($matchType == null) {
-                throw new Exception("Insufficient data ('matchType' is required.)", 400);
-            }
-
             // fill data
             $match = new Entities\MatchRecord();
             $match->setBrandId($this->post('brandId'));
@@ -34,7 +29,6 @@ class Match extends Stadioom_REST_Controller {
             $match->setLatitude($this->post('latitude'));
             $match->setLocation($this->post('location'));
             $match->setLongitude($this->post('longitude'));
-            $match->setMatchType($matchType);
             $match->setOwnerId($userId);
             $match->setSportId($this->post('sportId'));
             $match->setStarted($this->post('started'));

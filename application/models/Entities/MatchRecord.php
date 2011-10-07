@@ -33,11 +33,6 @@ class MatchRecord
     private $title;
 
     /**
-     * @var integer $matchType
-     */
-    private $matchType;
-
-    /**
      * @var integer $leagueType
      */
     private $leagueType;
@@ -206,26 +201,6 @@ class MatchRecord
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set matchType
-     *
-     * @param integer $matchType
-     */
-    public function setMatchType($matchType)
-    {
-        $this->matchType = $matchType;
-    }
-
-    /**
-     * Get matchType
-     *
-     * @return integer $matchType
-     */
-    public function getMatchType()
-    {
-        return $this->matchType;
     }
 
     /**

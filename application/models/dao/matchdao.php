@@ -37,25 +37,25 @@ class MatchDao extends CI_Model {
      * @param array $memberFbIdsB 
      */
     private function validateMatch($match, $memberFbIdsA, $memberFbIdsB) {
-        $matchType = $match->getMatchType();
+//        $matchType = $match->getMatchType();
 
-        if ($matchType == 1) { // single match
-            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
-            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
-
-            if ($numA != 1 || $numB != 1) {
-                throw new Exception("Number of both teams' members should be 1, but " . $numA . " and " . $numB, 400);
-            }
-        } else if ($matchType == 2) { // team match
-            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
-            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
-
-            if ($numA < 1 || $numB < 1) {
-                throw new Exception("Number of both teams' members should be greater than 0, but " . $numA . " and " . $numB, 400);
-            }
-        } else {
-            throw new Exception("Unsupported match type: " . $match->getMatchType(), 400);
-        }
+//        if ($matchType == 1) { // single match
+//            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
+//            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
+//
+//            if ($numA != 1 || $numB != 1) {
+//                throw new Exception("Number of both teams' members should be 1, but " . $numA . " and " . $numB, 400);
+//            }
+//        } else if ($matchType == 2) { // team match
+//            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
+//            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
+//
+//            if ($numA < 1 || $numB < 1) {
+//                throw new Exception("Number of both teams' members should be greater than 0, but " . $numA . " and " . $numB, 400);
+//            }
+//        } else {
+//            throw new Exception("Unsupported match type: " . $match->getMatchType(), 400);
+//        }
         
 //        // team A and team B should exclusive.
 //        

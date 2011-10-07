@@ -19,9 +19,6 @@ Entities\MatchRecord:
       type: string
       length: 64
       nullable: true
-    matchType:
-      type: integer # 1(single), 2(team)
-      nullable: false
     leagueType:
       type: integer # 1(amature), 2(pro), or 3(specific league). 
       nullable: true
