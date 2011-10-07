@@ -104,7 +104,7 @@ class Sport extends Stadioom_REST_Controller {
                 $userId = $this->verifyToken($accessToken);
             }
 
-            $sportId = $this->get('sportId');
+            $sportId = $this->get('id');
             $brands = $this->BrandSportMapDao->findSponsorsOf($sportId);
             $array = array();
             foreach ($brands as $brand) {

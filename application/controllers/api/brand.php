@@ -12,8 +12,8 @@ class Brand extends Stadioom_REST_Controller {
         $this->load->model('dao/BrandDao');
         $this->load->model('dao/BrandSportMapDao');
 
-        if (function_exists('force_ssl'))
-            remove_ssl();
+//        if (function_exists('force_ssl'))
+//            remove_ssl();
     }
 
     // only for testing purpose.
@@ -104,7 +104,7 @@ class Brand extends Stadioom_REST_Controller {
                 $userId = $this->verifyToken($accessToken);
             }
 
-            $brandId = $this->get('brandId');
+            $brandId = $this->get('id');
             $sports = $this->BrandSportMapDao->findSponsoredBy($brandId);
             $array = array();
             foreach ($sports as $sport) {
