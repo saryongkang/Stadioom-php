@@ -83,24 +83,24 @@ class MatchTest extends Test_REST_Controller {
         
         array_push($this->matchIds, $result->id);
 
-        // user 1 vs. user 2.
-        $param = array('accessToken' => $this->accessToken,
-            'sportId' => 1,
-            'brandId' => 2,
-            'title' => 'valid test match..',
-            'leagueType' => 2, // pro
-            'started' => $this->now,
-            'ended' => $this->now,
-            'scoreA' => 0,
-            'scoreB' => 3,
-            'memberIdsA' => array($this->testUsers[0]->getId()),
-            'memberIdsB' => array($this->testUsers[1]->getId())
-        );
-        $result = $this->runTest("user 1 vs. user 2.", "api/match", $param);
-        $result = json_decode($result);
-        Assert::assertTrue($result->id > 0);
-        
-        array_push($this->matchIds, $result->id);
+//        // user 1 vs. user 2.
+//        $param = array('accessToken' => $this->accessToken,
+//            'sportId' => 1,
+//            'brandId' => 2,
+//            'title' => 'valid test match..',
+//            'leagueType' => 2, // pro
+//            'started' => $this->now,
+//            'ended' => $this->now,
+//            'scoreA' => 0,
+//            'scoreB' => 3,
+//            'memberIdsA' => array($this->testUsers[0]->getId()),
+//            'memberIdsB' => array($this->testUsers[1]->getId())
+//        );
+//        $result = $this->runTest("user 1 vs. user 2.", "api/match", $param);
+//        $result = json_decode($result);
+//        Assert::assertTrue($result->id > 0);
+//        
+//        array_push($this->matchIds, $result->id);
     }
 
 //    public function testRegisterSingle_StadioomUser_N_get() {
