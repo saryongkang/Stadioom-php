@@ -108,11 +108,9 @@
           
           <div class="clearfix">
               <label> Sponsor </label>
-              <a href="#">
-              <div class="sponsorSelect" data-controls-modal="sponsors-modal">
+              <div id="sponsorSelect" data-controls-modal="sponsors-modal">
                   <p class="sponsorSelecText">Select Match Sponsor</p>
               </div>
-              </a>
           </div>
           <!-- /clearfix -->
     <!--      
@@ -172,28 +170,23 @@
 </div>
 
 
-<!--  modal content -->
-          <div id="sponsors-modal" class="modal hide fade">
-            <div class="modal-header">
-              <a href="#" class="close">&times;</a>
-              <h3>Match Sponsor</h3>
-            </div>
-            <div class="modal-body">
-                <div id="sponsors-list">
-                <p>For all sponsors...</p>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <a href="#" class="btn primary">OK</a>
-              <a href="#" class="btn secondary">Cancel</a>
-            </div>
-          </div>
-
+<!--  JS window variables -->
 <script type="text/javascript">
-    var sportsList;
-    var selectedSport;
-    selectedSportId =  <?php echo $sportsList[0]->getId(); ?>;
+    var sportsList, selectedSponsor, selectedSportId;
+    var tempSelectedSponsor; // to temporarily use in the modalbox before user press ok
+    var sportBrandsJsonReq; //Container of XHR object for brands json
     
+    sportBrandsJsonReq = null;
+    
+    var sponsors; // To use after change on dropdown select
+    var sponsorPicsFolder;
+    var sponsorBannersFolder;
+
+    sponsorPicsFolder='/assets/images/sponsors/';
+    sponsorBannersFolder=sponsorPicsFolder+'banners/';
+    
+    selectedSportId =  <?php echo $sportsList[0]->getId(); ?>;
+
     sportsList = [];
     
 <?php foreach ($sportsList as $sport):?>
@@ -203,7 +196,85 @@
 <?php endforeach;?>
 </script>
 
+
+
+<!--  modal content -->
+          <div id="sponsors-modal" class="modal hide fade">
+            <div class="modal-header">
+              <a href="#" class="close">&times;</a>
+              <h3>Match Sponsor</h3>
+            </div>
+            <div class="modal-body">
+                <div id="sponsors-list">
+                <p>Loading sponsors... </p>
+                <img id="sponsorsLoader" src="/assets/images/loader2.gif"/>
+                </div>
+            </div>
+            <div id="sponsors-modal-footer" class="modal-footer">
+              
+            </div> 
+              
+              <!--  Necessary to be here so its executed in the modal box -->
+
+          </div>
+<!--  END OF modal content -->
+
+
+
 <script type="text/javascript">
+    //Add OK button to modal when shown and add JS function (click listener and OK click)
+    $('#sponsors-modal').bind('show', function () {
+        $('#sponsors-modal-footer').html('<a href="#" id="sponsorOK" class="btn primary">OK</a>');
+        
+          $('.sponsorItem').click(function() {
+              $('.sponsorItem').removeClass('clickedSponsor');
+            window.tempSelectedSponsor = $(this).data('sponsor');
+            //console.log (window.tempSelectedSponsorId );
+            $(this).addClass('clickedSponsor');
+          });
+          
+          
+            $('#sponsorOK').click(function() {
+                if(tempSelectedSponsor!=null){
+                    window.selectedSponsor = window.tempSelectedSponsor;
+                    //console.log(window.selectedSponsor);
+                    window.hideModal();
+                }else{
+                    alert('You didn\'t choose any sponsor!');
+                }       
+
+            });
+        });
+    
+    updateMatchSponsorBanner = function(){
+        imageString = window.sponsorBannersFolder+window.selectedSponsor.stringId+'_banner'+'.png';
+        
+        $('#sponsorSelect').html(
+        '<img class="sponsorBanner" src="'+imageString+'" />'
+        );
+    }
+        
+    //Remove OK button from modal when hidden
+    $('#sponsors-modal').bind('hide', function () {
+                  
+        if(window.selectedSponsor!=null){
+            updateMatchSponsorBanner();
+        }
+        
+        $('#sponsors-modal-footer').html('');
+
+    });
+    
+    
+    
+    //Auxiliar function to manually hide Modal box for sponsors
+    hideModal = function (){
+        try{
+            $('#sponsors-modal').modal('hide');
+        }catch(err){
+            console.log('Modal Box already closed');
+        }
+    }
   
     $('#fbSwitch').iphoneSwitch("on", 
      function() {

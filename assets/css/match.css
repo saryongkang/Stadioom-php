@@ -39,7 +39,7 @@ root {
     margin-bottom: 10px;
 }
 
-.sponsorSelect{
+#sponsorSelect{
     color: #999;
     display: table-cell;
     vertical-align: middle;
@@ -58,6 +58,51 @@ root {
     border-style: dotted;
 }
 
-.sponsorSelect p{
+#sponsorSelect p{
     font-size: 24px;
+}
+
+.sponsorBanner{
+    width:400px;
+    height:91px;
+}
+
+.sponsorItem img{
+    width:400px;
+    height:92px;
+}
+
+/*For inner border*/
+.sponsorItem img, .sponsorItem { border: none; overflow: hidden;}
+
+
+.sponsorItem:hover{
+    border: 3px solid black;
+}
+
+.sponsorItem:hover img{
+     margin: -3px;
+}
+
+/* end for inner border */
+
+.modal {
+    width: 430px;
+}
+
+.clickedSponsor{
+    
+}
+
+.sponsorItem.clickedSponsor {
+    border: 3px solid black;
+}
+
+.sponsorItem.clickedSponsor img{
+    margin: -3px;
+}
+
+#sponsorsLoader{
+    width:30px;
+    height:30px;
 }

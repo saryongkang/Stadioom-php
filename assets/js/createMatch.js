@@ -17,16 +17,8 @@ $('#sponsors-modal').modal({
 });
 
 // Get sponsors per sport
-var sponsors;
-var selectedSponsor;
-var sponsorPicsFolder;
-var sponsorBannersFolder;
-
-sponsorPicsFolder='/assets/images/sponsors/';
-sponsorBannersFolder=sponsorPicsFolder+'banners/';
-
-updatePlayersDiv = function (){
-    jQuery.getJSON('/api/sport/brands?id='+window.selectedSportId, function(sponsors) {
+updateSponsorsDiv = function (){
+     window.sportBrandsJsonReq = jQuery.getJSON('/api/sport/brands?id='+window.selectedSportId, function(sponsors) {
       window.sponsors = sponsors.data;
       sponsors=sponsors.data;
       //console.log(sponsors.length);
@@ -34,21 +26,52 @@ updatePlayersDiv = function (){
 
      for (i = 0, len = sponsors.length; i < len; i += 1) {
          imageString = window.sponsorBannersFolder+sponsors[i].stringId+'_banner'+'.png';
-           $("#sponsors-list").append('<div class="sponsor-item"><img src="'+imageString+'" /> ' + '</div>');
+           $("#sponsors-list").append('<div id="'+sponsors[i].stringId +'-banner" class="sponsorItem"><img class="sponsorBanner" src="'+imageString+'" /> ' + '</div>');
+           $('#'+sponsors[i].stringId +'-banner').data('sponsor', sponsors[i]);
      }
 
     });
+    return window.sportBrandsJsonReq;
 };
 
-updatePlayersDiv();
 
-$("#sportSelect").change(function() {
-    window.selectedSportId = this.value;
-    window.updatePlayersDiv();
+reEnableSponsorSelect= function(){
+//    data-controls-modal="sponsors-modal"
+    $('#sponsorSelect').attr('data-controls-modal', 'sponsors-modal');  
+    $('#sponsorSelect').html('<p class="sponsorSelecText">Select Match Sponsor</p>');
+}
+
+disableSponsorSelect= function(){
+    $('#sponsorSelect').html('<p class="sponsorSelecText">Loading sponsors... </p><img id="sponsorsLoader" src="/assets/images/loader2.gif"/>');
+    $('#sponsorSelect').removeAttr('data-controls-modal');
+}
+
+
+sportsChanged= function() {
+    disableSponsorSelect();
+    
+    window.selectedSportId = $("#sportSelect").val();
+    
+    sportBrandsJson = window.updateSponsorsDiv();
+    
+    sportBrandsJson.complete(function() {
+        window.reEnableSponsorSelect();
+        window.sportBrandsJsonReq = null;
+    });
+}
+
+sportsChanged();
+
+//Listener for change in sport select
+
+$("#sportSelect").change( function(){
+    if(window.sportBrandsJsonReq!=null){
+        window.sportBrandsJsonReq.abort();
+    }
+    
+    sportsChanged();
+    window.selectedSponsor=null;
 });
-
-
-
 
 
 //For the Facebook Friends Selectors
@@ -88,12 +111,12 @@ window.fbAsyncInit = function () {
 //        
 		// When the user clicks OK, log a message
 		callbackSubmit1 = function(selectedFriendIds) {
-            console.log(selectedFriendIds);
+            //console.log(selectedFriendIds);
 			updatePlayersDiv(selectedFriendIds, 'teamAPlayersList');
 		};
         
         callbackSubmit2 = function(selectedFriendIds) {
-            console.log(selectedFriendIds);
+            //console.log(selectedFriendIds);
 			updatePlayersDiv(selectedFriendIds, 'teamBPlayersList');
 		};
 
