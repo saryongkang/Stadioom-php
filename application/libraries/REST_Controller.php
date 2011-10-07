@@ -473,10 +473,8 @@ class REST_Controller extends CI_Controller {
 	{
             if (config_item('rest_log_to_php_error')) {
                 // INSERTED BY WEGRA.
-                error_log('uri: [' . $this->request->method . '] ' . $this->uri->uri_string());
-                error_log('params: ' . $this->paramToString($this->_args));
-                error_log('from [IP]: ' . $this->input->ip_address());
-                error_log('user agent: ' . $this->input->user_agent());
+                error_log("\n  Requested [" . $this->request->method . '] ' . $this->uri->uri_string() . ' [with params] ' . $this->paramToString($this->_args).
+                "\n  from [IP] " . $this->input->ip_address() . ' [user agent] ' . $this->input->user_agent());
             } else {
 		return $this->rest->db->insert(config_item('rest_logs_table'), array(
 			'uri' => $this->uri->uri_string(),
