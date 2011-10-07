@@ -191,9 +191,15 @@
 
 <script type="text/javascript">
     var sportsList;
+    var selectedSport;
+    selectedSportId =  <?php echo $sportsList[0]->getId(); ?>;
+    
+    sportsList = [];
+    
 <?php foreach ($sportsList as $sport):?>
-    sportsList[<?php echo $sport->getId(); ?>]['name'] = <?php echo $sport->getName(); ?>
-    sportsList[<?php echo $sport->getId(); ?>]['stringId'] = <?php echo $sport->getStringId(); ?>
+    sportsList[<?php echo $sport->getId(); ?>] = [];
+    sportsList[<?php echo $sport->getId(); ?>]['name'] = '<?php echo $sport->getName(); ?>';
+    sportsList[<?php echo $sport->getId(); ?>]['stringId'] = '<?php echo $sport->getStringId(); ?>';
 <?php endforeach;?>
 </script>
 

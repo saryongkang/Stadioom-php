@@ -22,25 +22,28 @@ var selectedSponsor;
 var sponsorPicsFolder;
 var sponsorBannersFolder;
 
-var selectedSport;
-
 sponsorPicsFolder='/assets/images/sponsors/';
 sponsorBannersFolder=sponsorPicsFolder+'banners/';
 
-jQuery.getJSON('/api/brand/sport?id='+selectedSport['id'], function(data) {
-  window.sponsors = data;
-  $('#sponsors-list').text('');
-  console.log (data);
-  
-//  for (i = 0, len = data.length; i < len; i += 1) {
-//        $("#sponsors-list").append('<div class="sponsor-item"><img src="'+sponsorBannersFolder+'" /> ' +TDFriendSelector.getFriendById(playersIds[i])['name']+ '</div>');
-//        console.log(TDFriendSelector.getFriendById(playersIds[i]));
-//    }
-  
-});
+updatePlayersDiv = function (){
+    jQuery.getJSON('/api/brand/sport?id='+window.selectedSportId, function(data) {
+      window.sponsors = data;
+      $('#sponsors-list').text('');
+      console.log (data);
+
+    //  for (i = 0, len = data.length; i < len; i += 1) {
+    //        $("#sponsors-list").append('<div class="sponsor-item"><img src="'+sponsorBannersFolder+'" /> ' +TDFriendSelector.getFriendById(playersIds[i])['name']+ '</div>');
+    //        console.log(TDFriendSelector.getFriendById(playersIds[i]));
+    //    }
+
+    });
+};
+
+updatePlayersDiv();
 
 $("#sportSelect").change(function() {
-    window.selectedSport = this.value;
+    window.selectedSportId = this.value;
+    updatePlayersDiv();
 });
 
 
