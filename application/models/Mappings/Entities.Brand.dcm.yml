@@ -1,10 +1,12 @@
 Entities\Brand:
   type: entity
   uniqueConstraints:
-    email_index:
+    name_index:
+      columns:
+       - name
+    string_id_index:
       columns:
        - stringId
-       - name
   fields:
     id:
       type: integer
@@ -35,3 +37,15 @@ Entities\Brand:
     updateFlag:
       type: integer
       nullable: false
+  manyToMany:
+    sports:
+      targetEntity: Sport
+      joinTable:
+        name: brands_sports
+        joinColumns:
+          brand_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          sport_id:
+            referencedColumnName: id
+      

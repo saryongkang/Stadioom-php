@@ -1,10 +1,13 @@
 Entities\Sport:
   type: entity
   uniqueConstraints:
-    email_index:
+    name_index:
       columns:
        - stringId
        - name
+    string_id_index:
+      columns:
+       - stringId
   fields:
     id:
       type: integer
