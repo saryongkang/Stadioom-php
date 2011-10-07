@@ -17,10 +17,13 @@ class Home extends CI_Controller {
         // FB Stuff
           
         $this->load->library('fb_connect');
+        
+        $extraScope = ',user_interests,user_activities,user_hometown';
 
         $fbLoginData = array(
-            'scope' => 'email,user_checkins,user_likes,user_interests,user_hometown,user_location,user_education_history,user_birthday,user_activities,publish_stream',
-            'redirect_uri' => $this->config->item('base_ssl_url').'fb/session/login/'
+            //'scope' => 'email,user_likes,user_interests,user_hometown,user_location,user_birthday,user_activities,publish_stream,offline_access',
+            'scope' => 'email,user_birthday,publish_stream'.$extraScope ,
+            'redirect_uri' => $this->config->item('base_ssl_url').'/'
         );
         
         $data['loginUrl'] = $this->fb_connect->getLoginUrl($fbLoginData);   

@@ -8,7 +8,7 @@
     <meta property="og:title"       content="Stadioom - Connecting Sports"> 
 	<title><?php echo $site_title?> - <?php echo $site_name?></title>
         <!-- fav and touch icons -->
-        <link rel="shortcut icon" href="/images/favicon.ico">
+        <link rel="shortcut icon" href="/images/favicon_stad.ico">
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
         <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">
         <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">
@@ -20,28 +20,56 @@
 <body>
 
 	<section id="header">
-            <div class="topbar">
-              <div class="fill">
-                <div class="container">
+            <div class="topbar fillHome">
+                <div id="topbarContainer" class="container">
                     <div class="row">
                         <div class="span4">
-                            <a class="brand" href="#"><?php echo $site_name ?></a>
+                            <div class="logo">
+                                <img id="stadioomLogo" src="/assets/images/stadioom-logo.png"/>
+                            </div>
                         </div>
                         <div class="span12">
+                            
+                            
                             <div class="rfloat">
-                                <ul id="pageNav">
-                                    <li class="topNavLink"><a href="#"><img class="headerTinymanPhoto" src="https://graph.facebook.com/<?php echo $userdata['fbUId'] ?>/picture" /></a> <a href="#" class="headerTinymanName" ><?php echo $userdata['fullName'] ?></a></li>
+                                <ul id="pageNav" class="nav">
+                                    <li class="topNavLink dropdown" data-dropdown="dropdown">
+
+                                            <a href="#"><img class="headerTinymanPhoto" src="https://graph.facebook.com/<?php echo $userdata['fbUId'] ?>/picture" /></a>
+                                            <a href="#" class="headerTinymanName dropdown-toggle" ><?php echo $userdata['fullName'] ?></a>
+
+                                        <ul class="dropdown-menu">
+<!--                                            <li><a href="#">Secondary link</a></li>
+                                            <li><a href="#">Something else here</a></li>
+                                            <li class="divider"></li>-->
+                                            <li><a href="#">Logout</a></li>
+
+                                        </ul>
+                                    </li>
                                     <li class="topNavLink"><a href="#" class="topSettings">Settings</a><li/>
                                 </ul>
                             </div>
                         </div>
                     </div> <!-- row -->
-                </div>
-              </div>
-            </div><!-- topbar -->
+                  
+              </div><!-- topbarContainer -->
+            </div> <!-- topbar -->
 	
 	</section>
 
+    
+    
+    
+    
+    <div class="row">
+                        
+                    </div> <!-- row -->
+                    
+                    
+                    
+                    
+                    
+                    
 
 	<section id="main">
 
@@ -60,9 +88,10 @@
                   </div><!-- end of row -->
 
                   <div class="row">
+                      <?php echo $messages?>
                       <div id='leftmenu' class="span4">
                         <ul>
-                            <li><a href="#">My Sport Card</a></li>
+                            <li><a href="/main">My Sport Card</a></li>
                             <li><a href="/match/create">New Match</a></li>
                             <li><a href="#">Challenge Friends</a></li>
                         </ul>
@@ -70,15 +99,12 @@
                   </div><!-- end of row -->
 
               </div>
-              <div id="middleContent"class="span8">
-
-				<?php echo $messages?>
-				<?php echo $content?>
-                  
+                <div class="span12">
+                    <div class="row">
+                    <?php echo $content?>
+                    </div>
                 </div>
-              <div class="span4">
-                  Ads
-              </div>
+                  
             </div> <!-- End of main row -->
 			
 		</div>
