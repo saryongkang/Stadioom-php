@@ -21,7 +21,16 @@ class Match extends Stadioom_REST_Controller {
         $accessToken = $this->post('accessToken');
 
         try {
-            $userId = $this->verifyToken($accessToken);
+            if ($accessToken != null) {
+                $userId = $this->verifyToken($accessToken);
+            } else {
+                $this->security->csrf_verify();
+                
+                $userId = $this->post("userId");
+                if ($userId == null) {
+                    throw new Exception("'userId' is required.", 400);
+                }
+            }
 
             // fill data
             $match = new Entities\MatchRecord();
