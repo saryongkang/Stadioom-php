@@ -18,7 +18,7 @@ $('#sponsors-modal').modal({
 
 // Get sponsors per sport
 updateSponsorsDiv = function (){
-     window.sportBrandsJsonReq = jQuery.getJSON('/api/sport/brands?id='+window.selectedSportId, function(sponsors) {
+     window.sportBrandsJsonReq = jQuery.getJSON(window.baseSSLUrl+'api/sport/brands?id='+window.selectedSportId, function(sponsors) {
       window.sponsors = sponsors.data;
       sponsors=sponsors.data;
       //console.log(sponsors.length);
@@ -78,18 +78,21 @@ $('#submitMatch').click(function() {
     var errors = [];
     
     //Validation
-    if(window.selectedSponsor!=null){
-        errors['sponsor'] = true;
+    if(window.selectedSponsor==null){
+        errors.push( {type: 'sponsor', value: true});
     }
     
     if(window.teamAFBSelector.getselectedFriendIds().length <1){
-        errors['teamA'] = true;
+         errors.push( {type: 'teamA', value: true});
     }
     
     if(window.teamBFBSelector.getselectedFriendIds().length <1){
-        errors['teamB'] = true;
+         errors.push( {type: 'teamB', value: true});
     }
     
+    //console.log(errors);
+    console.log("Errors: "+ errors.length);
+    console.log(errors);
     if(errors.length<1){
         
         var teamAFBPlayers = window.teamAFBSelector.getselectedFriendIds().slice(0);
@@ -115,12 +118,12 @@ $('#submitMatch').click(function() {
             //@"", @"memberIdsB",
             "memberFbIdsB[]" : teamBFBPlayers,
             "started" : currentDate.getTime(),
-            //"csrf_protection" csrf: ,
+            "csrf_protection": csrf ,
             "ended" : currentDate.getTime()
         };
 
         //Make AJAX POST
-        submitMatch = $.post(baseSSLUrl+'match', params);
+        submitMatch = $.post(baseSSLUrl+'api/match', params);
         
         //Show success message and post to FB
         submitMatch.success( function(){

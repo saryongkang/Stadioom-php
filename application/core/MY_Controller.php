@@ -26,6 +26,9 @@ class FBAuth_Controller extends MY_Controller{
     function __construct()
     {
         parent::__construct();
+        
+        force_ssl();
+        
         $this->load->library('session');
         if (!$this->session->userdata('loggedin')){
             $this->_login();

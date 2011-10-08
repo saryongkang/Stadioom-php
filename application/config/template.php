@@ -17,9 +17,10 @@ $template_conf = array(
 
 $template_css = array('bootstrap.min','base');
 
-$template_js = array('jquery-1.6.4.min');
+$template_js = array();
 
 $template_head = array(
+    'google-jquery' => '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>',
     
         'google-analytics'  => "<!-- Google Analytics -->
       <script type='text/javascript'>

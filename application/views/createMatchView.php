@@ -173,12 +173,12 @@
 <!--  JS window variables -->
 <script type="text/javascript">
     //Domain for posts
-    var baseSSLUrl = <?php echo $this->config->item('base_ssl_url'); ?>
+    var baseSSLUrl = '<?php echo $this->config->item('base_ssl_url'); ?>';
     
     //FBUid
     var user = {
-        id: <?php echo $userdata['fbUId']; ?>,
-        name: <?php echo $userdata['fullName']; ?>
+        id: '<?php echo $userdata['fbUId']; ?>',
+        name: '<?php echo $userdata['fullName']; ?>'
     };
     
     //Friends Selector
@@ -190,7 +190,7 @@
     var tempSelectedSponsor; // to temporarily use in the modalbox before user press ok
     var sportBrandsJsonReq; //Container of XHR object for brands json
     
-    
+    selectedSponsor = null;
     sportBrandsJsonReq = null;
     
     var sponsors; // To use after change on dropdown select
