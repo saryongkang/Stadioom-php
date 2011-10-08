@@ -19,8 +19,9 @@ class MatchTest extends Test_REST_Controller {
         $this->em = $this->doctrine->em;
 
         $this->load->model('dao/MatchDao');
-        if (function_exists('force_ssl'))
-            remove_ssl();
+        force_ssl();
+//        if (function_exists('force_ssl'))
+//            remove_ssl();
     }
 
     public function beforeClass() {

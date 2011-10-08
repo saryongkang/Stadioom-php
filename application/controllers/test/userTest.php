@@ -8,8 +8,9 @@ class UserTest extends Test_REST_Controller {
 
     function __construct() {
         parent::__construct();
-        if (function_exists('force_ssl'))
-            remove_ssl();
+        force_ssl();
+//        if (function_exists('force_ssl'))
+//            remove_ssl();
     }
 
     public function beforeClass() {
