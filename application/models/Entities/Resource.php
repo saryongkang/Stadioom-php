@@ -200,16 +200,14 @@ class Resource
     /**
      * @prePersist
      */
-    public function prePersist()
-    {
-        // Add your code here
+    public function prePersist() {
+        $this->lastUpdated = new \DateTime();
     }
 
     /**
      * @preUpdate
      */
-    public function preUpdate()
-    {
-        // Add your code here
+    public function preUpdate() {
+        $this->lastUpdated = new \DateTime();
     }
 }
