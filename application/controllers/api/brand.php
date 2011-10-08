@@ -100,9 +100,9 @@ class Brand extends Stadioom_REST_Controller {
         $accessToken = $this->get('accessToken');
 
         try {
-            if ($this->input->ip_address() != '127.0.0.1') {
-                $userId = $this->verifyToken($accessToken);
-            }
+//            if ($this->input->ip_address() != '127.0.0.1') {
+//                $userId = $this->verifyToken($accessToken);
+//            }
 
             $brandId = $this->get('id');
             $brand = $this->BrandSportDao->getBrand($brandId);

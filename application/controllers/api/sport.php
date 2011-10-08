@@ -99,9 +99,9 @@ class Sport extends Stadioom_REST_Controller {
         $accessToken = $this->get('accessToken');
 
         try {
-            if ($this->input->ip_address() != '127.0.0.1') {
-                $userId = $this->verifyToken($accessToken);
-            }
+//            if ($this->input->ip_address() != '127.0.0.1') {
+//                $userId = $this->verifyToken($accessToken);
+//            }
 
             $sportId = $this->get('id');
             $brands = $this->BrandSportDao->findAllSponsorsOf($sportId);
