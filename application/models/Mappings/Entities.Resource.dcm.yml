@@ -1,0 +1,37 @@
+Entities\Resource:
+  type: entity
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    numId:
+      type: integer
+      nullable: false
+    strId:
+      type: string
+      length: 32
+      nullable: false
+    msg:
+      type: string
+      length: 200
+      nullable: false
+    msgiOS:
+      type: string
+      length: 200
+      nullable: false
+    msgJS:
+      type: string
+      length: 200
+      nullable: false
+    lang:
+      type: string
+      length: 10
+      nullable: false
+    lastUpdated:
+      type: datetime
+      nullable: true
+  lifecycleCallbacks:
+    prePersist: [prePersist]
+    preUpdate: [preUpdate]
