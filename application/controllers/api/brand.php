@@ -54,10 +54,7 @@ class Brand extends Stadioom_REST_Controller {
     }
 
     public function index_get() {
-        $accessToken = $this->get('accessToken');
         try {
-            $userId = $this->verifyToken($accessToken);
-
             $brandId = $this->get('id');
             if ($brandId == null) {
 
