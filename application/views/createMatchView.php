@@ -40,6 +40,8 @@
 
     <form action="" class="form-stacked">
         <fieldset>
+            
+            <input type="hidden" value="<?php echo $this->security->get_csrf_hash() ?>" id="csrf_protection" />  
     <!--      <legend>Register your match
           </legend>-->
     <!--      <div class="clearfix">
@@ -54,7 +56,8 @@
               <select name="sportSelect" id="sportSelect" class="large">
 
                 <?php foreach ($sportsList as $sport):?>
-                <option value="<?php echo $sport->getId(); ?>"><?php echo $sport->getName(); ?></option>
+                 <?php  $img= "/assets/images/sports/icons/icon_game_".$sport->getStringId()."_51x51.png"; ?>
+                <option class="optionWithSportIcon" style="background-image:url(<?php echo $img; ?>);" value="<?php echo $sport->getId(); ?>"> <?php echo $sport->getName(); ?></option>
                 <?php endforeach;?>
 
               </select>
@@ -67,7 +70,7 @@
                 <ul class="inputs-list">
                     <li>
                       <label>
-                        <input type="radio" name="belongTeam" value="teamA">
+                        <input  checked="yes" type="radio" name="belongTeam" value="teamA">
                         <span>Team A</span>
                       </label>
                     </li>
@@ -138,7 +141,7 @@
                 <img src="/assets/images/social/twitter_32.png" /><div id="twitterSwitch" class="inline"> </div><div id="ajaxd2" class="inline"> </div>
             </div>
           <div class="actions center">
-                    <input id="sendMatch" type="submit" class="btn primary large" value="Publish" />
+                    <input id="submitMatch" type="submit" class="btn primary large" value="Publish" />
 
           </div> <!-- actions -->
         </fieldset>
@@ -172,6 +175,11 @@
 
 <!--  JS window variables -->
 <script type="text/javascript">
+    //Friends Selector
+    var teamAFBSelector, teamBFBSelector;
+    
+    
+    //Sport and Brands
     var sportsList, selectedSponsor, selectedSportId;
     var tempSelectedSponsor; // to temporarily use in the modalbox before user press ok
     var sportBrandsJsonReq; //Container of XHR object for brands json
@@ -304,7 +312,12 @@
 
 
 <script type="text/javascript">
-    var appId='205626906162291';
+    
+    var appId = <?php echo $this->config->item('appId'); ?>;
+    alert('FB-AppId = '+<?php echo $this->config->item('appId'); ?>);
+    //var appId='200987663288876';
+    //200987663288876  (pre-beta)
+    //205626906162291 (test)
 </script>
 
 <script src="/assets/js/createMatch.js"></script>

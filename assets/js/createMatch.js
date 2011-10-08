@@ -74,14 +74,34 @@ $("#sportSelect").change( function(){
 });
 
 
+$('#submitMatch').click(function() {
+    if(window.selectedSponsor!=null){
+
+        console.log(window.selectedSponsor);
+
+        console.log(window.selectedSportId);
+
+        console.log(window.teamAFBSelector.getselectedFriendIds());
+        
+        console.log(window.teamBFBSelector.getselectedFriendIds());
+
+    }else{
+        alert('Select stuff first');
+    }
+    
+    return false;
+
+});
+
+
 //For the Facebook Friends Selectors
 window.fbAsyncInit = function () {
 
 	FB.init({appId: window.appId, status: true, cookie: false, xfbml: false, oauth: true});
 
 	$(document).ready(function () {
-		var selector1, selector2, updatePlayersDiv, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
-        var callbackSubmit1, callbackSubmit2;
+		var updatePlayersDiv, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
+        var callbackSubmitA, callbackSubmitB;
         
 		// When a friend is selected, log their name and ID
 //		callbackFriendSelected = function(friendId) {
@@ -110,34 +130,37 @@ window.fbAsyncInit = function () {
 //		};
 //        
 		// When the user clicks OK, log a message
-		callbackSubmit1 = function(selectedFriendIds) {
+		callbackSubmitA = function(selectedFriendIds) {
             //console.log(selectedFriendIds);
 			updatePlayersDiv(selectedFriendIds, 'teamAPlayersList');
+            
+            window.teamBFBSelector.setDisabledFriendIds(selectedFriendIds);
 		};
         
-        callbackSubmit2 = function(selectedFriendIds) {
+        callbackSubmitB = function(selectedFriendIds) {
             //console.log(selectedFriendIds);
 			updatePlayersDiv(selectedFriendIds, 'teamBPlayersList');
+            window.teamAFBSelector.setDisabledFriendIds(selectedFriendIds);
 		};
 
 		// Initialise the Friend Selector with options that will apply to all instances
 		TDFriendSelector.init({debug: true});
 
 		// Create some Friend Selector instances
-		selector1 = TDFriendSelector.newInstance({
+		window.teamAFBSelector  = TDFriendSelector.newInstance({
 //			callbackFriendSelected   : callbackFriendSelected,
 //			callbackFriendUnselected : callbackFriendUnselected,
 //			callbackMaxSelection     : callbackMaxSelection,
-			callbackSubmit           : callbackSubmit1,
+			callbackSubmit           : callbackSubmitA,
             maxSelection             : 12,
 			friendsPerPage           : 3
 		});
         
-		selector2 = TDFriendSelector.newInstance({
+		window.teamBFBSelector = TDFriendSelector.newInstance({
 //			callbackFriendSelected   : callbackFriendSelected,
 //			callbackFriendUnselected : callbackFriendUnselected,
 //			callbackMaxSelection     : callbackMaxSelection,
-			callbackSubmit           : callbackSubmit2,
+			callbackSubmit           : callbackSubmitB,
 			maxSelection             : 12,
 			friendsPerPage           : 3,
 			autoDeselection          : true
@@ -172,19 +195,19 @@ window.fbAsyncInit = function () {
 
 		$("#playersA").click(function (e) {
 			e.preventDefault();
-			selector1.showFriendSelector();
+			window.teamAFBSelector.showFriendSelector();
 		});
 
 		$("#playersB").click(function (e) {
 			e.preventDefault();
-			selector2.showFriendSelector();
+			window.teamBFBSelector.showFriendSelector();
 		});
         
         updatePlayersDiv = function (playersIds, divId) {
             $("#"+divId).html('');
             for (i = 0, len = playersIds.length; i < len; i += 1) {
                 $("#"+divId).append('<div class="playerInTeamList"><img src="https://graph.facebook.com/'+playersIds[i]+'/picture" /> ' +TDFriendSelector.getFriendById(playersIds[i])['name']+ '</div>');
-                console.log(TDFriendSelector.getFriendById(playersIds[i]));
+                //console.log(TDFriendSelector.getFriendById(playersIds[i]));
             }
 		};
         

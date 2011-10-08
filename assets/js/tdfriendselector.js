@@ -101,6 +101,7 @@ var TDFriendSelector = (function(module, $) {
 	};
 
 	/**
+     * HERE ARE ALL THE METHODS THAT YOU CAN USE!!
 	 * Create a new instance of the friend selector
 	 * @param options An object containing settings that are relevant to this particular instance
 	 */

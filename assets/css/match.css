@@ -106,3 +106,17 @@ root {
     width:30px;
     height:30px;
 }
+
+.optionWithSportIcon{
+    background-repeat:no-repeat;
+    padding-left:51px;
+    height:51px;
+    line-height:51x;
+}
+
+#sportSelect{
+    width:300px;
+    font-size:30px;
+    height:50px;
+    line-height:50px;
+}
