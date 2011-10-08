@@ -11,8 +11,9 @@ class User extends Stadioom_REST_Controller {
 
         $this->load->model('dao/UserDao');
 
-        if (function_exists('force_ssl'))
-            remove_ssl();
+        force_ssl();
+//        if (function_exists('force_ssl'))
+//            remove_ssl();
     }
 
     public function index_get() {

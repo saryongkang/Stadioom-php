@@ -9,8 +9,9 @@ class Match extends Stadioom_REST_Controller {
 
         $this->load->model('dao/MatchDao');
 
-        if (function_exists('force_ssl'))
-            remove_ssl();
+        force_ssl();
+//        if (function_exists('force_ssl'))
+//            remove_ssl();
     }
 
     /**

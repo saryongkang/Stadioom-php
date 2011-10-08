@@ -11,6 +11,7 @@ class Sport extends Stadioom_REST_Controller {
 
         $this->load->model('dao/BrandSportDao');
 
+        force_ssl();
 //        if (function_exists('force_ssl'))
 //            remove_ssl();
     }

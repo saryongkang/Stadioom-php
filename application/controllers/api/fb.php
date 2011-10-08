@@ -8,8 +8,10 @@ class Fb extends Stadioom_REST_Controller {
         parent::__construct();
 
         $this->load->model('dao/UserDao');
-        if (function_exists('force_ssl'))
-            remove_ssl();
+        
+        force_ssl();
+//        if (function_exists('force_ssl'))
+//            remove_ssl();
     }
 
     public function connect_post() {

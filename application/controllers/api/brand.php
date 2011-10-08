@@ -9,9 +9,9 @@ class Brand extends Stadioom_REST_Controller {
     function __construct() {
         parent::__construct();
 
-//        $this->load->model('dao/BrandDao');
         $this->load->model('dao/BrandSportDao');
 
+        force_ssl();
 //        if (function_exists('force_ssl'))
 //            remove_ssl();
     }
