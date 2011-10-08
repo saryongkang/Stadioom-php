@@ -80,7 +80,7 @@ $autoload['helper'] = array('url', 'ssl_helper');
 |
 */
 
-$autoload['config'] = array();
+$autoload['config'] = array('facebook');
 
 
 /*
