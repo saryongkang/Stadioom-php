@@ -4,7 +4,7 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class Brand extends Stadioom_REST_Controller {
 
-    private $filterKeys = array('firstRevision', 'latestRevision', 'updateFlag');
+    private $filterKeys = array('firstRevision', 'latestRevision', 'updateFlag', 'sports');
 
     function __construct() {
         parent::__construct();
