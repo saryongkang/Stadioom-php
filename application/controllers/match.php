@@ -28,5 +28,9 @@ class Match extends FBAuth_Controller {
         $this->template->set_content('createMatchView', $data);
         $this->template->build('main');
     }
+    
+    function view(){
+        $this->template->add_js('jquery.timeago');
+    }
 }
 ?>

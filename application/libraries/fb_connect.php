@@ -13,8 +13,12 @@ class Fb_connect extends Facebook {
     //constructor method.
     public function __construct() {
         $CI = & get_instance();
-        $CI->config->load("facebook", TRUE);
-        $config = $CI->config->item('facebook');
+        //$CI->config->load("facebook", TRUE);
+        $config = array();
+        $config['appId'] = $CI->config->item('fbAppId');
+        $config['secret'] = $CI->config->item('fbSecret');
+        
+        //$config = $CI->config->item('facebook');
         parent::__construct($config);
         $this->user_id = $this->getUser(); // New code
 

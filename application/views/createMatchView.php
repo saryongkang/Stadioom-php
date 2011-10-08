@@ -38,7 +38,7 @@
 
     <h2>New Match</h2>
 
-    <form action="" class="form-stacked">
+    <form id="newMatchForm" action="" class="form-stacked">
         <fieldset>
             
             <input type="hidden" value="<?php echo $this->security->get_csrf_hash() ?>" id="csrf_protection" />  
@@ -150,10 +150,7 @@
     <div id="results">
     </div>
 
-
     Score<br />
-
-    Brand<br />
 
 </div>
 <div class="span4">
@@ -175,6 +172,15 @@
 
 <!--  JS window variables -->
 <script type="text/javascript">
+    //Domain for posts
+    var baseSSLUrl = <?php echo $this->config->item('base_ssl_url'); ?>
+    
+    //FBUid
+    var user = {
+        id: <?php echo $userdata['fbUId']; ?>,
+        name: <?php echo $userdata['fullName']; ?>
+    };
+    
     //Friends Selector
     var teamAFBSelector, teamBFBSelector;
     
@@ -184,14 +190,21 @@
     var tempSelectedSponsor; // to temporarily use in the modalbox before user press ok
     var sportBrandsJsonReq; //Container of XHR object for brands json
     
+    
     sportBrandsJsonReq = null;
     
     var sponsors; // To use after change on dropdown select
     var sponsorPicsFolder;
     var sponsorBannersFolder;
+    
+    
+    //Scores
+    var scoreA = 0;
+    var scoreB = 0;
 
     sponsorPicsFolder='/assets/images/sponsors/';
     sponsorBannersFolder=sponsorPicsFolder+'banners/';
+    sponsorShareIconsFolder=sponsorPicsFolder+'shareicons/';
     
     selectedSportId =  <?php echo $sportsList[0]->getId(); ?>;
 
@@ -313,14 +326,12 @@
 
 <script type="text/javascript">
     
-    var appId = <?php echo $this->config->item('appId'); ?>;
-    alert('FB-AppId = '+<?php echo $this->config->item('appId'); ?>);
-    //var appId='200987663288876';
-    //200987663288876  (pre-beta)
-    //205626906162291 (test)
+    var appId = <?php echo $this->config->item('fbAppId'); ?>;
 </script>
 
+
 <script src="/assets/js/createMatch.js"></script>
+<script src="/assets/js/createMatchFBFriendSelector.js"></script>
 
 
 

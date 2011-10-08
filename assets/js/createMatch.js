@@ -75,144 +75,98 @@ $("#sportSelect").change( function(){
 
 
 $('#submitMatch').click(function() {
+    var errors = [];
+    
+    //Validation
     if(window.selectedSponsor!=null){
-
-        console.log(window.selectedSponsor);
-
-        console.log(window.selectedSportId);
-
-        console.log(window.teamAFBSelector.getselectedFriendIds());
-        
-        console.log(window.teamBFBSelector.getselectedFriendIds());
-
-    }else{
-        alert('Select stuff first');
+        errors['sponsor'] = true;
     }
+    
+    if(window.teamAFBSelector.getselectedFriendIds().length <1){
+        errors['teamA'] = true;
+    }
+    
+    if(window.teamBFBSelector.getselectedFriendIds().length <1){
+        errors['teamB'] = true;
+    }
+    
+    if(errors.length<1){
+        
+        var teamAFBPlayers = window.teamAFBSelector.getselectedFriendIds().slice(0);
+        var teamBFBPlayers = window.teamBFBSelector.getselectedFriendIds().slice(0);
+                
+        var currentDate = new Date();
+        var title = window.selectedSponsor.id +" " + window.selectedSportId + " match: " +window.scoreA +" - "+window.scoreB;
+        
+        var csrf = $('#csrf_protection').val();
+        
+        var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
+
+        params = {
+            "accessToken" : null,
+            "sportId" : window.selectedSportId,
+            "brandId": window.selectedSponsor.id ,
+            "title" : null,
+            //@"1", @"leagueType",
+            "scoreA" : window.scoreA,
+            "scoreB" : window.scoreB,
+            //@"", @"memberIdsA",
+            "memberFbIdsA[]" : teamAFBPlayers,
+            //@"", @"memberIdsB",
+            "memberFbIdsB[]" : teamBFBPlayers,
+            "started" : currentDate.getTime(),
+            //"csrf_protection" csrf: ,
+            "ended" : currentDate.getTime()
+        };
+
+        //Make AJAX POST
+        submitMatch = $.post(baseSSLUrl+'match', params);
+        
+        //Show success message and post to FB
+        submitMatch.success( function(){
+             
+             function postToWallUsingFBApi()
+            {
+                var sponsorShareIcon = window.sponsorShareIconsFolder+sportsList[selectedSportId].stringId+window.selectedSponsor.stringId +'_shareicon'+'.gif';
+                
+                var message = window.user['fullName'];
+                
+                
+                var name = selectedSponsor.name +" "+sportsList[selectedSportId].stringId+ "Match";
+                    
+                var data=
+                {
+                    message: "Great Game!",
+                    //display: 'iframe',
+                    caption: "An amazing game",
+                    name: name,  
+                    picture: sponsorShareIcon,    
+                    link: "http://www.stadioom.com/",  // Go here if user click the picture
+                    description: "Description field",
+                    actions: [{ name: 'Join the stadioom and join the sports fun!', link: 'http://www.stadioom.com' }]			
+                }
+                //console.log(data);    
+                FB.api('/me/feed', 'post', data, onPostToWallCompleted);
+                
+            }
+        });
+
+
+//   NSString *caption = [NSString stringWithFormat:@"%@ just defeated %@ in a fierce %@ match.", namesInTeamA, namesInTeamB, self.game.name];
+//    NSString *message = [NSString stringWithFormat:@"%@ won!", ([self.teamMembers count] > 0)? @"We" : @"I"];
+//    NSString *picture = [NSString stringWithFormat:@"http://stadioom.com/assets/images/sponsors/shareicons/%@_%@_shareicon.gif", self.sponsor.name, self.game.name];
+//    NSString *name = [NSString stringWithFormat:@"%@ %@ Match", self.sponsor.name, self.game.name];
+//    NSString *link = [NSString stringWithFormat:@"http://stadioom.com/match/view/%@", self.matchId];
+//    NSString *description = [NSString stringWithFormat:@"Final score: %@ %@ - %@ %@", namesInTeamA, self.myScore, namesInTeamB, self.opponentScore];
+//        
+        return false;
+    }
+    
+    var onPostToWallCompleted = function(){
+        alert('posted to FB');
+    }
+    
     
     return false;
 
 });
-
-
-//For the Facebook Friends Selectors
-window.fbAsyncInit = function () {
-
-	FB.init({appId: window.appId, status: true, cookie: false, xfbml: false, oauth: true});
-
-	$(document).ready(function () {
-		var updatePlayersDiv, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
-        var callbackSubmitA, callbackSubmitB;
-        
-		// When a friend is selected, log their name and ID
-//		callbackFriendSelected = function(friendId) {
-//			var friend, name;
-//			friend = TDFriendSelector.getFriendById(friendId);
-//			name = friend.name;
-//			logActivity('Selected ' + name + ' (ID: ' + friendId + ')');
-//		};
-//
-//		// When a friend is deselected, log their name and ID
-//		callbackFriendUnselected = function(friendId) {
-//			var friend, name;
-//			friend = TDFriendSelector.getFriendById(friendId);
-//			name = friend.name;
-//			logActivity('Unselected ' + name + ' (ID: ' + friendId + ')');
-//		};
-
-		// When the maximum selection is reached, log a message
-//		callbackMaxSelection = function() {
-//			logActivity('Selected the maximum number of friends');
-//		};
-//        
-//        // When the user clicks OK, log a message
-//		callbackSubmit = function(selectedFriendIds) {
-//			logActivity('Clicked OK with the following friends selected: ' + selectedFriendIds.join(", "));
-//		};
-//        
-		// When the user clicks OK, log a message
-		callbackSubmitA = function(selectedFriendIds) {
-            //console.log(selectedFriendIds);
-			updatePlayersDiv(selectedFriendIds, 'teamAPlayersList');
-            
-            window.teamBFBSelector.setDisabledFriendIds(selectedFriendIds);
-		};
-        
-        callbackSubmitB = function(selectedFriendIds) {
-            //console.log(selectedFriendIds);
-			updatePlayersDiv(selectedFriendIds, 'teamBPlayersList');
-            window.teamAFBSelector.setDisabledFriendIds(selectedFriendIds);
-		};
-
-		// Initialise the Friend Selector with options that will apply to all instances
-		TDFriendSelector.init({debug: true});
-
-		// Create some Friend Selector instances
-		window.teamAFBSelector  = TDFriendSelector.newInstance({
-//			callbackFriendSelected   : callbackFriendSelected,
-//			callbackFriendUnselected : callbackFriendUnselected,
-//			callbackMaxSelection     : callbackMaxSelection,
-			callbackSubmit           : callbackSubmitA,
-            maxSelection             : 12,
-			friendsPerPage           : 3
-		});
-        
-		window.teamBFBSelector = TDFriendSelector.newInstance({
-//			callbackFriendSelected   : callbackFriendSelected,
-//			callbackFriendUnselected : callbackFriendUnselected,
-//			callbackMaxSelection     : callbackMaxSelection,
-			callbackSubmit           : callbackSubmitB,
-			maxSelection             : 12,
-			friendsPerPage           : 3,
-			autoDeselection          : true
-		});
-
-//		FB.getLoginStatus(function(response) {
-//			if (response.authResponse) {
-//				$("#login-status").html("Logged in");
-//			} else {
-//				$("#login-status").html("Not logged in");
-//			}
-//		});
-
-//		$("#btnLogin").click(function (e) {
-//			e.preventDefault();
-//			FB.login(function (response) {
-//				if (response.authResponse) {
-//					console.log("Logged in");
-//					$("#login-status").html("Logged in");
-//				} else {
-//					console.log("Not logged in");
-//					$("#login-status").html("Not logged in");
-//				}
-//			}, {});
-//		});
-//
-//		$("#btnLogout").click(function (e) {
-//			e.preventDefault();
-//			FB.logout();
-//			$("#login-status").html("Not logged in");
-//		});
-
-		$("#playersA").click(function (e) {
-			e.preventDefault();
-			window.teamAFBSelector.showFriendSelector();
-		});
-
-		$("#playersB").click(function (e) {
-			e.preventDefault();
-			window.teamBFBSelector.showFriendSelector();
-		});
-        
-        updatePlayersDiv = function (playersIds, divId) {
-            $("#"+divId).html('');
-            for (i = 0, len = playersIds.length; i < len; i += 1) {
-                $("#"+divId).append('<div class="playerInTeamList"><img src="https://graph.facebook.com/'+playersIds[i]+'/picture" /> ' +TDFriendSelector.getFriendById(playersIds[i])['name']+ '</div>');
-                //console.log(TDFriendSelector.getFriendById(playersIds[i]));
-            }
-		};
-        
-		logActivity = function (message) {
-			$("#results").append('<div>' + new Date() + ' - ' + message + '</div>');
-		};
-	});
-};
