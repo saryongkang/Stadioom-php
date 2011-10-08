@@ -12,56 +12,6 @@ class Resource extends Stadioom_REST_Controller {
         force_ssl();
     }
 
-//    public function getMessage($clientType) {
-////        $accessToken = $this->get('accessToken');
-//        try {
-////            $userId = $this->verifyToken($accessToken);
-//
-//            $lang = $this->get("lang");
-//            if ($lang == null) {
-//                $lang = "en_US";
-//            }
-//
-//            $msgId = $this->get("numId");
-//            if ($msgId != null) {
-////                echo "<html><head><meta http-equiv ='Content-Type' content='text/html; charset=utf-8'><body>";
-////                echo $this->ResourceDao->getMessageByMsgId($msgId, $clientType, $lang);
-//                $this->responseOk(array('msg' => $this->ResourceDao->getByNumId($msgId, $clientType, $lang)));
-////                echo "</body></head></html>";
-//            }
-//            $msgId = $this->get("strId");
-//            if ($msgId != null) {
-//                $this->responseOk(array('msg' => $this->ResourceDao->getByStrId($msgId, $clientType, $lang)));
-//            }
-//            throw new Exception("'numId' or 'strId' is required.", 400);
-//        } catch (Exception $e) {
-//            $this->responseError($e);
-//        }
-//    }
-//    public function getResource($clientType) {
-////        $accessToken = $this->get('accessToken');
-//        try {
-////            $userId = $this->verifyToken($accessToken);
-//
-//            $lang = "en_US";
-//
-//            $msgId = $this->get("numId");
-//            if ($msgId != null) {
-////                echo "<html><head><meta http-equiv ='Content-Type' content='text/html; charset=utf-8'><body>";
-////                echo $this->ResourceDao->getMessageByMsgId($msgId, $clientType, $lang);
-//                $this->responseOk(array('msg' => $this->ResourceDao->getByNumId($msgId, $clientType, $lang)));
-////                echo "</body></head></html>";
-//            }
-//            $msgId = $this->get("strId");
-//            if ($msgId != null) {
-//                $this->responseOk(array('msg' => $this->ResourceDao->getByStrId($msgId, $clientType, $lang)));
-//            }
-//            throw new Exception("'numId' or 'strId' is required.", 400);
-//        } catch (Exception $e) {
-//            $this->responseError($e);
-//        }
-//    }
-//    
     public function index_get() {
 //        $accessToken = $this->get('accessToken');
         try {
@@ -75,9 +25,9 @@ class Resource extends Stadioom_REST_Controller {
 
             $id = $this->get('id');
             if (is_numeric($id)) {
-                $this->responseOk(array('msg' => $this->ResourceDao->getByNumId($id, $clientType, $lang)));
+                $this->responseOk($this->ResourceDao->getByNumId($id, $clientType, $lang));
             } else {
-                $this->responseOk(array('msg' => $this->ResourceDao->getByStrId($id, $clientType, $lang)));
+                $this->responseOk($this->ResourceDao->getByStrId($id, $clientType, $lang));
             }
         } catch (Exception $e) {
             $this->responseError($e);
@@ -88,29 +38,6 @@ class Resource extends Stadioom_REST_Controller {
         // TODO later...
     }
 
-//    public function msg_get($id) {
-//        if (is_numeric($id)) {
-//            return $this->getMessageByNumId($id);
-//        } else {
-//            return $this->getMessageByStrId($id);
-//        }
-//    }
-//
-//    public function img_get($clientType) {
-//        return $this->getResource($clientType);
-//    }
-//
-//    public function link_get($clientType) {
-//        return $this->getResource($clientType);
-//    }
-//
-//    public function ios_get() {
-//        return $this->getMessage("ios");
-//    }
-//
-//    public function js_get() {
-//        return $this->getMessage("js");
-//    }
     // only for testing purpose.
     public function insert_get() {
         $this->ResourceDao->insert(1000, 'img_shareicon', "http://stadioom.com/assets/images/sponsors/shareicons/{1}_{2}_shareicon.gif", "http://stadioom.com/assets/images/sponsors/shareicons/%1@_%2@_shareicon.gif", "http://stadioom.com/assets/images/sponsors/shareicons/%1s_%2s_shareicon.gif", "en_US");
