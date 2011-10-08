@@ -26,7 +26,26 @@ class MatchDao extends CI_Model {
 
         $this->em->persist($match);
         $this->em->flush();
-        return $match->getId();
+        
+        // make member names A
+        // make member names B
+        // make caption (score, who's win, or even or not played..)
+        // get brand String ID
+        // get sport String ID
+        // get brand name
+        // get sport name
+        
+        
+        $result = array(
+            'matchId' => $match->getId(),
+            'caption' => $memberNamesA . ' just defeated ' . $mamberNamesB . ' in a fierce ' . $matchTitle . ' match.',
+            'message' => $subject . " " . $matchResult,
+            'picture' => "http://stadioom.com/assets/images/sponsors/shareicons/" . $brandStringId . "_" . $sportStringId . "_shareicon.gif",
+            'title' => $sponsorName . " " . $sportName . " Match",
+            'link' => "http://stadioom.com/match/view/" . $match->getId(),
+            'description' => "Final score: " . $memberNamesA . " " . $match->getScoreA() . " - " . $memberNamesB . " " . $match->getScoreB()
+        );
+        return $result;
     }
 
     /**
@@ -107,6 +126,7 @@ class MatchDao extends CI_Model {
                     $userFb->setLocale($fbFriend->locale);
 
                     $this->em->persist($userFb);
+                    $this->em->flush();
                 }
 
                 $newMember = new Entities\MatchRecordMemberA();
@@ -145,6 +165,7 @@ class MatchDao extends CI_Model {
                     $userFb->setLocale($fbFriend->locale);
 
                     $this->em->persist($userFb);
+                    $this->em->flush();
                 }
 
                 $newMember = new Entities\MatchRecordMemberB();
