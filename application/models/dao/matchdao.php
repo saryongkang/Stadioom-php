@@ -37,16 +37,16 @@ class MatchDao extends CI_Model {
         // get sport name
 
 
-        $result = array(
-            'matchId' => $match->getId(),
-            'caption' => $memberNamesA . ' just defeated ' . $mamberNamesB . ' in a fierce ' . $matchTitle . ' match.',
-            'message' => $subject . " " . $matchResult,
-            'picture' => "http://stadioom.com/assets/images/sponsors/shareicons/" . $brandStringId . "_" . $sportStringId . "_shareicon.gif",
-            'title' => $sponsorName . " " . $sportName . " Match",
-            'link' => "http://stadioom.com/match/view/" . $match->getId(),
-            'description' => "Final score: " . $memberNamesA . " " . $match->getScoreA() . " - " . $memberNamesB . " " . $match->getScoreB()
-        );
-        return $result;
+//        $result = array(
+//            'matchId' => $match->getId(),
+//            'caption' => $memberNamesA . ' just defeated ' . $mamberNamesB . ' in a fierce ' . $matchTitle . ' match.',
+//            'message' => $subject . " " . $matchResult,
+//            'picture' => "http://stadioom.com/assets/images/sponsors/shareicons/" . $brandStringId . "_" . $sportStringId . "_shareicon.gif",
+//            'title' => $sponsorName . " " . $sportName . " Match",
+//            'link' => "http://stadioom.com/match/view/" . $match->getId(),
+//            'description' => "Final score: " . $memberNamesA . " " . $match->getScoreA() . " - " . $memberNamesB . " " . $match->getScoreB()
+//        );
+        return $match->getId();
     }
 
     /**
