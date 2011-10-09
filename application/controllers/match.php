@@ -20,6 +20,7 @@ class Match extends FBAuth_Controller {
         $this->template->add_css('tdfriendselector');
         $this->template->add_js('tdfriendselector');
         $this->template->add_js('jquery.iphone-switch');
+        $this->template->add_js('jquery.cookie');
         $this->template->add_js('bootstrap/bootstrap-modal');
         
         $this->template->add_css('match');

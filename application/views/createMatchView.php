@@ -41,7 +41,7 @@
     <form id="newMatchForm" action="" class="form-stacked">
         <fieldset>
             
-            <input type="hidden" value="<?php echo $this->security->get_csrf_hash() ?>" id="csrf_protection" />  
+            <input type=“hidden” name=”<?php echo $this->security->get_csrf_token_name()?>” value=”<?php echo $this->security->get_csrf_hash()?>” >  
     <!--      <legend>Register your match
           </legend>-->
     <!--      <div class="clearfix">
@@ -177,8 +177,10 @@
     
     //FBUid
     var user = {
-        id: '<?php echo $userdata['fbUId']; ?>',
-        name: '<?php echo $userdata['fullName']; ?>'
+ 
+        id: '<?php echo $userdata['stdUid']; ?>',
+        name: '<?php echo $userdata['fullName']; ?>',
+        fbId: '<?php echo $userdata['fbUId']; ?>'
     };
     
     //Friends Selector

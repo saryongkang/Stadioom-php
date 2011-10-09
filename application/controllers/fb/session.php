@@ -145,9 +145,11 @@ class Session extends CI_Controller {
     }
     
     function logout(){
-        echo "Bye bye ". $this->session->userdata('fullName');
+        $this->load->helper('url');
+        //echo "Bye bye ". $this->session->userdata('fullName');
         $this->load->library('session');
         $this->session->sess_destroy();
+        redirect('/home', 'refresh');
     }
 }
 ?>

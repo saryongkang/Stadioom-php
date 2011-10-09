@@ -1,7 +1,19 @@
 //For the Facebook Friends Selectors
+
+//function fbLoginStatus(response) {
+//     if(response.session) {
+//        //user is logged in, display profile div
+//     } else {
+//        //user is not logged in, display guest div
+//        window.location = "https://stadioomtest.com/fb/session/logout"
+//     }
+//  }
+
 window.fbAsyncInit = function () {
 
 	FB.init({appId: window.appId, status: true, cookie: false, xfbml: false, oauth: true});
+//    FB.getLoginStatus(fbLoginStatus);
+//    FB.Event.subscribe('auth.statusChange', fbLoginStatus);
 
 	$(document).ready(function () {
 		var updatePlayersDiv, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;

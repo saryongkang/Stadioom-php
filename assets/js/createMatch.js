@@ -101,16 +101,16 @@ $('#submitMatch').click(function() {
         var currentDate = new Date();
         var title = window.selectedSponsor.id +" " + window.selectedSportId + " match: " +window.scoreA +" - "+window.scoreB;
         
-        var csrf = $('#csrf_protection').val();
+        var cct = $.cookie('safe_sdsk_stad');
         
         var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
 
         params = {
-            "accessToken" : null,
             "sportId" : window.selectedSportId,
             "brandId": window.selectedSponsor.id ,
             "title" : null,
             //@"1", @"leagueType",
+            "userId" : window.user['id'],
             "scoreA" : window.scoreA,
             "scoreB" : window.scoreB,
             //@"", @"memberIdsA",
@@ -118,7 +118,7 @@ $('#submitMatch').click(function() {
             //@"", @"memberIdsB",
             "memberFbIdsB[]" : teamBFBPlayers,
             "started" : currentDate.getTime(),
-            "csrf_protection": csrf ,
+            "sdsk_stad_tok": cct ,
             "ended" : currentDate.getTime()
         };
 
@@ -172,4 +172,4 @@ $('#submitMatch').click(function() {
     
     return false;
 
-});
+}); //End of Submit Match

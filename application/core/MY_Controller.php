@@ -42,11 +42,11 @@ class FBAuth_Controller extends MY_Controller{
         
         $this->load->library('fb_connect');
         // Get User ID
-        
           if ($this->fb_connect->user_id){
+              
             $retry=true;
             $meAddress = '/me';
-            $data['fbId'] = $fb_uid = $this->fb_connect->user_id;
+            $data['fbId'] = $this->fb_connect->user_id;
             
             while(true){
               try {
@@ -132,9 +132,4 @@ class FBAuth_Controller extends MY_Controller{
         return true;
     }
     
-    function logout(){
-        echo "Bye bye ". $this->session->userdata('fullName');
-        $this->load->library('session');
-        $this->session->sess_destroy();
-    }
 }

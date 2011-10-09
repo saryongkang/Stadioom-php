@@ -42,7 +42,7 @@
 <!--                                            <li><a href="#">Secondary link</a></li>
                                             <li><a href="#">Something else here</a></li>
                                             <li class="divider"></li>-->
-                                            <li><a href="#">Logout</a></li>
+                                            <li><a href="/fb/session/logout">Logout</a></li>
 
                                         </ul>
                                     </li>
