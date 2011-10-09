@@ -22,11 +22,12 @@ class MatchDao extends CI_Model {
     public function register($match, $memberFbIdsA, $memberFbIdsB) {
         $this->validateMatch($match, $memberFbIdsA, $memberFbIdsB);
 
-        $this->complete($match, $memberFbIdsA, $memberFbIdsB);
+        $this->completeMembers($match, $memberFbIdsA, $memberFbIdsB);
+        $this->completeTitle($match);
 
         $this->em->persist($match);
         $this->em->flush();
-        
+
         // make member names A
         // make member names B
         // make caption (score, who's win, or even or not played..)
@@ -34,8 +35,8 @@ class MatchDao extends CI_Model {
         // get sport String ID
         // get brand name
         // get sport name
-        
-        
+
+
         $result = array(
             'matchId' => $match->getId(),
             'caption' => $memberNamesA . ' just defeated ' . $mamberNamesB . ' in a fierce ' . $matchTitle . ' match.',
@@ -94,7 +95,7 @@ class MatchDao extends CI_Model {
         return $sharedInfo->getId();
     }
 
-    public function complete(&$match, &$memberFbIdsA, &$memberFbIdsB) {
+    public function completeMembers(&$match, &$memberFbIdsA, &$memberFbIdsB) {
         if (is_array($memberFbIdsA)) {
             $me = $this->em->find('Entities\User', $match->getOwnerId());
             foreach ($memberFbIdsA as $fbId) {
@@ -176,6 +177,34 @@ class MatchDao extends CI_Model {
         }
 
         $this->em->flush();
+    }
+
+    private function completeTitle($match) {
+        $title = $match->getTitle();
+        if ($title == null) {
+            // get sport name
+            $sportId = $match->getSportId();
+            $sportName = $this->em->createQuery("SELECT s.name FROM Entities\Sport s WHERE s.id = " . $sportId);
+            if (count($sportName) == 0) {
+                throw new Exception("Unknown Sport: " . $sportId, 404);
+            }
+            $title = $sportName[0]['name'];
+
+            // get brand name (if exists)
+            $brandId = $match->getBrandId();
+            if ($brandId != null) {
+                $brandName = $this->em->createQuery("SELECT b.name FROM Entities\Brand b WHERE b.id = " . $brandId);
+                if (count($brandName) == 0) {
+                    throw new Exception("Unknown Brand: " . $sportId, 404);
+                }
+
+                $title = $title . ' ' . $brandName[0]['name'];
+            }
+
+            // append 'Match'
+            $title = $title . ' Match';
+            $match->setTitle($title);
+        }
     }
 
     public function find($matchId) {
