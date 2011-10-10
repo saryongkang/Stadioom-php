@@ -74,7 +74,7 @@ class I18nDao extends CI_Model {
      * @param integer $after timestamp.
      * @return array array of updated message including '__last_modified'.
      */
-    public function getDelta($category, $lang, $after) {
+    public function getDelta($category, $lang = null, $clientType = null, $after) {
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
@@ -88,9 +88,14 @@ class I18nDao extends CI_Model {
         }
         $lastUpdated = intval($this->lang->line("__last_modified"));
         if ($lastUpdated > $after) {
-            return $this->lang->all();
+            $all = $this->lang->all();
+            $keys = array_keys($all);
+            foreach ($keys as $key) {
+                $all[$key] = $this->replace($all[$key], $clientType);
+            }
+            return array('data' => $all);
         }
-        return array("__last_modified" => $this->lang->line("__last_modified"));
+        return array('data' => array("__last_modified" => $this->lang->line("__last_modified")));
     }
 
     /**
