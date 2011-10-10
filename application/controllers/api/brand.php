@@ -4,7 +4,8 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class Brand extends Stadioom_REST_Controller {
 
-    private $filterKeys = array('firstRevision', 'latestRevision', 'updateFlag', 'sports');
+    private $filterKeys4Brand = array('firstRevision', 'latestRevision', 'updateFlag', 'sports');
+    private $filterKeys4Sport = array('firstRevision', 'latestRevision', 'updateFlag', 'brands');
 
     function __construct() {
         parent::__construct();
@@ -61,7 +62,7 @@ class Brand extends Stadioom_REST_Controller {
                 $allSports = $this->BrandSportDao->getAllBrands();
                 $array = array();
                 foreach ($allSports as $brand) {
-                    array_push($array, $this->filter($brand->toArray(), $this->filterKeys));
+                    array_push($array, $this->filter($brand->toArray(), $this->filterKeys4Brand));
                 }
                 
                 $data = array("data" => $array);
@@ -69,7 +70,7 @@ class Brand extends Stadioom_REST_Controller {
             } else {
                 $brand = $this->BrandSportDao->getBrand($brandId);
 
-                $this->responseOk($this->filter($brand->toArray(), $this->filterKeys));
+                $this->responseOk($this->filter($brand->toArray(), $this->filterKeys4Brand));
             }
         } catch (Exception $e) {
             $this->responseError($e);
@@ -111,7 +112,7 @@ class Brand extends Stadioom_REST_Controller {
             
             $array = array();
             foreach ($sports as $sport) {
-                array_push($array, $this->filter($sport->toArray(), $this->filterKeys));
+                array_push($array, $this->filter($sport->toArray(), $this->filterKeys4Sport));
             }
 
             $data = array("data" => $array);
