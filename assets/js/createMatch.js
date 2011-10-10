@@ -173,7 +173,7 @@ $('#submitMatch').click(function(event) {
     }
     
     var postToWallUsingFBApi = function(){
-        var sponsorShareIcon = window.baseUrl+window.sponsorShareIconsFolder+sportsList[selectedSportId].stringId+'_'+window.selectedSponsor.stringId +'_shareicon'+'.gif';
+        var sponsorShareIcon = window.baseUrl+window.sponsorShareIconsFolder+window.selectedSponsor.stringId +'_'+sportsList[selectedSportId].stringId+'_shareicon'+'.gif';
 
         var message = window.user['fullName'];
 
@@ -191,8 +191,8 @@ $('#submitMatch').click(function(event) {
             description: "Description field",
             actions: [{ name: 'Enter the Stadioom', link: window.baseUrl }]			
         }
-        //console.log(data);    
-        FB.api('/me/feed', 'post', data, onPostToWallCompleted);
+        console.log(data);    
+        //FB.api('/me/feed', 'post', data, onPostToWallCompleted);
         $("#fbShareSuccess").show();
     }
 

@@ -60,7 +60,7 @@ window.fbAsyncInit = function () {
 		};
 
 		// Initialise the Friend Selector with options that will apply to all instances
-		TDFriendSelector.init({debug: true});
+		TDFriendSelector.init({debug: false});
 
 		// Create some Friend Selector instances
 		window.teamAFBSelector  = TDFriendSelector.newInstance({
