@@ -30,7 +30,7 @@ class FBAuth_Controller extends MY_Controller{
         force_ssl();
         
         $this->load->library('session');
-        if (!$this->session->userdata('loggedin')){
+        if (!$this->session->userdata('loggedIn')){
             $this->_login();
         }
         

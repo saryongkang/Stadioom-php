@@ -13,6 +13,8 @@ class Main extends FBAuth_Controller {
         $this->load->model('dao/SportDao');
         $data['sports'] = $this->SportDao->getAll();
         
+        $this->load->model('dao/BrandDao');
+        $data['brands'] = $this->BrandDao->getAll();
         
         //BUILDING THE TEMPLATE
         $this->template->add_css('main');

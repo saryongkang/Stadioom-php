@@ -14,17 +14,18 @@
           <a href="#">View all matches</a>
         </div>
       </div>
-
+        
+        <?php $match=$lastMatch[0]; ?>
       <div class='match-banner'>
         <div class='match-banner-title'>
-        {$matchSport} Match, sponsored by {$matchSponsor} 
+        <?php echo $sports[$match->getSportId()]->getName(); ?> Match, sponsored by <?php echo $brands[$match->getBrandId()]->getName();?>
         </div>
         <div class='match-banner-body'>
           <div class='match-team-left' id='match-player1'>
-            <img class='match-player-img' id='match-player1-img' src="assets/images/default_user_100x100.png" width="50" height="50" />
+            <img class='match-player-img' id='match-player1-img' src="/assets/images/default_user_100x100.png" width="50" height="50" />
             <div class="match-player-text">
             {$player1Name} <br />
-            {$player1Score}
+            <?php echo $match->getScoreA() ?>
             </div>
           </div><!-- End match-teamleft -->
           <div class='match-vs'>
@@ -34,9 +35,9 @@
           <div class='match-team-right' id='match-player2'>
             <div class="match-player-text">
             {$player2Name} <br />
-            {$player2Score}
+            <?php echo $match->getScoreB() ?>
             </div>
-            <img class='match-player-img' id='match-player2-img' src="assets/images/default_user_100x100.png" width="50" height="50" />
+            <img class='match-player-img' id='match-player2-img' src="/assets/images/default_user_100x100.png" width="50" height="50" />
           </div><!-- End match-player2 -->
 
         </div> <!-- End match-banner-body -->
