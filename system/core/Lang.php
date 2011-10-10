@@ -94,7 +94,8 @@ class CI_Lang {
 
 			if ($found !== TRUE)
 			{
-				show_error('Unable to load the requested language file: language/'.$idiom.'/'.$langfile);
+				log_message('debug', 'Unable to load the requested language file: language/'.$idiom.'/'.$langfile);
+                                return false;
 			}
 		}
 
@@ -145,7 +146,7 @@ class CI_Lang {
          * 
          */
         public function all() {
-            return $language;
+            return $this->language;
         }
 
 }

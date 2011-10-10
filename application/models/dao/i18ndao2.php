@@ -64,13 +64,19 @@ class I18nDao2 extends CI_Model {
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
+        if ($category == null || !is_numeric($after)) {
+            throw new Exception("'category' and 'after' are required.", 400);
+        }
 
-        $this->lang->load($category, $lang);
-        $lastUpdated = intval($this->lang->line("__" . $category . "_last_modified"));
+        $found = $this->lang->load($category, $lang);
+        if ($found == FALSE) {
+            throw new Exception("Category Not Found", 404);
+        }
+        $lastUpdated = intval($this->lang->line("__last_modified"));
         if ($lastUpdated > $after) {
             return $this->lang->all();
         }
-        return array();
+        return array("__last_modified" => $this->lang->line("__last_modified"));
     }
 
     /**
