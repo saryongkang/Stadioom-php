@@ -39,24 +39,25 @@ class I18nDao2 extends CI_Model {
      * @param type $lang (optional) The language code to translate.
      * @param type $clientType  (optional) The client type ('ios', 'js')
      */
-    public function translate($msgId, $lang = null, $clientType = null) {
+    public function translate($id, $lang = null, $clientType = null) {
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
 
-        $translated = $this->getByStrId($msgId, $lang, $clientType);
-        return $this->replace($translated, $clientType);
-    }
-    
-    private function replace(&$translated, &$clientType) {
-        
-    }
-
-    public function getByStrId(&$id, &$lang) {
         $category = strtok($id, "_");
 
         $this->lang->load($category, $lang);
-        return $this->lang->line($id);
+        $originalText = $this->lang->line($id);
+        return $this->replace($originalText, $clientType);
+    }
+
+    private function replace(&$translated, &$clientType) {
+        if ($clientType == 'ios') {
+            $pattern = "/%(\d*)s/";
+            $replacement = '%\1@';
+            $translated = preg_replace($pattern, $replacement, $translated);
+        }
+        return $translated;
     }
 
     /**
@@ -69,29 +70,6 @@ class I18nDao2 extends CI_Model {
         return array_key_exists($lang, $this->ll_cc);
     }
 
-    private function getColumnName(&$clientType) {
-        switch ($clientType) {
-            case "ios":
-                return "msgiOS";
-            case "js":
-                return "msgJS";
-            default:
-                return "msg";
-        }
-    }
-
-//
-//    public function insert($numId, $strId, $msgGeneral, $msgiOS, $msgJS, $lang) {
-//        $msg = new Entities\Resource();
-//        $msg->setNumId($numId);
-//        $msg->setStrId($strId);
-//        $msg->setMsg($msgGeneral);
-//        $msg->setMsgiOS($msgiOS);
-//        $msg->setMsgJS($msgJS);
-//        $msg->setLang($lang);
-//        $this->em->persist($msg);
-//        $this->em->flush();
-//    }
 }
 
 ?>
