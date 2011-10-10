@@ -206,9 +206,9 @@ class REST_Controller extends CI_Controller {
 		}
 
 		// And...... GO!
-                $this->log('Started..');
+                $this->log('debug', 'Started..');
 		call_user_func_array(array($this, $controller_method), $arguments);
-                $this->log('Ended..');
+                $this->log('debug', 'Ended..');
 	}
 
 	/*
@@ -473,7 +473,7 @@ class REST_Controller extends CI_Controller {
 	{
             if (config_item('rest_log_to_php_error')) {
                 // INSERTED BY WEGRA.
-                error_log("\n  Requested [" . $this->request->method . '] ' . $this->uri->uri_string() . ' [with params] ' . $this->paramToString($this->_args).
+                $this->log('debug', "\n  Requested [" . $this->request->method . '] ' . $this->uri->uri_string() . ' [with params] ' . $this->paramToString($this->_args).
                 "\n  from [IP] " . $this->input->ip_address() . ' [user agent] ' . $this->input->user_agent());
             } else {
 		return $this->rest->db->insert(config_item('rest_logs_table'), array(
@@ -488,8 +488,10 @@ class REST_Controller extends CI_Controller {
             }
 	}
 
-        protected function log($message) {
+        protected function log($level, $message) {
             if (config_item('rest_log_to_php_error')) {
+//                log_message($level, '['. $this->controller_method . '] ' . $message);
+                log_message($level, '['. $this->controller_method . '] ' . $message);
                 error_log('['. $this->controller_method . '] ' . $message);
             }
         }

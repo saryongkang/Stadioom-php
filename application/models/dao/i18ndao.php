@@ -22,6 +22,9 @@ class I18nDao extends CI_Model {
      * @return array all languages currently supported.
      */
     public function getAllSupportedLanguages() {
+        log_message('debug', "getAllSupportedLanguages: enter.");
+        log_message('debug', "getAllSupportedLanguages: exit.");
+        
         return $this->ll_cc;
     }
 
@@ -32,10 +35,15 @@ class I18nDao extends CI_Model {
      * @return string Language name og given langauge code. 
      */
     public function getLanguageName($ll) {
+        log_message('debug', "getLanguageName: enter.");
+        
+        $result = null;
         if ($this->isSupported($ll)) {
-            return $this->ll_cc[$ll];
+            $result =  $this->ll_cc[$ll];
         }
-        return null;
+        
+        log_message('debug', "getLanguageName: exit.");
+        return $result;
     }
 
     /**
@@ -46,6 +54,8 @@ class I18nDao extends CI_Model {
      * @param type $clientType  (optional) The client type ('ios', 'js')
      */
     public function translate($id, $lang = null, $clientType = null) {
+        log_message('debug', "translate: enter.");
+        
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
@@ -54,15 +64,21 @@ class I18nDao extends CI_Model {
 
         $this->lang->load($category, $lang);
         $originalText = $this->lang->line($id);
+        
+        log_message('debug', "translate: exit.");
         return $this->replace($originalText, $clientType);
     }
 
     private function replace(&$translated, &$clientType) {
+        log_message('debug', "replace: enter.");
+        
         if ($clientType == 'ios') {
             $pattern = "/%(\d*)s/";
             $replacement = '%\1$@';
             $translated = preg_replace($pattern, $replacement, $translated);
         }
+        
+        log_message('debug', "replace: exit.");
         return $translated;
     }
 
@@ -75,6 +91,8 @@ class I18nDao extends CI_Model {
      * @return array array of updated message including '__last_modified'.
      */
     public function getDelta($category, $after, $lang = null, $clientType = null) {
+        log_message('debug', "getDelta: enter.");
+        
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
@@ -93,8 +111,12 @@ class I18nDao extends CI_Model {
             foreach ($keys as $key) {
                 $all[$key] = $this->replace($all[$key], $clientType);
             }
+            
+            log_message('debug', "getDelta: exit.");
             return array('data' => $all);
         }
+        
+        log_message('debug', "getDelta: exit.");
         return array('data' => array("__last_modified" => $this->lang->line("__last_modified")));
     }
 
@@ -105,7 +127,9 @@ class I18nDao extends CI_Model {
      * @return boolean 'true' if the given language is supported. 'false' otherwise.
      */
     private function isSupported(&$lang) {
-        return array_key_exists($lang, $this->ll_cc);
+        log_message('debug', "isSupported: enter.");
+         log_message('debug', "isSupported: exit.");
+       return array_key_exists($lang, $this->ll_cc);
     }
 
 }

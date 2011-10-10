@@ -17,6 +17,8 @@ class SportDao extends CI_Model {
      * @param Entities\Sport $sport
      */
     public function add(&$sport) {
+        log_message('debug', "add: enter.");
+        
         if (!$this->isInRange($sport->getName(), 5, 32)) {
             throw new Exception("Invalid name (5 <= name <= 32).", 400);
         }
@@ -27,6 +29,8 @@ class SportDao extends CI_Model {
             $this->em->flush();
         }
         $added = $this->em->getRepository('Entities\Sport')->findOneByName($sport->getName());
+        
+        log_message('debug', "add: exit.");
         return $added->getId();
     }
 
@@ -36,14 +40,20 @@ class SportDao extends CI_Model {
      * @param integer $id
      */
     public function remove(&$id) {
+        log_message('debug', "remove: enter.");
+        
         $sport = $this->em->find('Entities\Sport', $id);
         if ($sport != null) {
             $this->em->remove($sport);
             $this->em->flush();
         }
+        
+        log_message('debug', "remove: exit.");
     }
 
     public function find(&$id) {
+        log_message('debug', "find: enter.");
+
         if (!(is_numeric($id) && $id > 0)) {
             throw new Exception("Invalid ID: " . $id, 400);
         }
@@ -51,23 +61,32 @@ class SportDao extends CI_Model {
         if ($sport == null) {
             throw new Exception("Not Found.", 404);
         }
+        
+        log_message('debug', "find: exit.");
         return $sport;
     }
 
     public function getAll() {
-        return $this->em->createQuery('SELECT s FROM Entities\Sport s')->getResult();
+        log_message('debug', "getAll: enter.");
+         log_message('debug', "getAll: exit.");
+       return $this->em->createQuery('SELECT s FROM Entities\Sport s')->getResult();
     }
     
     public function getAllOrderedByPriority() {
+        log_message('debug', "getAllOrderedByPriority: enter.");
+        log_message('debug', "getAllOrderedByPriority: exit.");
         return $this->em->createQuery('SELECT s FROM Entities\Sport s ORDER BY s.priority DESC')->getResult();
     }
 
     public function findAfter($after) {
+        log_message('debug', "findAfter: enter.");
         if ($after == null || $after < 0) {
             $after = 0;
         }
 
         $q = $this->em->createQuery('SELECT s FROM Entities\Sport s WHERE s.latestRevision > ' . $after);
+        
+        log_message('debug', "findAfter: exit.");
         return $q->getResult();
     }
 

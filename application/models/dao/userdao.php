@@ -12,6 +12,7 @@ class UserDao extends CI_Model {
     }
     
     public function fbtest($fbInfo) {
+        log_message('debug', "fbtest: enter.");
         $this->load->library('fb_connect');
         $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
         try {
@@ -23,8 +24,10 @@ class UserDao extends CI_Model {
             }
             
         } catch (FacebookApiException $e) {
+            log_message('error', "Failed to get authorized by Facebook.");
             throw new Exception("Failed to get authorized by Facebook.", 401, $e);
         }
+        log_message('debug', "fbtest: exit.");
     }
 
 
@@ -39,6 +42,7 @@ class UserDao extends CI_Model {
      * @throws Exception 404 - if the user could not be found. 
      */
     public function signIn(&$user) {
+        log_message('debug', "signIn: enter.");
         if (!$this->isValidEmail($user->getEmail())) {
             throw new Exception("Invalid email.", 400);
         }
@@ -62,6 +66,7 @@ class UserDao extends CI_Model {
             throw new Exception("Unregistered account.", 404);
         }
 
+        log_message('debug', "signIn: exit.");
         return $this->generateAccessToken($prevUser);
     }
 
@@ -76,6 +81,7 @@ class UserDao extends CI_Model {
      * @throws Exception 401 - if failed to access Facebook with the given fbAccessToken.
      */
     public function fbConnect($fbInfo) {
+        log_message('debug', "fbConnect: enter.");
         if ($fbInfo === NULL
                 || $fbInfo['fbId'] == null
                 || $fbInfo['fbAccessToken'] == null
@@ -198,6 +204,7 @@ class UserDao extends CI_Model {
         }
 
         $result['accessToken'] = $this->generateAccessToken($user);
+        log_message('debug', "fbConnect: exit.");
         return $result;
     }
 
@@ -209,6 +216,7 @@ class UserDao extends CI_Model {
      * @return Exception 404 - if the given fbId could not be found.
      */
     public function fbDeauthorize($fbId) {
+        log_message('debug', "fbDeauthorize: enter.");
         if ($fbId == null) {
             throw new Exception("Invalid FB ID.", 400);
         }
@@ -224,9 +232,11 @@ class UserDao extends CI_Model {
             $this->em->persist($user);
             $this->em->flush();
         }
+        log_message('debug', "fbDeauthorize: exit.");
     }
 
     public function fbDeauthorizeWithId($id) {
+        log_message('debug', "fbDeauthorizeWithId: enter.");
         if ($id == null) {
             throw new Exception("Invalid ID.", 400);
         }
@@ -242,6 +252,7 @@ class UserDao extends CI_Model {
             $this->em->persist($user);
             $this->em->flush();
         }
+        log_message('debug', "fbDeauthorizeWithId: exit.");
     }
 
     /**
@@ -253,6 +264,7 @@ class UserDao extends CI_Model {
      * @return string Invitation results for each invitee.
      */
     public function fbInvite($invitorId, $inviteeFbIds) {
+        log_message('debug', "fbInvite: enter.");
         // TODO: check whether the invitor is real.
         $invitedDate = new DateTime();
         if ($inviteeFbIds == null) {
@@ -288,6 +300,7 @@ class UserDao extends CI_Model {
         }
         $this->em->flush();
 
+        log_message('debug', "fbInvite: exit.");
         return $result;
     }
 
@@ -300,6 +313,7 @@ class UserDao extends CI_Model {
      * @return string 
      */
     public function invite($invitorId, $inviteeEmails, $invitationMessage = null) {
+        log_message('debug', "invite: enter.");
         if ($invitorId == null) {
             throw new Exception("The 'invitorId' MUST NOT be NULL.", 400);
         }
@@ -349,6 +363,8 @@ class UserDao extends CI_Model {
             $result[$email] = 'invitation sent.';
         }
         $this->em->flush();
+        
+        log_message('debug', "invite: exit.");
         return $result;
     }
 
@@ -361,6 +377,7 @@ class UserDao extends CI_Model {
      * @throws Exception 406 - if the user has already registered.
      */
     public function signUp(&$user) {
+        log_message('debug', "signUp: enter.");
         if (!$this->isValidEmail($user->getEmail())) {
             throw new Exception("Invalid email.", 400);
         }
@@ -402,6 +419,7 @@ class UserDao extends CI_Model {
         } else {
             throw new Exception("User already exist.", 406);
         }
+        log_message('debug', "signUp: exit.");
     }
 
     /**
@@ -411,9 +429,11 @@ class UserDao extends CI_Model {
      * @return string The verification code.
      */
     private function generateVerificationCode($email) {
+        log_message('debug', "generateVerificationCode: enter.");
         $secret = "Powered by " . $email . " SeedShock";
         $code = substr(md5($secret), 3, 10);
 
+        log_message('debug', "generateVerificationCode: exit.");
         return $code;
     }
 
@@ -424,10 +444,12 @@ class UserDao extends CI_Model {
      * @return string The verification code.
      */
     private function generateAccessToken($user) {
+        log_message('debug', "generateAccessToken: enter.");
         $this->load->library('encrypt');
         $expired = 0;   // forever.
         $msg = "SeedShock:" . $user->getId() . ':' . $expired;
 
+        log_message('debug', "generateAccessToken: exit.");
         return $this->encrypt->encode($msg);
     }
 
@@ -438,10 +460,13 @@ class UserDao extends CI_Model {
      * @param type $code The verification code.
      */
     public function sendVerificationEmail($email, $code) {
+        log_message('debug', "sendVefiricationEmail: enter.");
         $this->sendEmail($email, '[Welcome to Stadioom] Your Verification Code', "Thanks for registering to Stadioom.<br>Please click the following URL to verify your email.<br><br> " . $this->config->item('base_url') . "/api/auth/verify?code=" . $code . "&email=" . $email . " <br><br>Your Sincerely, SeedShock.");
+        log_message('debug', "sendVefiricationEmail: exit.");
     }
 
     private function sendEmail($toEmail, $subject, $message) {
+        log_message('debug', "sendEmail: enter.");
         $config = Array(
             'protocol' => $this->config->item('email_protocol'),
             'smtp_host' => $this->config->item('email_smtp_host'),
@@ -464,6 +489,7 @@ class UserDao extends CI_Model {
         $this->email->message($message);
 
         $this->email->send();
+        log_message('debug', "sendEmail: exit.");
     }
 
     /**
@@ -476,11 +502,13 @@ class UserDao extends CI_Model {
      * @throws Exception 406 - if the user has already verified.
      */
     public function verifyUser($email, $code) {
+        log_message('debug', "verifyUser: enter.");
         $user = $this->em->getRepository('Entities\User')->findOneByEmail($email);
         if ($user->getVerified() != 0) {
             throw new Exception("Already Verified.", 406);
         }
-
+        
+        $verified = false;
         $userVerification = $this->em->getRepository('Entities\UserVerification')->findOneByEmail($email);
         if ($userVerification != null && $userVerification->getCode() == $code) {
             $user->setVerified(1);
@@ -491,22 +519,26 @@ class UserDao extends CI_Model {
             $this->em->flush();
             $this->em->commit();
 
-            return TRUE;
+            $verified = true;
         }
 
-        return FALSE;
+        log_message('debug', "verifyUser: exit.");
+        return $verified;
     }
 
     public function find($id) {
+        log_message('debug', "find: enter.");
         $user = $this->em->find('Entities\User', $id);
         if ($user == null) {
             throw new Exception("Not Found.", 404);
         }
 
+        log_message('debug', "find: exit.");
         return $user;
     }
 
     public function search($type, $keyword) {
+        log_message('debug', "search: enter.");
         $dql = 'select u from Entities\User u where';
         if ($type == 'name') {
             $dql = $dql . " u.name LIKE '%" . $keyword . "%'";
@@ -518,6 +550,7 @@ class UserDao extends CI_Model {
 
         $q = $this->em->createQuery($dql);
         $result = $q->getResult();
+        log_message('debug', "search: exit.");
         return $result;
     }
 
@@ -528,15 +561,13 @@ class UserDao extends CI_Model {
      * @return boolean
      */
     public function isDuplicateEmail($email) {
+        log_message('debug', "isDuplicateEmail: enter.");
         $q = $this->em->createQuery('select u.email from Entities\User u where u.email = :email');
         $q->setParameter('email', $email);
         $result = $q->getResult();
 
-        if (count($result) > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        log_message('debug', "isDuplicateEmail: enter.");
+        return (count($result) > 0);
     }
 
 // -- INTERNAL APIs --------------------------------------------------------
@@ -546,8 +577,10 @@ class UserDao extends CI_Model {
      * @return boolean
      */
     private function isValidEmail(&$email) {
+        log_message('debug', "isValidEmail: enter.");
         $this->load->helper('email');
 
+        log_message('debug', "isValidEmail: exit.");
         return valid_email($email);
     }
 
@@ -557,7 +590,9 @@ class UserDao extends CI_Model {
      * @return boolean
      */
     private function isValidPassword(&$password) {
+        log_message('debug', "isValidPassword: enter.");
         $length = strlen($password);
+        log_message('debug', "isValidPassword: exit.");
         return 5 < $length && $length <= 20;
     }
 
@@ -567,8 +602,10 @@ class UserDao extends CI_Model {
      * @return boolean
      */
     private function isValidName(&$name) {
+        log_message('debug', "isValidName: enter.");
         $length = strlen($name);
         return $length == 0 || (3 < $length && $length <= 100);
+        log_message('debug', "isValidName: exit.");
     }
 
     /**
@@ -578,6 +615,7 @@ class UserDao extends CI_Model {
      * @param array $fbMe 
      */
     private function storeUserFb($fbInfo, $fbMe) {
+        log_message('debug', "storeUserFb: enter.");
         // TODO: check duplication first.
         // add Facebook user info to UserFB table.
         $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbInfo['fbId']);
@@ -640,6 +678,7 @@ class UserDao extends CI_Model {
 
         $this->em->persist($userFb);
         $this->em->flush();
+        log_message('debug', "storeUserFb: exit.");
     }
     
     /**
@@ -651,6 +690,7 @@ class UserDao extends CI_Model {
      * @return array of Entities\MatchRecord 
      */
     public function getLatestMatches($userId, $maxNumber) {
+        log_message('debug', "getLatestMatches: enter.");
         $dql = "SELECT m, a, b";
         $dql = $dql . " FROM Entities\MatchRecord m";
         $dql = $dql . " JOIN m.memberIdsA a JOIN m.memberIdsB b";
@@ -659,6 +699,8 @@ class UserDao extends CI_Model {
         $q = $this->em->createQuery($dql);
         $q->setMaxResults($maxNumber);
         $result = $q->getResult();
+        
+        log_message('debug', "getLatestMatches: exit.");
         return $result;
     }
 }

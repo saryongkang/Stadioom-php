@@ -20,6 +20,7 @@ class MatchDao extends CI_Model {
      * @param string $fbAccessToken 
      */
     public function register($match, $memberFbIdsA, $memberFbIdsB) {
+        log_message('debug', "register: enter.");
         $this->validateMatch($match, $memberFbIdsA, $memberFbIdsB);
 
         $this->completeMembers($match, $memberFbIdsA, $memberFbIdsB);
@@ -46,6 +47,7 @@ class MatchDao extends CI_Model {
 //            'link' => "http://stadioom.com/match/view/" . $match->getId(),
 //            'description' => "Final score: " . $memberNamesA . " " . $match->getScoreA() . " - " . $memberNamesB . " " . $match->getScoreB()
 //        );
+        log_message('debug', "register: exit.");
         return $match->getId();
     }
 
@@ -57,6 +59,7 @@ class MatchDao extends CI_Model {
      * @param array $memberFbIdsB 
      */
     private function validateMatch($match, $memberFbIdsA, $memberFbIdsB) {
+        log_message('debug', "validateMatch: enter.");
 //        $matchType = $match->getMatchType();
 //        if ($matchType == 1) { // single match
 //            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
@@ -85,17 +88,23 @@ class MatchDao extends CI_Model {
 //            $users = $q->getResult();
 //            if (count($users) == )
 //        }
+        log_message('debug', "validateMatch: exit.");
     }
 
     public function shared($sharedInfo) {
+        log_message('debug', "share: enter.");
         // TODO check input.
 
         $this->em->persist($sharedInfo);
         $this->em->flush();
+        
+        log_message('debug', "share: exit.");
         return $sharedInfo->getId();
     }
 
     public function completeMembers(&$match, &$memberFbIdsA, &$memberFbIdsB) {
+        log_message('debug', "completeMembers: enter.");
+        
         if (is_array($memberFbIdsA)) {
             $me = $this->em->find('Entities\User', $match->getOwnerId());
             foreach ($memberFbIdsA as $fbId) {
@@ -176,10 +185,13 @@ class MatchDao extends CI_Model {
             }
         }
 
+        log_message('debug', "completeMembers: exit.");
         $this->em->flush();
     }
 
     private function completeTitle($match) {
+        log_message('debug', "completeTitle: enter.");
+        
         $title = $match->getTitle();
         if ($title == null) {
             // get sport name
@@ -205,53 +217,24 @@ class MatchDao extends CI_Model {
             $title = $title . ' Match';
             $match->setTitle($title);
         }
+        
+        log_message('debug', "completeTitle: exit.");
     }
 
     public function find($matchId) {
+        log_message('debug', "find: enter.");
         $match = $this->em->find('Entities\MatchRecord', $matchId);
         if ($match == null) {
             throw new Exception("Not Found", 404);
         }
+        
+        log_message('debug', "find: exit.");
         return $match->toArray();
     }
 
-//    public function findAll($since, $firstOffset, $limit, $sportId) {
-//        if ($limit == null || $limit < 10) {
-//            $limit = 10;    // minimum limit is 20.
-//        } else if ($limit > 200) {
-//            $limit = 200;   // maximum limit is 200.
-//        }
-//
-//        if ($since == null) {
-//            $since = new DateTime();
-//            $since = $since->sub(new DateInterval('P1M'));   // a month ago.
-//            $since = $since->getTimestamp();
-//        }
-//
-//        if ($firstOffset == null || $firstOffset < 0) {
-//            $firstOffset = 0;  // default page is 0.
-//        }
-//
-//        // TODO: apply 'page' and 'limit'.
-//        $dql = 'SELECT m FROM Entities\MatchRecord m WHERE m.lastUpdated >= ' . $since;
-//        if ($sportId != null) {
-//            $dql = $dql . ' AND m.sportId = ' . $sportId;
-//        }
-//        $dql = $dql . ' ORDER BY m.lastUpdated DESC';
-//        $q = $this->em->createQuery($dql);
-//        $q->setMaxResults($limit);
-//        $q->setFirstResult($firstOffset);
-//        $result = $q->getResult();
-//        $allMatches = array();
-//        if (is_array($result)) {
-//            foreach ($result as $match) {
-//                array_push($allMatches, $match->toArray());
-//            }
-//        }
-//        return $allMatches;
-//    }
-
     public function delete($matchId, $userId) {
+        log_message('debug', "delete: enter.");
+        
         $match = $this->em->find('Entities\MatchRecord', $matchId);
         if ($match == null) {
             throw new Exception("Not Found.", 404);
@@ -262,9 +245,13 @@ class MatchDao extends CI_Model {
 
         $this->em->remove($match);
         $this->em->flush();
+        
+        log_message('debug', "delete: exit.");
     }
 
     public function findAll($options) {
+        log_message('debug', "findAll: enter.");
+
         $since = $options['since'];
         $firstOffset = $options['firstOffset'];
         $limit = $options['limit'];
@@ -341,10 +328,14 @@ class MatchDao extends CI_Model {
                 array_push($allMatches, $match->toArray());
             }
         }
+        
+        log_message('debug', "findAll: exit.");
         return $allMatches;
     }
 
     public function deleteMatch($matchId, $userId) {
+        log_message('debug', "deleteMatch: enter.");
+        
         $match = $this->em->find('Entities\MatchRecord', $matchId);
         if ($match != null) {
             if ($match->getOwnerId() != $userId) {
@@ -354,6 +345,8 @@ class MatchDao extends CI_Model {
             $this->em->remove($match);
             $this->em->flush();
         }
+        
+        log_message('debug', "deleteMatch: exit.");
     }
 
 }
