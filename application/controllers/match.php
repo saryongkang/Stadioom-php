@@ -17,6 +17,8 @@ class Match extends FBAuth_Controller {
         $this->load->model('dao/SportDao');
         $data['sportsList'] = $this->SportDao->getAll();
         
+        $this->security->csrf_verify();
+        
         $this->template->add_css('tdfriendselector');
         $this->template->add_js('tdfriendselector');
         $this->template->add_js('jquery.iphone-switch');

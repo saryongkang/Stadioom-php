@@ -127,9 +127,14 @@ $('#submitMatch').click(function() {
         
         //Show success message and post to FB
         submitMatch.success( function(){
+            
+            alert('Success');
+            
+            
              
              function postToWallUsingFBApi()
             {
+                alert('postToWall');
                 var sponsorShareIcon = window.sponsorShareIconsFolder+sportsList[selectedSportId].stringId+window.selectedSponsor.stringId +'_shareicon'+'.gif';
                 
                 var message = window.user['fullName'];
