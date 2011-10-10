@@ -24,6 +24,7 @@ class BrandSportDao extends CI_Model {
         log_message('debug', "addBrand: enter.");
 
         if (!$this->isInRange($brand->getName(), 5, 32)) {
+            log_message('error', "Invalid name (5 <= name <= 32).");
             throw new Exception("Invalid name (5 <= name <= 32).", 400);
         }
 
@@ -47,6 +48,7 @@ class BrandSportDao extends CI_Model {
         log_message('debug', "addSport: enter.");
 
         if (!$this->isInRange($sport->getName(), 5, 32)) {
+            log_message('error', "Invalid name (5 <= name <= 32).");
             throw new Exception("Invalid name (5 <= name <= 32).", 400);
         }
 
@@ -103,7 +105,8 @@ class BrandSportDao extends CI_Model {
         }
         $brand = $this->em->find('Entities\Brand', $id);
         if ($brand == null) {
-            throw new Exception("Not Found.", 404);
+            log_message('error', "Not found: ". $id);
+            throw new Exception("Not Found: " . $id, 404);
         }
 
         log_message('debug', "getBrand: exit.");
@@ -118,7 +121,8 @@ class BrandSportDao extends CI_Model {
         }
         $sport = $this->em->find('Entities\Sport', $id);
         if ($sport == null) {
-            throw new Exception("Not Found.", 404);
+            log_message('error', "Not found: ". $id);
+            throw new Exception("Not Found: " . $id, 404);
         }
 
         log_message('debug', "getSport: exit.");
@@ -145,20 +149,20 @@ class BrandSportDao extends CI_Model {
 
     public function findBrandsAfter($after) {
         log_message('debug', "findBrandsAfter: enter.");
-        
+
         if ($after == null || $after < 0) {
             $after = 0;
         }
 
         $q = $this->em->createQuery('SELECT b FROM Entities\Brand b WHERE b.latestRevision > ' . $after);
-        
+
         log_message('debug', "findBrandsAfter: exit.");
         return $q->getResult();
     }
 
     public function findSportsAfter($after) {
         log_message('debug', "findSportsAfter: enter.");
-        
+
         if ($after == null || $after < 0) {
             $after = 0;
         }
@@ -171,7 +175,7 @@ class BrandSportDao extends CI_Model {
 
     public function findAllSponsorsOf($sportId) {
         log_message('debug', "findAllSponsorsOf: enter.");
-        
+
         if ($sportId == null) {
             throw new Exception("sportId is required.", 400);
         }
@@ -189,7 +193,7 @@ class BrandSportDao extends CI_Model {
 
     public function link($brandId, $sportIds) {
         log_message('debug', "link: enter.");
-        
+
         $brand = $this->em->find("Entities\Brand", $brandId);
         $sports = array();
         if (count($sportIds) > 0) {

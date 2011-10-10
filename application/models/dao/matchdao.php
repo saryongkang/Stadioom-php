@@ -36,8 +36,6 @@ class MatchDao extends CI_Model {
         // get sport String ID
         // get brand name
         // get sport name
-
-
 //        $result = array(
 //            'matchId' => $match->getId(),
 //            'caption' => $memberNamesA . ' just defeated ' . $mamberNamesB . ' in a fierce ' . $matchTitle . ' match.',
@@ -97,14 +95,14 @@ class MatchDao extends CI_Model {
 
         $this->em->persist($sharedInfo);
         $this->em->flush();
-        
+
         log_message('debug', "share: exit.");
         return $sharedInfo->getId();
     }
 
     public function completeMembers(&$match, &$memberFbIdsA, &$memberFbIdsB) {
         log_message('debug', "completeMembers: enter.");
-        
+
         if (is_array($memberFbIdsA)) {
             $me = $this->em->find('Entities\User', $match->getOwnerId());
             foreach ($memberFbIdsA as $fbId) {
@@ -191,7 +189,7 @@ class MatchDao extends CI_Model {
 
     private function completeTitle($match) {
         log_message('debug', "completeTitle: enter.");
-        
+
         $title = $match->getTitle();
         if ($title == null) {
             // get sport name
@@ -217,7 +215,7 @@ class MatchDao extends CI_Model {
             $title = $title . ' Match';
             $match->setTitle($title);
         }
-        
+
         log_message('debug', "completeTitle: exit.");
     }
 
@@ -225,27 +223,30 @@ class MatchDao extends CI_Model {
         log_message('debug', "find: enter.");
         $match = $this->em->find('Entities\MatchRecord', $matchId);
         if ($match == null) {
-            throw new Exception("Not Found", 404);
+            log_message('error', "Not Found: " . $matchId);
+            throw new Exception("Not Found: " . $matchId, 404);
         }
-        
+
         log_message('debug', "find: exit.");
         return $match->toArray();
     }
 
     public function delete($matchId, $userId) {
         log_message('debug', "delete: enter.");
-        
+
         $match = $this->em->find('Entities\MatchRecord', $matchId);
         if ($match == null) {
-            throw new Exception("Not Found.", 404);
+            log_message('error', "Not Found: " . $matchId);
+            throw new Exception("Not Found: " . $matchId, 404);
         }
         if ($match->getOwnerId() != $userId) {
+            log_message('error', "Forbidden. You have no permission to delete this match.");
             throw new Exception("Forbidden. You have no permission to delete this match.", 403);
         }
 
         $this->em->remove($match);
         $this->em->flush();
-        
+
         log_message('debug', "delete: exit.");
     }
 
@@ -328,24 +329,25 @@ class MatchDao extends CI_Model {
                 array_push($allMatches, $match->toArray());
             }
         }
-        
+
         log_message('debug', "findAll: exit.");
         return $allMatches;
     }
 
     public function deleteMatch($matchId, $userId) {
         log_message('debug', "deleteMatch: enter.");
-        
+
         $match = $this->em->find('Entities\MatchRecord', $matchId);
         if ($match != null) {
             if ($match->getOwnerId() != $userId) {
+                log_message('error', "Forbidden. You have no permission to delete this match.");
                 throw new Exception("Forbidden. You have no permission to delete this match.", 403);
             }
 
             $this->em->remove($match);
             $this->em->flush();
         }
-        
+
         log_message('debug', "deleteMatch: exit.");
     }
 

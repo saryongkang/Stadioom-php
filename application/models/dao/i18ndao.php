@@ -97,12 +97,14 @@ class I18nDao extends CI_Model {
             $lang = "en";
         }
         if ($category == null || !is_numeric($after)) {
+            log_message('error', "'category' and 'after' are required.");
             throw new Exception("'category' and 'after' are required.", 400);
         }
 
         $found = $this->lang->load($category, $lang);
         if ($found == FALSE) {
-            throw new Exception("Category Not Found", 404);
+            log_message('error', "Category Not Found: ". $category);
+            throw new Exception("Category Not Found: ". $category, 404);
         }
         $lastUpdated = intval($this->lang->line("__last_modified"));
         if ($lastUpdated > $after) {
