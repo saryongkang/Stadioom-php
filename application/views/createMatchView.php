@@ -81,7 +81,7 @@
             <div class="input">
               <select name="sportSelect" id="sportSelect" class="large">
 
-                <?php foreach ($sportsList as $sport):?>
+                <?php foreach ($sports as $sport):?>
                  <?php  $img= "/assets/images/sports/icons/icon_game_".$sport->getStringId()."_51x51.png"; ?>
                 <option class="optionWithSportIcon" style="background-image:url(<?php echo $img; ?>);" value="<?php echo $sport->getId(); ?>"> <?php echo $sport->getName(); ?></option>
                 <?php endforeach;?>
@@ -205,9 +205,9 @@
     //FBUid
     var user = {
  
-        id: '<?php echo $userdata['stdUid']; ?>',
-        name: '<?php echo $userdata['fullName']; ?>',
-        fbId: '<?php echo $userdata['fbUId']; ?>'
+        id: '<?php echo $session['user']['id']; ?>',
+        name: '<?php echo $session['user']['fullName']; ?>',
+        fbId: '<?php echo $session['fbUser']['id']; ?>'
     };
     
     //Friends Selector
@@ -235,7 +235,7 @@
     sponsorBannersFolder=sponsorPicsFolder+'banners/';
     sponsorShareIconsFolder=sponsorPicsFolder+'shareicons/';
     
-    selectedSportId =  <?php echo $sportsList[0]->getId(); ?>;
+    selectedSportId =  <?php echo $sports[0]->getId(); ?>;
 
     sportsList = [];
     
@@ -243,7 +243,7 @@
     var twitterShare = false;
     var FBShare = true;
     
-<?php foreach ($sportsList as $sport):?>
+<?php foreach ($sports as $sport):?>
     sportsList[<?php echo $sport->getId(); ?>] = [];
     sportsList[<?php echo $sport->getId(); ?>]['name'] = '<?php echo $sport->getName(); ?>';
     sportsList[<?php echo $sport->getId(); ?>]['stringId'] = '<?php echo $sport->getStringId(); ?>';

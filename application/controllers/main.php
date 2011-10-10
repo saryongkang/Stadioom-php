@@ -3,7 +3,15 @@ class Main extends FBAuth_Controller {
 
 	function index()
 	{
-        $data['userdata'] = $this->session->userdata;
+        $data['session'] = $this->session->userdata;
+        
+        
+        
+        $this->load->model('dao/UserDao');
+        $data['lastMatch'] = $this->UserDao->getLatestMatches($data['session']['user']['id'], 1);
+        
+        $this->load->model('dao/SportDao');
+        $data['sports'] = $this->SportDao->getAll();
         
         
         //BUILDING THE TEMPLATE

@@ -12,10 +12,10 @@ class Match extends FBAuth_Controller {
     }
     
     function create(){
-        $data['userdata'] = $this->session->userdata;
+        $data['session'] = $this->session->userdata;
         
         $this->load->model('dao/SportDao');
-        $data['sportsList'] = $this->SportDao->getAll();
+        $data['sports'] = $this->SportDao->getAll();
         
         $this->security->csrf_verify();
         

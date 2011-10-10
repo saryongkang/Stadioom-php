@@ -15,7 +15,7 @@ class Auth_Controller extends MY_Controller{
         parent::__construct();
         
         $this->load->library('session');
-        if (!$this->session->userdata('loggedin'))
+        if (!$this->session->userdata('loggedIn'))
         {
             header('Location: /fb/session/login');
         }
@@ -52,7 +52,7 @@ class FBAuth_Controller extends MY_Controller{
               try {
                 // Proceed knowing you have a logged in user who's authenticated.
                 $data['fbAccessToken'] = $this->fb_connect->getAccessToken();
-
+                
                 //echo "fbToken: ".$data['fbAccessToken'];
                 
                 
@@ -61,9 +61,10 @@ class FBAuth_Controller extends MY_Controller{
                 $data['fbExpires'] = '0';
 
                 if ($this->_checkFBUserDB($data)){
-
-                    //Properly logged and check in, redirect to the main app
-                    $this->session->set_userdata('loggedin', true);
+                    
+                    $this->session->set_userdata('loggedIn', true);
+                    
+                    
                     break;
 
                 }else{
@@ -111,17 +112,19 @@ class FBAuth_Controller extends MY_Controller{
             $this->load->library('session');
 
             //$id = db.getUserId();
-            
+            $user = array('id'=> $userData['id'], 'fullName' => $userData['fullName']);
+            $fbUser= array(
+                'accessToken'  => $data['fbAccessToken'],
+                'expires'  => $data['fbExpires'],
+                'id'  => $data['fbId']
+            );
 
             $userSession = array(
-                'stdUid'  => $userData['id'],
-                'fbAccessToken'  => $data['fbAccessToken'],
-                'fbExpires'  => $data['fbExpires'],
-                'fbUId'  => $data['fbId'],
-                'fullName'  => $userData['fullName'],
-                'logged_in' => TRUE,
-                'fb_connected' => TRUE
+                'user'  => $user,
+                'fbUser'  => $fbUser,
+                'fbConnected' => TRUE
             );
+            
 
             $this->session->set_userdata($userSession);
             //print_r($userSession);

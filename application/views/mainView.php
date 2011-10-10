@@ -1,5 +1,5 @@
 <div class="span8">
-    <h2><?php echo $userdata['fullName'] ?>'s Sport Card!</h2>
+    <h2><?php echo $session['user']['fullName'] ?>'s Sport Card!</h2>
 
     Total points: {$totalPoints}
     <br />

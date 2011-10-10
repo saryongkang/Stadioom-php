@@ -35,8 +35,8 @@
                                 <ul id="pageNav" class="nav">
                                     <li class="topNavLink dropdown" data-dropdown="dropdown">
 
-                                            <a href="#"><img class="headerTinymanPhoto" src="https://graph.facebook.com/<?php echo $userdata['fbUId'] ?>/picture" /></a>
-                                            <a href="#" class="headerTinymanName dropdown-toggle" ><?php echo $userdata['fullName'] ?></a>
+                                            <a href="#"><img class="headerTinymanPhoto" src="https://graph.facebook.com/<?php echo $session['fbUser']['id']  ?>/picture" /></a>
+                                            <a href="#" class="headerTinymanName dropdown-toggle" ><?php echo $session['user']['fullName']  ?></a>
 
                                         <ul class="dropdown-menu">
 <!--                                            <li><a href="#">Secondary link</a></li>
@@ -79,7 +79,7 @@
                   <div class="row">
                       <div class="span1">&nbsp; </div> 
                       <div id='user-pic-container' class="span2 center">
-                         <div id='user-pic-img'><img src="https://graph.facebook.com/<?php echo $userdata['fbUId'] ?>/picture?type=normal" />
+                         <div id='user-pic-img'><img src="https://graph.facebook.com/<?php echo $session['fbUser']['id'] ?>/picture?type=normal" />
                         </div>
                          <div id='user-pic-txt'>
                          </div>
