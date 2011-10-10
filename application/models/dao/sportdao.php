@@ -55,8 +55,11 @@ class SportDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->em->createQuery('SELECT s FROM Entities\Sport s ORDER BY s.priority DESC');
-        return $q->getResult();
+        return $this->em->createQuery('SELECT s FROM Entities\Sport s')->getResult();
+    }
+    
+    public function getAllOrderedByPriority() {
+        return $this->em->createQuery('SELECT s FROM Entities\Sport s ORDER BY s.priority DESC')->getResult();
     }
 
     public function findAfter($after) {
