@@ -60,7 +60,7 @@ class I18nDao extends CI_Model {
     private function replace(&$translated, &$clientType) {
         if ($clientType == 'ios') {
             $pattern = "/%(\d*)s/";
-            $replacement = '%\1@';
+            $replacement = '%\1$@';
             $translated = preg_replace($pattern, $replacement, $translated);
         }
         return $translated;
