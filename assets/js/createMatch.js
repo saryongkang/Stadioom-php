@@ -121,6 +121,15 @@ $('#submitMatch').click(function(event) {
         var cct = $.cookie('safe_sdsk_stad');
         
         var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
+        //console.log(belongTeam);
+        
+        if(belongTeam == 1){
+            teamAFBPlayers.push(window.user['fbId']);
+        }else if(belongTeam == 2){
+            teamBFBPlayers.push(window.user['fbId']);
+        }
+        console.log(window.user['fbId']);
+        
 
         params = {
             "sportId" : window.selectedSportId,

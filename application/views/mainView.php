@@ -18,7 +18,7 @@
         <?php $match=$lastMatch[0]; ?>
       <div class='match-banner'>
         <div class='match-banner-title'>
-        <?php echo $sports[$match->getSportId()]->getName(); ?> Match, sponsored by <?php echo $brands[$match->getBrandId()]->getName();?>
+        <?php echo $sports[$match->getSportId()-1]->getName(); ?> Match, sponsored by <?php echo $brands[$match->getBrandId()-1]->getName();?>
         </div>
         <div class='match-banner-body'>
           <div class='match-team-left' id='match-player1'>

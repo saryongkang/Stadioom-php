@@ -69,7 +69,7 @@ window.fbAsyncInit = function () {
 //			callbackMaxSelection     : callbackMaxSelection,
 			callbackSubmit           : callbackSubmitA,
             maxSelection             : 12,
-			friendsPerPage           : 3
+			friendsPerPage           : 4
 		});
         
 		window.teamBFBSelector = TDFriendSelector.newInstance({
@@ -78,7 +78,7 @@ window.fbAsyncInit = function () {
 //			callbackMaxSelection     : callbackMaxSelection,
 			callbackSubmit           : callbackSubmitB,
 			maxSelection             : 12,
-			friendsPerPage           : 3,
+			friendsPerPage           : 4,
 			autoDeselection          : true
 		});
 

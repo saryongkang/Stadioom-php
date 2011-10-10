@@ -17,7 +17,7 @@ $template_conf = array(
 
 $template_css = array('bootstrap.min','base');
 
-$template_js = array();
+$template_js = array('bootstrap/bootstrap-dropdown','bootstrap/bootstrap-scrollspy');
 
 $template_head = array(
     'google-jquery' => '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>',

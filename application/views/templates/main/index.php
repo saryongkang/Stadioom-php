@@ -93,7 +93,7 @@
                         <ul>
                             <li><a href="/main">My Sport Card</a></li>
                             <li><a href="/match/create">New Match</a></li>
-                            <li><a href="/match/viewAll">My Matches</a></li>
+                            <li><a href="/match/viewMine">My Matches</a></li>
                             <li><a href="#">Challenge Friends</a></li>
                         </ul>
                       </div>

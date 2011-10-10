@@ -109,19 +109,32 @@ root {
 
 .optionWithSportIcon{
     background-repeat:no-repeat;
-    padding-left:51px;
-    height:51px;
-    line-height:51x;
+    padding-left:30px;
+    height:30px;
+    line-height:30px;
 }
 
 #sportSelect{
     width:300px;
-    font-size:30px;
-    height:50px;
-    line-height:50px;
+    font-size:20px;
+    height:40px;
+    line-height:30px;
 }
 
 .alert-message{
     margin-top: 0px;
     margin-bottom: 2px;
+}
+
+#teamSelect {
+    list-style-type: none;
+    width:auto;
+}
+
+#teamSelect, #teamSelect li {
+	display: inline;
+}
+
+#teamSelect li label {
+    display:inline;
 }

@@ -74,7 +74,7 @@
               <select name="sportSelect" id="sportSelect" class="large">
 
                 <?php foreach ($sports as $sport):?>
-                 <?php  $img= "/assets/images/sports/icons/icon_game_".$sport->getStringId()."_51x51.png"; ?>
+                 <?php  $img= "/assets/images/sports/icons/icon_game_".$sport->getStringId()."_30x30.png"; ?>
                 <option class="optionWithSportIcon" style="background-image:url(<?php echo $img; ?>);" value="<?php echo $sport->getId(); ?>"> <?php echo $sport->getName(); ?></option>
                 <?php endforeach;?>
 
@@ -85,23 +85,23 @@
           <div class="clearfix">
           <label id="optionsRadio">On which team are you playing? </label>
               <div class="input">
-                <ul class="inputs-list">
+                <ul id="teamSelect" class="inputs-list">
                     <li>
                       <label>
-                        <input  checked="yes" type="radio" name="belongTeam" value="teamA">
+                        <input checked="yes" type="radio" name="belongTeam" value=1 />
                         <span>Team A</span>
                       </label>
                     </li>
                     <li>
 
                       <label>
-                        <input type="radio" name="belongTeam" value="teamB">
+                        <input type="radio" name="belongTeam" value=2 />
                         <span>Team B</span>
                       </label>
                     </li>
                     <li>
                       <label>
-                        <input type="radio" name="belongTeam" value="none">
+                        <input  type="radio" name="belongTeam" value=0 />
                         <span>None</span>
                       </label>
                     </li>
@@ -274,7 +274,7 @@
               $('.sponsorItem').removeClass('clickedSponsor');
             window.tempSelectedSponsor = $(this).data('sponsor');
             //console.log (window.tempSelectedSponsorId );
-            $(this).addClass('clickedSponsor');
+            $(this).addClass('clickedSponsor'); 
           });
           
           
@@ -299,8 +299,7 @@
     }
         
     //Remove OK button from modal when hidden
-    $('#sponsors-modal').bind('hide', function () {
-                  
+    $('#sponsors-modal').bind('hide', function () {        
         if(window.selectedSponsor!=null){
             updateMatchSponsorBanner();
         }
@@ -337,11 +336,11 @@
       
      $('#twitterSwitch').iphoneSwitch("off", 
      function() {
-       alert('TwitterOn');
+//       alert('TwitterOn');
        twitterShare=true;
       },
       function() {
-       alert('Twitterffn');
+//       alert('Twitterffn');
        twitterShare=false;
       },
       {
