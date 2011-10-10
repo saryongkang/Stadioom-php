@@ -55,10 +55,15 @@ class BrandDao extends CI_Model {
     }
 
     public function getAll() {
-        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b ORDER BY b.priority DESC');
+        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b');
         return $q->getResult();
     }
 
+    public function getAllOrderedByPriority() {
+        $q = $this->em->createQuery('SELECT b FROM Entities\Brand b ORDER BY b.priority DESC');
+        return $q->getResult();
+    }
+    
     public function findAfter($after) {
         if ($after == null || $after < 0) {
             $after = 0;
