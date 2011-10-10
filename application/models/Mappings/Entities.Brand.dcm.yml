@@ -25,6 +25,10 @@ Entities\Brand:
       type: string
       length: 500
       nullable: true
+    url:
+      type: string
+      length: 200
+      nullable: true;
     priority:
       type: integer
       nullable: false

@@ -144,10 +144,22 @@ class EntitiesBrandProxy extends \Entities\Brand implements \Doctrine\ORM\Proxy\
         return parent::getSports();
     }
 
+    public function setUrl($url)
+    {
+        $this->__load();
+        return parent::setUrl($url);
+    }
+
+    public function getUrl()
+    {
+        $this->__load();
+        return parent::getUrl();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'stringId', 'name', 'description', 'priority', 'firstRevision', 'latestRevision', 'updateFlag', 'sports');
+        return array('__isInitialized__', 'id', 'stringId', 'name', 'description', 'url', 'priority', 'firstRevision', 'latestRevision', 'updateFlag', 'sports');
     }
 
     public function __clone()
