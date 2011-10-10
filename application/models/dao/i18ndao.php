@@ -1,10 +1,11 @@
 <?php
 
-class I18nDao extends CI_Model {
+class I18nDao2 extends CI_Model {
 
     private $ll_cc = array(
         'en' => 'English',
-        'es' => 'Spanish'
+        'es' => 'Spanish',
+        'ko' => 'Korean'
     );
     private $em;
 
@@ -24,6 +25,12 @@ class I18nDao extends CI_Model {
         return $this->ll_cc;
     }
 
+    /**
+     * Returns the language name of the given language code. (eg. 'en' -> 'English')
+     * 
+     * @param type $ll language code to ask.
+     * @return string Language name og given langauge code. 
+     */
     public function getLanguageName($ll) {
         if ($this->isSupported($ll)) {
             return $this->ll_cc[$ll];
@@ -38,34 +45,52 @@ class I18nDao extends CI_Model {
      * @param type $lang (optional) The language code to translate.
      * @param type $clientType  (optional) The client type ('ios', 'js')
      */
-    public function translate($msgId, $lang = null, $clientType = null) {
+    public function translate($id, $lang = null, $clientType = null) {
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
 
-        if (is_numeric($msgId)) {
-            return $this->getByNumId($msgId, $lang, $clientType);
-        } else {
-            return $this->getByStrId($msgId, $lang, $clientType);
-        }
+        $category = strtok($id, "_");
+
+        $this->lang->load($category, $lang);
+        $originalText = $this->lang->line($id);
+        return $this->replace($originalText, $clientType);
     }
 
-    public function getByNumId(&$id, &$lang, &$clientType) {
-        $columnName = $this->getColumnName($clientType);
-        $result = $this->em->createQuery("SELECT m." . $columnName . " FROM Entities\Resource m WHERE m.numId = " . $id . " AND m.lang = '" . $lang . "'")->getResult();
-        if (count($result) == 0) {
-            throw new Exception("Resource Not Found.", 404);
+    private function replace(&$translated, &$clientType) {
+        if ($clientType == 'ios') {
+            $pattern = "/%(\d*)s/";
+            $replacement = '%\1@';
+            $translated = preg_replace($pattern, $replacement, $translated);
         }
-        return $result[0][$columnName];
+        return $translated;
     }
 
-    public function getByStrId(&$id, &$lang, &$clientType) {
-        $columnName = $this->getColumnName($clientType);
-        $result = $this->em->createQuery("SELECT m." . $columnName . " FROM Entities\Resource m WHERE m.strId = '" . $id . "' AND m.lang = '" . $lang . "'")->getResult();
-        if (count($result) == 0) {
-            throw new Exception("Resource Not Found.", 404);
+    /**
+     * Returns only the updated language message after the specific time.
+     * 
+     * @param string $category message category.
+     * @param string $lang language code.
+     * @param integer $after timestamp.
+     * @return array array of updated message including '__last_modified'.
+     */
+    public function getDelta($category, $lang, $after) {
+        if ($lang == null || !$this->isSupported($lang)) {
+            $lang = "en";
         }
-        return $result[0][$columnName];
+        if ($category == null || !is_numeric($after)) {
+            throw new Exception("'category' and 'after' are required.", 400);
+        }
+
+        $found = $this->lang->load($category, $lang);
+        if ($found == FALSE) {
+            throw new Exception("Category Not Found", 404);
+        }
+        $lastUpdated = intval($this->lang->line("__last_modified"));
+        if ($lastUpdated > $after) {
+            return $this->lang->all();
+        }
+        return array("__last_modified" => $this->lang->line("__last_modified"));
     }
 
     /**
@@ -74,32 +99,9 @@ class I18nDao extends CI_Model {
      * @param string $lang The language code to check.
      * @return boolean 'true' if the given language is supported. 'false' otherwise.
      */
-    public function isSupported(&$lang) {
+    private function isSupported(&$lang) {
         return array_key_exists($lang, $this->ll_cc);
     }
-
-    private function getColumnName(&$clientType) {
-        switch ($clientType) {
-            case "ios":
-                return "msgiOS";
-            case "js":
-                return "msgJS";
-            default:
-                return "msg";
-        }
-    }
-//
-//    public function insert($numId, $strId, $msgGeneral, $msgiOS, $msgJS, $lang) {
-//        $msg = new Entities\Resource();
-//        $msg->setNumId($numId);
-//        $msg->setStrId($strId);
-//        $msg->setMsg($msgGeneral);
-//        $msg->setMsgiOS($msgiOS);
-//        $msg->setMsgJS($msgJS);
-//        $msg->setLang($lang);
-//        $this->em->persist($msg);
-//        $this->em->flush();
-//    }
 
 }
 
