@@ -120,3 +120,8 @@ root {
     height:50px;
     line-height:50px;
 }
+
+.alert-message{
+    margin-top: 0px;
+    margin-bottom: 2px;
+}

@@ -7,6 +7,13 @@
 	document.getElementById('fb-root').appendChild(e);
 }());
 
+//Errors
+$(".close").click(function (event) {
+    event.preventDefault();
+  $(this).parent().fadeOut();
+});
+
+
 
 //Sponsors
 //
@@ -74,25 +81,35 @@ $("#sportSelect").change( function(){
 });
 
 
-$('#submitMatch').click(function() {
+$('#submitMatch').click(function(event) {
+    event.preventDefault();
     var errors = [];
+    $("#sponsorErrorDiv").hide();
+    $("#teamAErrorDiv").hide();
+    $("#teamBErrorDiv").hide();
+    $("#fbErrorDiv").hide();
+    $("#matchSuccess").hide();
+    $("#fbShareSuccess").hide();
     
     //Validation
     if(window.selectedSponsor==null){
         errors.push( {type: 'sponsor', value: true});
+        $("#sponsorErrorDiv").show();
     }
     
     if(window.teamAFBSelector.getselectedFriendIds().length <1){
          errors.push( {type: 'teamA', value: true});
+         $("#teamAErrorDiv").show();
     }
     
     if(window.teamBFBSelector.getselectedFriendIds().length <1){
          errors.push( {type: 'teamB', value: true});
+         $("#teamBErrorDiv").show();
     }
     
     //console.log(errors);
-    console.log("Errors: "+ errors.length);
-    console.log(errors);
+    //console.log("Errors: "+ errors.length);
+
     if(errors.length<1){
         
         var teamAFBPlayers = window.teamAFBSelector.getselectedFriendIds().slice(0);
@@ -127,36 +144,18 @@ $('#submitMatch').click(function() {
         
         //Show success message and post to FB
         submitMatch.success( function(){
+            $("#matchSuccess").show();
             
-            alert('Success');
-            
-            
-             
-             function postToWallUsingFBApi()
-            {
-                alert('postToWall');
-                var sponsorShareIcon = window.sponsorShareIconsFolder+sportsList[selectedSportId].stringId+window.selectedSponsor.stringId +'_shareicon'+'.gif';
-                
-                var message = window.user['fullName'];
-                
-                
-                var name = selectedSponsor.name +" "+sportsList[selectedSportId].stringId+ "Match";
-                    
-                var data=
-                {
-                    message: "Great Game!",
-                    //display: 'iframe',
-                    caption: "An amazing game",
-                    name: name,  
-                    picture: sponsorShareIcon,    
-                    link: "http://www.stadioom.com/",  // Go here if user click the picture
-                    description: "Description field",
-                    actions: [{ name: 'Join the stadioom and join the sports fun!', link: 'http://www.stadioom.com' }]			
+            if(FBShare==true){
+                try{
+
+                    postToWallUsingFBApi();
+                }catch(error){
+                    $("#fbErrorDiv").show();
+                    console.log(error);
                 }
-                //console.log(data);    
-                FB.api('/me/feed', 'post', data, onPostToWallCompleted);
-                
             }
+
         });
 
 
@@ -167,14 +166,35 @@ $('#submitMatch').click(function() {
 //    NSString *link = [NSString stringWithFormat:@"http://stadioom.com/match/view/%@", self.matchId];
 //    NSString *description = [NSString stringWithFormat:@"Final score: %@ %@ - %@ %@", namesInTeamA, self.myScore, namesInTeamB, self.opponentScore];
 //        
-        return false;
     }
     
     var onPostToWallCompleted = function(){
-        alert('posted to FB');
+        $("#fbShareSuccess").show();
     }
     
-    
-    return false;
+    var postToWallUsingFBApi = function(){
+        var sponsorShareIcon = window.baseUrl+window.sponsorShareIconsFolder+sportsList[selectedSportId].stringId+'_'+window.selectedSponsor.stringId +'_shareicon'+'.gif';
+
+        var message = window.user['fullName'];
+
+
+        var name = selectedSponsor.name +" "+sportsList[selectedSportId].stringId+ " Match";
+
+        var data=
+        {
+            message: "Great Game!",
+            //display: 'iframe',
+            caption: "An amazing game",
+            name: name,  
+            picture: sponsorShareIcon,    
+            link: window.baseUrl,  // Go here if user click the picture
+            description: "Description field",
+            actions: [{ name: 'Enter the Stadioom', link: window.baseUrl }]			
+        }
+        //console.log(data);    
+        FB.api('/me/feed', 'post', data, onPostToWallCompleted);
+        $("#fbShareSuccess").show();
+    }
+
 
 }); //End of Submit Match

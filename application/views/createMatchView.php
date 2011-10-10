@@ -37,6 +37,34 @@
 
 
     <h2>New Match</h2>
+    
+    <!-- Error Messages -->
+    <div id="matchSuccess" class="alert-message success" style="display: none">
+        <a class="close" href="">×</a>
+        <p><strong>Hooray!</strong> Your match has been registered!.</p>
+    </div>
+    <div id="fbShareSuccess" class="alert-message info" style="display: none">
+        <a class="close" href="">×</a>
+        <p><strong>Sweet!</strong> This match was shared on Facebook as well.</p>
+    </div>
+    <div id="fbErrorDiv" class="alert-message warning" style="display: none">
+        <a class="close" href="">×</a>
+        <p><strong>Oh-Oh!</strong> There was a problem sharing to Facebook!.</p>
+    </div>
+    <div id="sponsorErrorDiv" class="alert-message error" style="display: none">
+        <a class="close" href="">×</a>
+        <p><strong>Oops!</strong> You forgot to choose a sponsor!.</p>
+    </div>
+    <div id="teamAErrorDiv" class="alert-message error" style="display: none">
+        <a class="close" href="#">×</a>
+        <p><strong>Oops!</strong> You need to choose the players of team A.</p>
+    </div>
+    <div id="teamBErrorDiv" class="alert-message error" style="display: none">
+        <a class="close" href="#">×</a>
+        <p><strong>Oops!</strong> You need to choose the players of team B.</p>
+    </div>
+    
+
 
     <form id="newMatchForm" action="" class="form-stacked">
         <fieldset>
@@ -135,8 +163,8 @@
             </div>
           </div> /clearfix -->
             <div class="clearfix">
-                <img src="/assets/images/social/facebook_32.png" /><div id="fbSwitch" class="inline"> </div><div id="ajaxd" class="inline"> </div>
-                <img src="/assets/images/social/twitter_32.png" /><div id="twitterSwitch" class="inline"> </div><div id="ajaxd2" class="inline"> </div>
+                <img src="/assets/images/social/facebook_32.png" /><div id="fbSwitch" class="inline"> </div>
+                <img src="/assets/images/social/twitter_32.png" /><div id="twitterSwitch" class="inline"> </div>
             </div>
           <div class="actions center">
                     <input id="submitMatch" type="submit" class="btn primary large" value="Publish" />
@@ -172,6 +200,7 @@
 <script type="text/javascript">
     //Domain for posts
     var baseSSLUrl = '<?php echo $this->config->item('base_ssl_url'); ?>';
+    var baseUrl = '<?php echo $this->config->item('base_url'); ?>';
     
     //FBUid
     var user = {
@@ -209,6 +238,10 @@
     selectedSportId =  <?php echo $sportsList[0]->getId(); ?>;
 
     sportsList = [];
+    
+    // FB and twitter switch
+    var twitterShare = false;
+    var FBShare = true;
     
 <?php foreach ($sportsList as $sport):?>
     sportsList[<?php echo $sport->getId(); ?>] = [];
@@ -299,10 +332,12 @@
   
     $('#fbSwitch').iphoneSwitch("on", 
      function() {
-       $('#ajaxd').text('');
+       //alert('FBOn');
+       FBShare=true;
       },
       function() {
-       $('#ajaxd').text('');
+       //alert('FBOff');
+       FBShare=false;
       },
       {
         switch_height: 27,
@@ -312,10 +347,12 @@
       
      $('#twitterSwitch').iphoneSwitch("off", 
      function() {
-       $('#ajaxd2').text('');
+       alert('TwitterOn');
+       twitterShare=true;
       },
       function() {
-       $('#ajaxd2').text('');
+       alert('Twitterffn');
+       twitterShare=false;
       },
       {
         switch_height: 27,
