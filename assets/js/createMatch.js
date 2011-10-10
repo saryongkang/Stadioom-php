@@ -94,17 +94,17 @@ $('#submitMatch').click(function(event) {
     //Validation
     if(window.selectedSponsor==null){
         errors.push( {type: 'sponsor', value: true});
-        $("#sponsorErrorDiv").show();
+        $("#sponsorErrorDiv").fadeIn();
     }
     
     if(window.teamAFBSelector.getselectedFriendIds().length <1){
          errors.push( {type: 'teamA', value: true});
-         $("#teamAErrorDiv").show();
+         $("#teamAErrorDiv").fadeIn();
     }
     
     if(window.teamBFBSelector.getselectedFriendIds().length <1){
          errors.push( {type: 'teamB', value: true});
-         $("#teamBErrorDiv").show();
+         $("#teamBErrorDiv").fadeIn();
     }
     
     //console.log(errors);
@@ -144,14 +144,14 @@ $('#submitMatch').click(function(event) {
         
         //Show success message and post to FB
         submitMatch.success( function(){
-            $("#matchSuccess").show();
+            $("#matchSuccess").fadeIn();
             
             if(FBShare==true){
                 try{
 
                     postToWallUsingFBApi();
                 }catch(error){
-                    $("#fbErrorDiv").show();
+                    $("#fbErrorDiv").fadeIn();
                     console.log(error);
                 }
             }
@@ -169,7 +169,7 @@ $('#submitMatch').click(function(event) {
     }
     
     var onPostToWallCompleted = function(){
-        $("#fbShareSuccess").show();
+        $("#fbShareSuccess").fadeIn();
     }
     
     var postToWallUsingFBApi = function(){
@@ -193,7 +193,7 @@ $('#submitMatch').click(function(event) {
         }
         //console.log(data);    
         FB.api('/me/feed', 'post', data, onPostToWallCompleted);
-        $("#fbShareSuccess").show();
+        $("#fbShareSuccess").fadeIn();
     }
 
 
