@@ -41,7 +41,7 @@ class ResourceDao extends CI_Model {
         if (count($result) == 0) {
             throw new Exception("Resource Not Found.", 404);
         }
-        return $result[0]['$columnName'];
+        return $result[0][$columnName];
     }
     
     public function insert($numId, $strId, $msgGeneral, $msgiOS, $msgJS, $lang) {
