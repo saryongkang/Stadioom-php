@@ -1,6 +1,6 @@
 <?php
 
-class I18nDao2 extends CI_Model {
+class I18nDao extends CI_Model {
 
     private $ll_cc = array(
         'en' => 'English',
