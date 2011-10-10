@@ -191,8 +191,8 @@ $('#submitMatch').click(function(event) {
             description: "Description field",
             actions: [{ name: 'Enter the Stadioom', link: window.baseUrl }]			
         }
-        console.log(data);    
-        //FB.api('/me/feed', 'post', data, onPostToWallCompleted);
+        //console.log(data);    
+        FB.api('/me/feed', 'post', data, onPostToWallCompleted);
         $("#fbShareSuccess").show();
     }
 
