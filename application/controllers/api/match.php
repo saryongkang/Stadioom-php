@@ -25,7 +25,7 @@ class Match extends Stadioom_REST_Controller {
                 $userId = $this->verifyToken($accessToken);
             } else {
                 $this->security->csrf_verify();
-                $userId = $this->session->userdata('id');
+                $userId = $this->session->userdata('stdUid');
                 if ($userId == null) {
                     throw new Exception("'userId' was not set.", 400);
                 }
