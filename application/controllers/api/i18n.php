@@ -27,7 +27,7 @@ class I18n extends Stadioom_REST_Controller {
             $after = $this->get('after');
             $clientType = $this->get('clientType');
 
-            return $this->responseOk($this->I18nDao->getDelta($category, $lang, $clientType, $after));
+            return $this->responseOk($this->I18nDao->getDelta($category, $after, $lang, $clientType));
         } catch (Exception $e) {
             $this->responseError($e);
         }

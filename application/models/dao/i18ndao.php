@@ -74,7 +74,7 @@ class I18nDao extends CI_Model {
      * @param integer $after timestamp.
      * @return array array of updated message including '__last_modified'.
      */
-    public function getDelta($category, $lang = null, $clientType = null, $after) {
+    public function getDelta($category, $after, $lang = null, $clientType = null) {
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
