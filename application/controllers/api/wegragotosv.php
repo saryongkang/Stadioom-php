@@ -26,8 +26,8 @@ class WegraGoToSv extends Test_REST_Controller {
         $accessToken = json_decode($result)->accessToken;
 
         // make brands
-        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $accessToken, 'stringId' => 'seedshock', 'name' => 'SeedShock, Inc.', 'desc' => 'Maker of Stadioom.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
-        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $accessToken, 'stringId' => 'stadioom', 'name' => 'Stadioom®', 'desc' => 'The product you are using now.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $accessToken, 'stringId' => 'seedshock', 'name' => 'SeedShock, Inc.', 'desc' => 'Maker of Stadioom.', 'priority' => 100, 'url' => 'http://seedshock.com', 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $accessToken, 'stringId' => 'stadioom', 'name' => 'Stadioom®', 'desc' => 'The product you are using now.', 'priority' => 100, 'url' => 'https://stadioom.com', 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
 
         // make sports
         $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'basketball', 'name' => 'Basketball', 'desc' => 'Basketball.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
