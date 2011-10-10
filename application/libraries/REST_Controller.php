@@ -490,9 +490,7 @@ class REST_Controller extends CI_Controller {
 
         protected function log($level, $message) {
             if (config_item('rest_log_to_php_error')) {
-//                log_message($level, '['. $this->controller_method . '] ' . $message);
                 log_message($level, '['. $this->controller_method . '] ' . $message);
-                error_log('['. $this->controller_method . '] ' . $message);
             }
         }
         
