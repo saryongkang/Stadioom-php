@@ -9,4 +9,4 @@ $lang['match_publish_score'] = "Final score: %1s %2s - %3s %4s";
 $lang['match_publish_link'] = "http://stadioom.com/match/view/%s";
 $lang['match_publish_icon'] = "http://stadioom.com/assets/images/sponsors/shareicons/%1s_%2s_shareicon.gif";
 
-$lang['__last_modified'] = '1318234635';
+$lang['__last_updated'] = '1318234635';

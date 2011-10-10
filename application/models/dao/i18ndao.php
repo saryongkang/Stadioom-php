@@ -24,7 +24,7 @@ class I18nDao extends CI_Model {
     public function getAllSupportedLanguages() {
         log_message('debug', "getAllSupportedLanguages: enter.");
         log_message('debug', "getAllSupportedLanguages: exit.");
-        
+
         return $this->ll_cc;
     }
 
@@ -36,12 +36,12 @@ class I18nDao extends CI_Model {
      */
     public function getLanguageName($ll) {
         log_message('debug', "getLanguageName: enter.");
-        
+
         $result = null;
         if ($this->isSupported($ll)) {
-            $result =  $this->ll_cc[$ll];
+            $result = $this->ll_cc[$ll];
         }
-        
+
         log_message('debug', "getLanguageName: exit.");
         return $result;
     }
@@ -55,29 +55,31 @@ class I18nDao extends CI_Model {
      */
     public function translate($id, $lang = null, $clientType = null) {
         log_message('debug', "translate: enter.");
-        
+
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
 
         $category = strtok($id, "_");
+        // TODO: Current it ignores the language code. Fix it later.
+        $lang = strtok($lang, "_");
 
         $this->lang->load($category, $lang);
         $originalText = $this->lang->line($id);
-        
+
         log_message('debug', "translate: exit.");
         return $this->replace($originalText, $clientType);
     }
 
     private function replace(&$translated, &$clientType) {
         log_message('debug', "replace: enter.");
-        
+
         if ($clientType == 'ios') {
             $pattern = "/%(\d*)s/";
             $replacement = '%\1$@';
             $translated = preg_replace($pattern, $replacement, $translated);
         }
-        
+
         log_message('debug', "replace: exit.");
         return $translated;
     }
@@ -92,10 +94,13 @@ class I18nDao extends CI_Model {
      */
     public function getDelta($category, $after, $lang = null, $clientType = null) {
         log_message('debug', "getDelta: enter.");
-        
+
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
         }
+        // TODO: Current it ignores the language code. Fix it later.
+        $lang = strtok($lang, "_");
+        
         if ($category == null || !is_numeric($after)) {
             log_message('error', "'category' and 'after' are required.");
             throw new Exception("'category' and 'after' are required.", 400);
@@ -103,23 +108,26 @@ class I18nDao extends CI_Model {
 
         $found = $this->lang->load($category, $lang);
         if ($found == FALSE) {
-            log_message('error', "Category Not Found: ". $category);
-            throw new Exception("Category Not Found: ". $category, 404);
+            log_message('error', "Category Not Found: " . $category);
+            throw new Exception("Category Not Found: " . $category, 404);
         }
-        $lastUpdated = intval($this->lang->line("__last_modified"));
+        $lastUpdated = intval($this->lang->line("__last_updated"));
         if ($lastUpdated > $after) {
             $all = $this->lang->all();
             $keys = array_keys($all);
             foreach ($keys as $key) {
                 $all[$key] = $this->replace($all[$key], $clientType);
             }
-            
+
+            $_lastUpdated = $all['__last_updated'];
+            unset($all['__last_updated']);
+
             log_message('debug', "getDelta: exit.");
-            return array('data' => $all);
+            return array('lastUpdated' => $_lastUpdated, 'data' => $all);
         }
-        
+
         log_message('debug', "getDelta: exit.");
-        return array('data' => array("__last_modified" => $this->lang->line("__last_modified")));
+        return array("lastUpdated" => $this->lang->line("__last_updated"));
     }
 
     /**
@@ -130,8 +138,8 @@ class I18nDao extends CI_Model {
      */
     private function isSupported(&$lang) {
         log_message('debug', "isSupported: enter.");
-         log_message('debug', "isSupported: exit.");
-       return array_key_exists($lang, $this->ll_cc);
+        log_message('debug', "isSupported: exit.");
+        return array_key_exists($lang, $this->ll_cc) || array_key_exists(strtok($lang, "_"), $this->ll_cc);
     }
 
 }
