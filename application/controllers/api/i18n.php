@@ -20,8 +20,8 @@ class I18n extends Stadioom_REST_Controller {
         }
     }
 
-    public function delta_get($after) {
-        // TODO later...
+    public function delta_get($category, $after) {
+        $delta = $this->responseOk($this->I18nDao2->getDelta($category, $after));
     }
 
     public function lang_get($id = null) {

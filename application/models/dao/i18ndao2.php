@@ -60,6 +60,19 @@ class I18nDao2 extends CI_Model {
         return $translated;
     }
 
+    public function getDelta($category, $lang, $after) {
+        if ($lang == null || !$this->isSupported($lang)) {
+            $lang = "en";
+        }
+
+        $this->lang->load($category, $lang);
+        $lastUpdated = intval($this->lang->line("__" . $category . "_last_modified"));
+        if ($lastUpdated > $after) {
+            return $this->lang->all();
+        }
+        return array();
+    }
+
     /**
      * Checks whether the given language is supported.
      * 

@@ -139,6 +139,14 @@ class CI_Lang {
 
 		return $value;
 	}
+        
+        /**
+         * Fetch all lines of text from the language array
+         * 
+         */
+        public function all() {
+            return $language;
+        }
 
 }
 // END Language Class
