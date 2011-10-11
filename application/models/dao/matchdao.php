@@ -354,7 +354,6 @@ class MatchDao extends CI_Model {
             }
         }
         $dql .= ' ORDER BY m.lastUpdated DESC';
-        error_log('=============' . $dql);
         $q = $this->em->createQuery($dql);
         $q->setMaxResults($limit);
         $q->setFirstResult($firstOffset);
