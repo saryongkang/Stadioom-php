@@ -104,7 +104,7 @@ $('#submitMatch').click(function(event) {
 //    console.log('LengthB '+window.teamBFBSelector.getselectedFriendIds().length);
 //    
     //Validation
-    if(!window.scoreA === undefined || window.scoreB === ''){
+    if(!window.scoreA === undefined || window.scoreA === ''){
         
         errors.push( {type: 'scoreA', value: true});
         $("#scoreAErrorDiv").fadeIn();
