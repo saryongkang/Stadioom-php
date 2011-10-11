@@ -243,3 +243,13 @@ $(".score").keydown(function(event) {
         }   
     }
 });
+
+
+//Date picker
+
+
+$(function(){
+    $('#matchDate').datepicker();
+    //For Date RANGE
+//    $('#matchDate').daterangepicker({arrows:true}); 
+ });

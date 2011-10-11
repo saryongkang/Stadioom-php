@@ -150,9 +150,10 @@
             <label>Date</label>
             <div class="input">
               <div class="inline-inputs">
-                <input class="small" type="text" value="May 1, 2011" />
-                <input class="mini" type="text" value="2:00pm" />
-                <span class="help-inline">Time is Pacific Standard Time (GMT -08:00).</span>
+<!--                <input class="small" type="text" value="May 1, 2011" />
+                <input class="mini" type="text" value="2:00pm" />-->
+                  <input id="matchDate" class="small" value="Choose a Date" type="text" />
+<!--                <span class="help-inline">Time is Pacific Standard Time (GMT -08:00).</span>-->
               </div>
             </div>
           </div>

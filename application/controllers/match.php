@@ -19,15 +19,25 @@ class Match extends FBAuth_Controller {
         
         $this->security->csrf_verify();
         
-        $this->template->add_css('tdfriendselector');
+        
         $this->template->add_js('tdfriendselector');
         $this->template->add_js('jquery.iphone-switch');
         $this->template->add_js('jquery.cookie');
         $this->template->add_js('bootstrap/bootstrap-modal');
+        $this->template->add_js('ui/jquery.ui.core.min');
+        $this->template->add_js('ui/jquery.ui.datepicker.min');
+//        $this->template->add_js('jquery-ui-1.7.1.custom.min');
+//        $this->template->add_js('daterangepicker.jQuery');
         
+        $this->template->add_css('ui/themes/base/jquery-ui.min');
+        $this->template->add_css('ui/themes/base/jquery.ui.core.min');
+        $this->template->add_css('ui/themes/base/jquery.ui.datepicker.min');
+        $this->template->add_css('tdfriendselector');
         $this->template->add_css('match');
-        
+//        $this->template->add_css('ui.daterangepicker');
+//        $this->template->add_css('redmond/jquery-ui-1.7.1.custom');
         $this->template->add_css('main');
+        
         $this->template->set_content('createMatchView', $data);
         $this->template->build('main');
     }
@@ -87,7 +97,9 @@ class Match extends FBAuth_Controller {
                 
         $this->template->add_css('matchesview');
         $this->template->add_css('main');
+        
         $this->template->add_js('jquery.timeago');
+        
         $this->template->set_content('myMatchesView', $data);
         $this->template->build('main');
     }
