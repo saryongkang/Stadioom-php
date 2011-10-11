@@ -18,6 +18,7 @@ class Match extends Stadioom_REST_Controller {
      * Registers a new match.
      */
     public function index_post() {
+        log_message('debug', "index_post entered.");
         $accessToken = $this->post('accessToken');
 
         try {
@@ -31,6 +32,7 @@ class Match extends Stadioom_REST_Controller {
                     throw new Exception("'userId' was not set.", 400);
                 }
             }
+            log_message('debug', "got user ID.");
 
             // fill data
             $match = new Entities\MatchRecord();
@@ -50,6 +52,7 @@ class Match extends Stadioom_REST_Controller {
 
             $this->post('shared');
 
+            log_message('debug', "here 1.");
             $match->setTeamAId($this->post('teamA'));
             $match->setTeamBId($this->post('teamB'));
 
@@ -62,6 +65,7 @@ class Match extends Stadioom_REST_Controller {
                     $member->setMatch($match);
                 }
             }
+            log_message('debug', "here 2.");
             $memberIds = $this->post('memberIdsB');
             if (is_array($memberIds)) {
                 foreach ($memberIds as $id) {
@@ -72,13 +76,18 @@ class Match extends Stadioom_REST_Controller {
                 }
             }
 
+            log_message('debug', "here 3.");
             $memberFbIdsA = $this->post('memberFbIdsA');
             $memberFbIdsB = $this->post('memberFbIdsB');
 
+            log_message('debug', "trying to register.");
             $matchId = $this->MatchDao->register($match, $memberFbIdsA, $memberFbIdsB);
+            log_message('debug', "done.");
 
+            log_message('debug', "index_post exit.");
             $this->responseOk(array("id" => $matchId));
         } catch (Exception $e) {
+            log_message('debug', "index_post exit with error.");
             $this->responseError($e);
         }
     }

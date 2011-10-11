@@ -29,22 +29,6 @@ class MatchDao extends CI_Model {
         $this->em->persist($match);
         $this->em->flush();
 
-        // make member names A
-        // make member names B
-        // make caption (score, who's win, or even or not played..)
-        // get brand String ID
-        // get sport String ID
-        // get brand name
-        // get sport name
-//        $result = array(
-//            'matchId' => $match->getId(),
-//            'caption' => $memberNamesA . ' just defeated ' . $mamberNamesB . ' in a fierce ' . $matchTitle . ' match.',
-//            'message' => $subject . " " . $matchResult,
-//            'picture' => "http://stadioom.com/assets/images/sponsors/shareicons/" . $brandStringId . "_" . $sportStringId . "_shareicon.gif",
-//            'title' => $sponsorName . " " . $sportName . " Match",
-//            'link' => "http://stadioom.com/match/view/" . $match->getId(),
-//            'description' => "Final score: " . $memberNamesA . " " . $match->getScoreA() . " - " . $memberNamesB . " " . $match->getScoreB()
-//        );
         log_message('debug', "register: exit.");
         return $match->getId();
     }
@@ -58,34 +42,6 @@ class MatchDao extends CI_Model {
      */
     private function validateMatch($match, $memberFbIdsA, $memberFbIdsB) {
         log_message('debug', "validateMatch: enter.");
-//        $matchType = $match->getMatchType();
-//        if ($matchType == 1) { // single match
-//            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
-//            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
-//
-//            if ($numA != 1 || $numB != 1) {
-//                throw new Exception("Number of both teams' members should be 1, but " . $numA . " and " . $numB, 400);
-//            }
-//        } else if ($matchType == 2) { // team match
-//            $numA = count($match->getMemberIdsA()) + count($memberFbIdsA);
-//            $numB = count($match->getMemberIdsB()) + count($memberFbIdsB);
-//
-//            if ($numA < 1 || $numB < 1) {
-//                throw new Exception("Number of both teams' members should be greater than 0, but " . $numA . " and " . $numB, 400);
-//            }
-//        } else {
-//            throw new Exception("Unsupported match type: " . $match->getMatchType(), 400);
-//        }
-//        // team A and team B should exclusive.
-//        
-//        // all member's are registered?
-//        $members = count($match->getMemberIdsA());
-//        // make IN (...) statement, than get count, then compare with total required numbers.
-//        foreach ($members as $member) {
-//            $q = $this->em->createQuery("SELECT u FROM Entities\User WHERE id = " . $member->getId());
-//            $users = $q->getResult();
-//            if (count($users) == )
-//        }
         log_message('debug', "validateMatch: exit.");
     }
 
@@ -103,8 +59,8 @@ class MatchDao extends CI_Model {
     public function completeMembers(&$match, &$memberFbIdsA, &$memberFbIdsB) {
         log_message('debug', "completeMembers: enter.");
 
+//            $me = $this->em->find('Entities\User', $match->getOwnerId());
         if (is_array($memberFbIdsA)) {
-            $me = $this->em->find('Entities\User', $match->getOwnerId());
             foreach ($memberFbIdsA as $fbId) {
                 $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
                 if ($user == null) {
@@ -137,10 +93,7 @@ class MatchDao extends CI_Model {
                     $this->em->flush();
                 }
 
-                $newMember = new Entities\MatchRecordMemberA();
-                $newMember->setUserId($user->getId());
-                $newMember->setMatch($match);
-                $match->addMemberIdsA($newMember);
+                $match->addMembersA($user);
             }
         }
         if (is_array($memberFbIdsB)) {
@@ -176,17 +129,100 @@ class MatchDao extends CI_Model {
                     $this->em->flush();
                 }
 
-                $newMember = new Entities\MatchRecordMemberB();
-                $newMember->setUserId($user->getId());
-                $newMember->setMatch($match);
-                $match->addMemberIdsB($newMember);
+                $match->addMembersB($user);
             }
         }
 
         log_message('debug', "completeMembers: exit.");
         $this->em->flush();
     }
-
+//    public function completeMembers(&$match, &$memberFbIdsA, &$memberFbIdsB) {
+//        log_message('debug', "completeMembers: enter.");
+//
+//        if (is_array($memberFbIdsA)) {
+////            $me = $this->em->find('Entities\User', $match->getOwnerId());
+//            foreach ($memberFbIdsA as $fbId) {
+//                $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
+//                if ($user == null) {
+//                    $user = new Entities\User();
+//
+//                    $fbFriend = file_get_contents("http://graph.facebook.com/" . $fbId);
+//                    $fbFriend = json_decode($fbFriend);
+//
+//                    // fill user table
+//                    $user->setFbId($fbId);
+//                    $user->setName($fbFriend->name);
+//                    $user->setGender($fbFriend->gender);
+//                    $user->setFbLinked(false);
+//                    $user->setFbAuthorized(false);
+//                    $user->setVerified(false);
+//
+//                    $this->em->persist($user);
+//
+//                    // fill user fb table.
+//                    $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
+//                    if ($userFb == null) {
+//                        $userFb = new Entities\UserFb();
+//                        $userFb->setFbId($fbId);
+//                    }
+//                    $userFb->setName($fbFriend->name);
+//                    $userFb->setGender($fbFriend->gender);
+//                    $userFb->setLocale($fbFriend->locale);
+//
+//                    $this->em->persist($userFb);
+//                    $this->em->flush();
+//                }
+//
+//                $newMember = new Entities\MatchRecordMemberA();
+//                $newMember->setUserId($user->getId());
+//                $newMember->setMatch($match);
+//                $match->addMemberIdsA($newMember);
+//            }
+//        }
+//        if (is_array($memberFbIdsB)) {
+//            foreach ($memberFbIdsB as $fbId) {
+//                $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
+//                if ($user == null) {
+//                    $user = new Entities\User();
+//
+//                    $fbFriend = file_get_contents("http://graph.facebook.com/" . $fbId);
+//                    $fbFriend = json_decode($fbFriend);
+//
+//                    // fill user table
+//                    $user->setFbId($fbId);
+//                    $user->setName($fbFriend->name);
+//                    $user->setGender($fbFriend->gender);
+//                    $user->setFbLinked(false);
+//                    $user->setFbAuthorized(false);
+//                    $user->setVerified(false);
+//
+//                    $this->em->persist($user);
+//
+//                    // fill user fb table.
+//                    $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
+//                    if ($userFb == null) {
+//                        $userFb = new Entities\UserFb();
+//                        $userFb->setFbId($fbId);
+//                    }
+//                    $userFb->setName($fbFriend->name);
+//                    $userFb->setGender($fbFriend->gender);
+//                    $userFb->setLocale($fbFriend->locale);
+//
+//                    $this->em->persist($userFb);
+//                    $this->em->flush();
+//                }
+//
+//                $newMember = new Entities\MatchRecordMemberB();
+//                $newMember->setUserId($user->getId());
+//                $newMember->setMatch($match);
+//                $match->addMemberIdsB($newMember);
+//            }
+//        }
+//
+//        log_message('debug', "completeMembers: exit.");
+//        $this->em->flush();
+//    }
+//
     private function completeTitle($match) {
         log_message('debug', "completeTitle: enter.");
 
@@ -282,7 +318,7 @@ class MatchDao extends CI_Model {
         }
         $dql = $dql . ' FROM Entities\MatchRecord m';
         if ($memberId != null) {
-            $dql = $dql . ' JOIN m.memberIdsA a JOIN m.memberIdsB b';
+            $dql = $dql . ' JOIN m.membersA a JOIN m.membersB b';
         }
         if ($since != null || $sportId != null || $ownerId != null || $memberId != null) {
             $dql = $dql . ' WHERE';
@@ -313,7 +349,7 @@ class MatchDao extends CI_Model {
                 if (!$first) {
                     $dql = $dql . ' AND';
                 }
-                $dql = $dql . ' (a.userId = ' . $memberId . ' OR b.userId = ' . $memberId . ')';
+                $dql = $dql . ' (a.id = ' . $memberId . ' OR b.id = ' . $memberId . ')';
                 $first = false;
             }
         }

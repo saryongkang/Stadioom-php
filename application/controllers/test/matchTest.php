@@ -24,32 +24,32 @@ class MatchTest extends Test_REST_Controller {
 //            remove_ssl();
     }
 
-    public function beforeClass() {
-        // sign in with test account.
-        $this->meFb = $this->createTestUser();
-        $param = array('fbId' => $this->meFb['fbId'], 'fbAccessToken' => $this->meFb['fbAccessToken'], 'fbExpires' => 0);
-        $result = $this->sendPost($this->config->item('base_url') . "api/fb/connect", $param);
-        $this->accessToken = json_decode($result)->accessToken;
-
-        $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.email = '" . $this->meFb['email'] . "'");
-        $user = $q->getResult();
-        $this->me = $user[0];
-
-        // get test users;
-        for ($i = 1; $i <= 4; $i++) {
-            $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.name = '" . 'testUser' . $i . "'");
-            $user = $q->getResult();
-            array_push($this->testUsers, $user[0]);
-
-            $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.name = '" . 'testUserFb' . $i . "'");
-            $user = $q->getResult();
-            array_push($this->testUsersFb, $user[0]);
-        }
-
-        // set current timestamp;
-        $now = new DateTime();
-        $this->now = $now->getTimestamp();
-    }
+//    public function beforeClass() {
+//        // sign in with test account.
+//        $this->meFb = $this->createTestUser();
+//        $param = array('fbId' => $this->meFb['fbId'], 'fbAccessToken' => $this->meFb['fbAccessToken'], 'fbExpires' => 0);
+//        $result = $this->sendPost($this->config->item('base_url') . "api/fb/connect", $param);
+//        $this->accessToken = json_decode($result)->accessToken;
+//
+//        $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.email = '" . $this->meFb['email'] . "'");
+//        $user = $q->getResult();
+//        $this->me = $user[0];
+//
+//        // get test users;
+//        for ($i = 1; $i <= 4; $i++) {
+//            $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.name = '" . 'testUser' . $i . "'");
+//            $user = $q->getResult();
+//            array_push($this->testUsers, $user[0]);
+//
+//            $q = $this->em->createQuery("SELECT u FROM Entities\User u WHERE u.name = '" . 'testUserFb' . $i . "'");
+//            $user = $q->getResult();
+//            array_push($this->testUsersFb, $user[0]);
+//        }
+//
+//        // set current timestamp;
+//        $now = new DateTime();
+//        $this->now = $now->getTimestamp();
+//    }
 
     public function afterClass() {
         // delete all matches registered during this test.
@@ -63,10 +63,77 @@ class MatchTest extends Test_REST_Controller {
 //        $q = $this->em->createQuery("DELETE FROM Entities\User u WHERE u.id = " . $this->me->getId());
 //        $q->execute();
     }
+//
+//    public function testRegisterSingle_StadioomUser_get() {
+//        // me vs. user 1.
+//        $param = array('accessToken' => $this->accessToken,
+//            'sportId' => 1,
+//            'brandId' => 2,
+//            'title' => 'valid test match..',
+//            'leagueType' => 1, // amature
+//            'started' => $this->now,
+//            'ended' => $this->now,
+//            'scoreA' => 4,
+//            'scoreB' => 2,
+//            'memberFbIdsB' => array('649290919'),
+//            'memberFbIdsB' => array('100000155192872'),
+//        );
+//        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+//        $result = $this->runTest("me vs. user 1.", "api/match", $param);
+//        $result = json_decode($result);
+//        Assert::assertTrue($result->id > 0);
+//
+//        array_push($this->matchIds, $result->id);
+//
+////        // user 1 vs. user 2.
+////        $param = array('accessToken' => $this->accessToken,
+////            'sportId' => 1,
+////            'brandId' => 2,
+////            'title' => 'valid test match..',
+////            'leagueType' => 2, // pro
+////            'started' => $this->now,
+////            'ended' => $this->now,
+////            'scoreA' => 0,
+////            'scoreB' => 3,
+////            'memberIdsA' => array($this->testUsers[0]->getId()),
+////            'memberIdsB' => array($this->testUsers[1]->getId())
+////        );
+////        $result = $this->runTest("user 1 vs. user 2.", "api/match", $param);
+////        $result = json_decode($result);
+////        Assert::assertTrue($result->id > 0);
+////        
+////        array_push($this->matchIds, $result->id);
+//    }
 
     public function testRegisterSingle_StadioomUser_get() {
+//        $grantCode = $this->generateGrantCode('wegra.lee@gmail.com', 'password');
+//        $param = array('grantType' => 'authorization_code',
+//            'code' => $grantCode,
+//            'name' => 'Wegra',
+//            'gender' => 'male',
+//            'dob' => 1232123222);
+//        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+//        $result = $this->runTest("sign up with a valid email_1", "api/auth/signUp", $param);
+//        $grantCode = $this->generateGrantCode('wegra@seedshock.com', 'password');
+//        $result = $this->runTest("sign up with a valid email_1", "api/auth/signUp", array('grantType' => 'authorization_code',
+//            'code' => $grantCode,
+//            'name' => 'Seed',
+//            'gender' => 'male',
+//            'dob' => 1232123222));
+//        $grantCode = $this->generateGrantCode('test@seedshock.com', 'password');
+//        $result = $this->runTest("sign up with a valid email_1", "api/auth/signUp", array('grantType' => 'authorization_code',
+//            'code' => $grantCode,
+//            'name' => 'Test',
+//            'gender' => 'male',
+//            'dob' => 1232123222));
+        $grantCode = $this->generateGrantCode('test@seedshock.com', 'password');
+        $result = $this->runTest("sign in with a valid email_2 w/ 'invalid' password.", "api/auth/signIn", array('grantType' => 'authorization_code',
+            'code' => $grantCode));
+        $json = json_decode($result);
+        $accessToken = $json->accessToken;
+
         // me vs. user 1.
-        $param = array('accessToken' => $this->accessToken,
+        $param = array('accessToken' => $accessToken,
             'sportId' => 1,
             'brandId' => 2,
             'title' => 'valid test match..',
@@ -75,16 +142,16 @@ class MatchTest extends Test_REST_Controller {
             'ended' => $this->now,
             'scoreA' => 4,
             'scoreB' => 2,
-            'memberFbIdsB' => array('649290919'),
+            'memberFbIdsA' => array('649290919'),
             'memberFbIdsB' => array('100000155192872'),
         );
-        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+//        $param['XDEBUG_SESSION_START'] = 'netbeans-xdebug';
+        log_message('debug', "------ invoking api/match.");
         $result = $this->runTest("me vs. user 1.", "api/match", $param);
+        log_message('debug', "------ invoked api/match.");
         $result = json_decode($result);
-        Assert::assertTrue($result->id > 0);
-
-        array_push($this->matchIds, $result->id);
-
+//        Assert::assertTrue($result->id > 0);
+//        array_push($this->matchIds, $result->id);
 //        // user 1 vs. user 2.
 //        $param = array('accessToken' => $this->accessToken,
 //            'sportId' => 1,

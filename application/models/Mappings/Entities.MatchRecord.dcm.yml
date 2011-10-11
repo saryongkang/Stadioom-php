@@ -59,15 +59,36 @@ Entities\MatchRecord:
     lastUpdated:
       type: integer
       nullable: true
-  oneToMany:
-    memberIdsA:
-      targetEntity: MatchRecordMemberA
-      mappedBy: match
-      cascade: [all]
-    memberIdsB:
-      targetEntity: MatchRecordMemberB
-      mappedBy: match
-      cascade: [all]
+#  oneToMany:
+#    memberIdsA:
+#      targetEntity: MatchRecordMemberA
+#      mappedBy: match
+#      cascade: [all]
+#    memberIdsB:
+#      targetEntity: MatchRecordMemberB
+#      mappedBy: match
+#      cascade: [all]
+  manyToMany:
+    membersA:
+      targetEntity: User
+      joinTable:
+        name: match_members_a
+        joinColumns:
+          match_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          user_id:
+            referencedColumnName: id
+    membersB:
+      targetEntity: User
+      joinTable:
+        name: match_members_b
+        joinColumns:
+          match_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          user_id:
+            referencedColumnName: id
   lifecycleCallbacks:
     prePersist: [prePersist]
     preUpdate: [preUpdate]

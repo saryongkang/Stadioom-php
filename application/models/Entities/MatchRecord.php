@@ -464,46 +464,6 @@ class MatchRecord
     }
 
     /**
-     * Add memberIdsA
-     *
-     * @param Entities\MatchRecordMemberA $memberIdsA
-     */
-    public function addMemberIdsA(\Entities\MatchRecordMemberA $memberIdsA)
-    {
-        $this->memberIdsA[] = $memberIdsA;
-    }
-
-    /**
-     * Get memberIdsA
-     *
-     * @return Doctrine\Common\Collections\Collection $memberIdsA
-     */
-    public function getMemberIdsA()
-    {
-        return $this->memberIdsA;
-    }
-
-    /**
-     * Add memberIdsB
-     *
-     * @param Entities\MatchRecordMemberB $memberIdsB
-     */
-    public function addMemberIdsB(\Entities\MatchRecordMemberB $memberIdsB)
-    {
-        $this->memberIdsB[] = $memberIdsB;
-    }
-
-    /**
-     * Get memberIdsB
-     *
-     * @return Doctrine\Common\Collections\Collection $memberIdsB
-     */
-    public function getMemberIdsB()
-    {
-        return $this->memberIdsB;
-    }
-
-    /**
      * @prePersist
      */
     public function prePersist() {
@@ -530,18 +490,71 @@ class MatchRecord
         $memberIdsA = array();
         $memberIdsB = array();
 
-        $stIds = $this->getMemberIdsA();
-        foreach ($stIds as $stId) {
-            array_push($memberIdsA, $stId->getUserId());
+        $membersA = $this->getMembersA();
+        foreach ($membersA as $member) {
+            array_push($memberIdsA, $member->getId());
         }
-        $stIds = $this->getMemberIdsB();
-        foreach ($stIds as $stId) {
-            array_push($memberIdsB, $stId->getUserId());
+        $membersB = $this->getMembersB();
+        foreach ($membersB as $member) {
+            array_push($memberIdsB, $member->getId());
         }
 
         $array['memberIdsA'] = $memberIdsA;
         $array['memberIdsB'] = $memberIdsB;
+        
+        unset($array['membersA']);
+        unset($array['membersB']);
 
         return $array;
+    }
+    /**
+     * @var Entities\User
+     */
+    private $membersA;
+
+    /**
+     * @var Entities\User
+     */
+    private $membersB;
+
+
+    /**
+     * Add membersA
+     *
+     * @param Entities\User $membersA
+     */
+    public function addMembersA(\Entities\User $membersA)
+    {
+        $this->membersA[] = $membersA;
+    }
+
+    /**
+     * Get membersA
+     *
+     * @return Doctrine\Common\Collections\Collection $membersA
+     */
+    public function getMembersA()
+    {
+        return $this->membersA;
+    }
+
+    /**
+     * Add membersB
+     *
+     * @param Entities\User $membersB
+     */
+    public function addMembersB(\Entities\User $membersB)
+    {
+        $this->membersB[] = $membersB;
+    }
+
+    /**
+     * Get membersB
+     *
+     * @return Doctrine\Common\Collections\Collection $membersB
+     */
+    public function getMembersB()
+    {
+        return $this->membersB;
     }
 }

@@ -246,30 +246,6 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getLastUpdated();
     }
 
-    public function addMemberIdsA(\Entities\MatchRecordMemberA $memberIdsA)
-    {
-        $this->__load();
-        return parent::addMemberIdsA($memberIdsA);
-    }
-
-    public function getMemberIdsA()
-    {
-        $this->__load();
-        return parent::getMemberIdsA();
-    }
-
-    public function addMemberIdsB(\Entities\MatchRecordMemberB $memberIdsB)
-    {
-        $this->__load();
-        return parent::addMemberIdsB($memberIdsB);
-    }
-
-    public function getMemberIdsB()
-    {
-        $this->__load();
-        return parent::getMemberIdsB();
-    }
-
     public function prePersist()
     {
         $this->__load();
@@ -288,10 +264,34 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::toArray();
     }
 
+    public function addMembersA(\Entities\User $membersA)
+    {
+        $this->__load();
+        return parent::addMembersA($membersA);
+    }
+
+    public function getMembersA()
+    {
+        $this->__load();
+        return parent::getMembersA();
+    }
+
+    public function addMembersB(\Entities\User $membersB)
+    {
+        $this->__load();
+        return parent::addMembersB($membersB);
+    }
+
+    public function getMembersB()
+    {
+        $this->__load();
+        return parent::getMembersB();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'leagueType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'memberIdsA', 'memberIdsB');
+        return array('__isInitialized__', 'id', 'ownerId', 'sportId', 'brandId', 'title', 'leagueType', 'teamAId', 'teamBId', 'started', 'ended', 'canceled', 'scoreA', 'scoreB', 'location', 'latitude', 'longitude', 'created', 'lastUpdated', 'membersA', 'membersB');
     }
 
     public function __clone()

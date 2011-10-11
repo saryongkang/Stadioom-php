@@ -714,8 +714,8 @@ class UserDao extends CI_Model {
         log_message('debug', "getLatestMatches: enter.");
         $dql = "SELECT m, a, b";
         $dql = $dql . " FROM Entities\MatchRecord m";
-        $dql = $dql . " JOIN m.memberIdsA a JOIN m.memberIdsB b";
-        $dql = $dql . " WHERE a.userId = " . $userId . " OR b.userId = " . $userId;
+        $dql = $dql . " JOIN m.membersA a JOIN m.membersB b";
+        $dql = $dql . " WHERE a.id = " . $userId . " OR b.id = " . $userId;
         $dql = $dql . ' ORDER BY m.lastUpdated DESC';
         $q = $this->em->createQuery($dql);
         $q->setMaxResults($maxNumber);
