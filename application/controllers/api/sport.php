@@ -68,10 +68,20 @@ class Sport extends Stadioom_REST_Controller {
                 $data = array("data" => $array);
                 $this->responseOk($data);
             } else {
+                // TODO (deprecated)
                 $sport = $this->BrandSportDao->getSport($sportId);
 
-                $this->responseOk($this->filter($sport->toArray(), $this->$filterKeys4Sport));
+                $this->responseOk($this->filter($sport->toArray(), $this->filterKeys4Sport));
             }
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    public function getSport_get($id) {
+        try {
+            $sport = $this->BrandSportDao->getSport($id);
+            $this->responseOk($this->filter($sport->toArray(), $this->filterKeys4Sport));
         } catch (Exception $e) {
             $this->responseError($e);
         }
@@ -94,22 +104,33 @@ class Sport extends Stadioom_REST_Controller {
         }
     }
 
+    // TODO (deprecated)
     public function brands_get() {
-        $accessToken = $this->get('accessToken');
-
         try {
-//            if ($this->input->ip_address() != '127.0.0.1') {
-//                $userId = $this->verifyToken($accessToken);
-//            }
-
             $sportId = $this->get('id');
             $brands = $this->BrandSportDao->findAllSponsorsOf($sportId);
-            
+
             $array = array();
             foreach ($brands as $brand) {
                 array_push($array, $this->filter($brand->toArray(), $this->filterKeys4Brand));
             }
-            
+
+            $data = array("data" => $array);
+            $this->responseOk($data);
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    public function getBrands_get($id) {
+        try {
+            $brands = $this->BrandSportDao->findAllSponsorsOf($id);
+
+            $array = array();
+            foreach ($brands as $brand) {
+                array_push($array, $this->filter($brand->toArray(), $this->filterKeys4Brand));
+            }
+
             $data = array("data" => $array);
             $this->responseOk($data);
         } catch (Exception $e) {

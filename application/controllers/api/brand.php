@@ -64,14 +64,45 @@ class Brand extends Stadioom_REST_Controller {
                 foreach ($allSports as $brand) {
                     array_push($array, $this->filter($brand->toArray(), $this->filterKeys4Brand));
                 }
-                
+
                 $data = array("data" => $array);
                 $this->responseOk($data);
             } else {
+                // TODO (deprecated)
                 $brand = $this->BrandSportDao->getBrand($brandId);
 
                 $this->responseOk($this->filter($brand->toArray(), $this->filterKeys4Brand));
             }
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    public function getBrand_get($id) {
+        try {
+            $brand = $this->BrandSportDao->getBrand($id);
+
+            $this->responseOk($this->filter($brand->toArray(), $this->filterKeys4Brand));
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+    public function getSports_get($id) {
+        try {
+            $brand = $this->BrandSportDao->getBrand($id);
+            if ($brand == null) {
+                throw new Exception("Brand Not Found", 404);
+            }
+
+            $sports = $brand->getSports();
+
+            $array = array();
+            foreach ($sports as $sport) {
+                array_push($array, $this->filter($sport->toArray(), $this->filterKeys4Sport));
+            }
+
+            $data = array("data" => $array);
+            $this->responseOk($data);
         } catch (Exception $e) {
             $this->responseError($e);
         }
@@ -94,22 +125,17 @@ class Brand extends Stadioom_REST_Controller {
         }
     }
 
+    // TODO (deprecated)
     public function sports_get() {
-        $accessToken = $this->get('accessToken');
-
         try {
-//            if ($this->input->ip_address() != '127.0.0.1') {
-//                $userId = $this->verifyToken($accessToken);
-//            }
-
             $brandId = $this->get('id');
             $brand = $this->BrandSportDao->getBrand($brandId);
             if ($brand == null) {
                 throw new Exception("Brand Not Found", 404);
             }
-            
+
             $sports = $brand->getSports();
-            
+
             $array = array();
             foreach ($sports as $sport) {
                 array_push($array, $this->filter($sport->toArray(), $this->filterKeys4Sport));

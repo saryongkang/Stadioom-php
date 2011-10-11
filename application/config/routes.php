@@ -44,5 +44,10 @@ if (!defined('BASEPATH'))
 $route['default_controller'] = "main";
 $route['404_override'] = '';
 
+$route['api/brand/(:num)'] = "api/brand/getBrand/$1";
+$route['api/brand/(:num)/sports'] = "api/brand/getSports/$1";
+$route['api/sport/(:num)'] = "api/sport/getSport/$1";
+$route['api/sport/(:num)/brands'] = "api/sport/getBrands/$1";
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
