@@ -227,7 +227,7 @@ class MatchDao extends CI_Model {
         log_message('debug', "completeTitle: enter.");
 
         $title = $match->getTitle();
-        if ($title == null) {
+        if ($title == null || $title == "" || $title == "null") {
             // get sport name
             $sportId = $match->getSportId();
             $sportName = $this->em->createQuery("SELECT s.name FROM Entities\Sport s WHERE s.id = " . $sportId);
@@ -244,11 +244,11 @@ class MatchDao extends CI_Model {
                     throw new Exception("Unknown Brand: " . $sportId, 404);
                 }
 
-                $title = $title . ' ' . $brandName[0]['name'];
+                $title .= ' ' . $brandName[0]['name'];
             }
 
             // append 'Match'
-            $title = $title . ' Match';
+            $title .= ' Match';
             $match->setTitle($title);
         }
 
