@@ -92,14 +92,15 @@ class Match extends Stadioom_REST_Controller {
         }
     }
 
-    public function share_post() {
+    public function share_post($id) {
+        // TODO: not properly implemented.
         $accessToken = $this->post('accessToken');
         try {
             $userId = $this->verifyToken($accessToken);
 
             $sharedInfo = new Entities\MatchRecordShare();
             $sharedInfo->setSharedBy($userId);
-            $sharedInfo->setMatchId($this->post('matchId'));
+            $sharedInfo->setMatchId($id);
             $sharedTarget = $this->post('targetMedia');
             if ($sharedTarget == null) {
                 $sharedTarget = 'Facebook';
@@ -119,31 +120,26 @@ class Match extends Stadioom_REST_Controller {
     /**
      * Deletes the specified match.
      */
-    public function index_delete() {
+    public function match_delete($id) {
         $accessToken = $this->delete('accessToken');
 
         try {
             $userId = $this->verifyToken($accessToken);
-            $matchId = $this->delete('matchId');
 
-            $this->MatchDao->deleteMatch($matchId, $userId);
+            $this->MatchDao->deleteMatch($id, $userId);
         } catch (Exception $e) {
             $this->responseError($e);
         }
-        $this->responseError(new Exception("Not Implemented.", 501));
     }
 
     /**
      * Returns a list of registered matches or the specified match.
      */
     public function index_get() {
-//        $accessToken = $this->get('accessToken');
-
         try {
-//            $userId = $this->verifyToken($accessToken);
-
             $matchId = $this->get('matchId');
             if ($matchId != null) {
+                // TODO this path is deprecated by 'match_get'.
                 $match = $this->MatchDao->find($matchId);
                 $this->responseOk($match);
             } else {
@@ -158,6 +154,18 @@ class Match extends Stadioom_REST_Controller {
                 $data = array('data' => $allMatches);
                 $this->responseOk($data);
             }
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
+    }
+
+    /**
+     * Returns the specified match.
+     */
+    public function match_get($id) {
+        try {
+            $match = $this->MatchDao->find($matchId);
+            $this->responseOk($match);
         } catch (Exception $e) {
             $this->responseError($e);
         }

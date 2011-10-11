@@ -182,25 +182,6 @@ class MatchDao extends CI_Model {
         return $match->toArray();
     }
 
-    public function delete($matchId, $userId) {
-        log_message('debug', "delete: enter.");
-
-        $match = $this->em->find('Entities\MatchRecord', $matchId);
-        if ($match == null) {
-            log_message('error', "Not Found: " . $matchId);
-            throw new Exception("Not Found: " . $matchId, 404);
-        }
-        if ($match->getOwnerId() != $userId) {
-            log_message('error', "Forbidden. You have no permission to delete this match.");
-            throw new Exception("Forbidden. You have no permission to delete this match.", 403);
-        }
-
-        $this->em->remove($match);
-        $this->em->flush();
-
-        log_message('debug', "delete: exit.");
-    }
-
     public function findAll($options) {
         log_message('debug', "findAll: enter.");
 
