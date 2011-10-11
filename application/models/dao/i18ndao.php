@@ -123,7 +123,7 @@ class I18nDao extends CI_Model {
             unset($all['__last_updated']);
 
             log_message('debug', "getDelta: exit.");
-            return array('lastUpdated' => $_lastUpdated, 'data' => $all);
+            return array('lastUpdated' => $_lastUpdated, 'data' => array($all));
         }
 
         log_message('debug', "getDelta: exit.");
