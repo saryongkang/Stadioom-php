@@ -24,6 +24,7 @@ class BrandDao extends CI_Model {
             throw new Exception("Invalid name (5 <= name <= 32).", 400);
         }
 
+        // TODO (low) need optimization.
         $prev = $this->em->getRepository('Entities\Brand')->findOneByName($brand->getName());
         if ($prev == null) {
             $this->em->persist($brand);
@@ -101,6 +102,26 @@ class BrandDao extends CI_Model {
         return $q->getResult();
     }
 
+    public function setSponsoredSports($brandId, $sportIds) {
+        log_message('debug', "setSponsoredSports: enter.");
+
+        $brand = $this->em->find("Entities\Brand", $brandId);
+        $sports = array();
+        if (count($sportIds) > 0) {
+            $q = $this->em->createQuery("SELECT s FROM Entities\Sport s WHERE s.id IN (" . implode(",", $sportIds) . ")");
+            $sports = $q->getResult();
+        }
+
+        $linkedSports = $brand->getSports();
+        $linkedSports->clear();
+        foreach ($sports as $sport) {
+            $brand->addSports($sport);
+        }
+
+        $this->em->flush();
+        log_message('debug', "setSponsoredSports: exit.");
+    }
+    
     private function isInRange(&$str, $min, $max) {
         $length = strlen($str);
         return $length == 0 || ($min <= $length && $length <= $max);

@@ -24,6 +24,7 @@ class SportDao extends CI_Model {
             throw new Exception("Invalid name (5 <= name <= 32).", 400);
         }
 
+        // TODO (low) need optimization.
         $prev = $this->em->getRepository('Entities\Sport')->findOneByName($sport->getName());
         if ($prev == null) {
             $this->em->persist($sport);
@@ -90,6 +91,25 @@ class SportDao extends CI_Model {
 
         log_message('debug', "findAfter: exit.");
         return $q->getResult();
+    }
+
+    public function findAllSponsorsOf($sportId) {
+        log_message('debug', "findAllSponsorsOf: enter.");
+
+        if ($sportId == null) {
+            log_message('error', "Sport ID is required.", 400);
+            throw new Exception("sportId is required.", 400);
+        }
+        
+        $sport = $this->em->find('Entities\Sport', $sportId);
+        if ($sport == null) {
+            throw new Exception("Sport Not Found: " . $sportId, 404);
+        }
+
+        $result = $this->doctrine->em->createQuery("SELECT b, s FROM Entities\Brand b JOIN b.sports s WHERE s.id = " . $sportId)->getResult();
+
+        log_message('debug', "findAllSponsorsOf: exit.");
+        return $result;
     }
 
     private function isInRange(&$str, $min, $max) {

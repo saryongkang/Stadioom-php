@@ -10,7 +10,7 @@ class Sport extends Stadioom_REST_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model('dao/BrandSportDao');
+        $this->load->model('dao/SportDao');
 
         force_ssl();
 //        if (function_exists('force_ssl'))
@@ -32,7 +32,7 @@ class Sport extends Stadioom_REST_Controller {
             $sport->setLatestRevision($this->post('latestRevision'));
             $sport->setUpdateFlag($this->post('updateFlag'));
 
-            $result = $this->BrandSportDao->addSport($sport);
+            $result = $this->SportDao->add($sport);
             $this->responseOk($result);
         } catch (Exception $e) {
             $this->responseError($e);
@@ -47,7 +47,7 @@ class Sport extends Stadioom_REST_Controller {
 
             $id = $this->delete('id');
 
-            $result = $this->BrandSportDao->removeSport($id);
+            $result = $this->SportDao->remove($id);
             $this->responseOk($result);
         } catch (Exception $e) {
             $this->responseError($e);
@@ -60,7 +60,7 @@ class Sport extends Stadioom_REST_Controller {
             if ($sportId == null) {
 
                 // TODO returns list ordered by priority.
-                $allSports = $this->BrandSportDao->getAllSports();
+                $allSports = $this->SportDao->getAllOrderedByPriority();
                 $array = array();
                 foreach ($allSports as $sport) {
                     array_push($array, $this->filter($sport->toArray(), $this->filterKeys4Sport));
@@ -69,7 +69,7 @@ class Sport extends Stadioom_REST_Controller {
                 $this->responseOk($data);
             } else {
                 // TODO (deprecated)
-                $sport = $this->BrandSportDao->getSport($sportId);
+                $sport = $this->SportDao->find($sportId);
 
                 $this->responseOk($this->filter($sport->toArray(), $this->filterKeys4Sport));
             }
@@ -80,7 +80,7 @@ class Sport extends Stadioom_REST_Controller {
 
     public function getSport_get($id) {
         try {
-            $sport = $this->BrandSportDao->getSport($id);
+            $sport = $this->SportDao->find($id);
             $this->responseOk($this->filter($sport->toArray(), $this->filterKeys4Sport));
         } catch (Exception $e) {
             $this->responseError($e);
@@ -92,7 +92,7 @@ class Sport extends Stadioom_REST_Controller {
         try {
             $userId = $this->verifyToken($accessToken);
             $after = $this->get('after');
-            $allSports = $this->BrandSportDao->findSportsAfter($after);
+            $allSports = $this->SportDao->findAfter($after);
             $array = array();
             foreach ($allSports as $sport) {
                 array_push($array, $sport->toArray());
@@ -108,7 +108,7 @@ class Sport extends Stadioom_REST_Controller {
     public function brands_get() {
         try {
             $sportId = $this->get('id');
-            $brands = $this->BrandSportDao->findAllSponsorsOf($sportId);
+            $brands = $this->SportDao->findAllSponsorsOf($sportId);
 
             $array = array();
             foreach ($brands as $brand) {
@@ -124,7 +124,7 @@ class Sport extends Stadioom_REST_Controller {
 
     public function getBrands_get($id) {
         try {
-            $brands = $this->BrandSportDao->findAllSponsorsOf($id);
+            $brands = $this->SportDao->findAllSponsorsOf($id);
 
             $array = array();
             foreach ($brands as $brand) {
