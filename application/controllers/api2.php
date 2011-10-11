@@ -1,7 +1,7 @@
 <?php
 require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
-class Auth extends Stadioom_REST_Controller {
+class Api2 extends Stadioom_REST_Controller {
 
     function __construct() {
         parent::__construct();
