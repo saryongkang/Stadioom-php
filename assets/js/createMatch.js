@@ -82,6 +82,7 @@ $("#sportSelect").change( function(){
 
 
 $('#submitMatch').click(function(event) {
+    console.log();
     event.preventDefault();
     var errors = [];
     $("#sponsorErrorDiv").hide();
@@ -98,6 +99,10 @@ $('#submitMatch').click(function(event) {
     
     var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
     
+//    console.log('belongTeam '+belongTeam);
+//    console.log('LengthA '+window.teamAFBSelector.getselectedFriendIds().length);
+//    console.log('LengthB '+window.teamBFBSelector.getselectedFriendIds().length);
+//    
     //Validation
     if(!window.scoreA === undefined || window.scoreB === ''){
         
