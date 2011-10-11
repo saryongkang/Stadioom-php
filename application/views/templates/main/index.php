@@ -55,21 +55,7 @@
               </div><!-- topbarContainer -->
             </div> <!-- topbar -->
 	
-	</section>
-
-    
-    
-    
-    
-    <div class="row">
-                        
-                    </div> <!-- row -->
-                    
-                    
-                    
-                    
-                    
-                    
+	</section>                    
 
 	<section id="main">
 
@@ -79,10 +65,10 @@
                   <div class="row">
                       <div class="span1">&nbsp; </div> 
                       <div id='user-pic-container' class="span2 center">
-                         <div id='user-pic-img'><img src="https://graph.facebook.com/<?php echo $session['fbUser']['id'] ?>/picture?type=normal" />
-                        </div>
+                         <img src="https://graph.facebook.com/<?php echo $session['fbUser']['id'] ?>/picture?type=normal" />
+<!--                        <div id='user-pic-img'></div>
                          <div id='user-pic-txt'>
-                         </div>
+                         </div>-->
                        </div>
                       <div class="span1">&nbsp; </div> 
                   </div><!-- end of row -->

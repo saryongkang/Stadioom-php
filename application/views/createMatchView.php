@@ -63,6 +63,14 @@
         <a class="close" href="#">×</a>
         <p><strong>Oops!</strong> You need to choose the players of team B.</p>
     </div>
+    <div id="scoreAErrorDiv" class="alert-message error" style="display: none">
+        <a class="close" href="#">×</a>
+        <p><strong>Oops!</strong> You forgot to include the score for team A.</p>
+    </div>
+    <div id="scoreBErrorDiv" class="alert-message error" style="display: none">
+        <a class="close" href="#">×</a>
+        <p><strong>Oops!</strong> You forgot to include the score for team B.</p>
+    </div>
     
 
 
@@ -70,7 +78,7 @@
         <fieldset>
           <div class="clearfix">
             <label for="stackedSelect">Select Sport</label>
-            <div class="input">
+            <div class="input center">
               <select name="sportSelect" id="sportSelect" class="large">
 
                 <?php foreach ($sports as $sport):?>
@@ -108,12 +116,34 @@
                 </ul>
               </div>
           </div><!-- /clearfix -->
-
+          
           <div class="clearfix">
-           <label for="teamsPlayers">Who's playing?</label>
-            <button id="playersA" class="btn success large" >Team A</button>
-           VS
-            <button id="playersB" class="btn danger large" >Team B</button>
+              <label for="teamsPlayers">Who's playing?</label>
+              <div class="row">
+                  <div class="span1"> &nbsp;</div>
+                  <div class="span6">
+                      <div class="row">
+                          <div class="span2 center">
+                            <button id="playersA" class="btn success large" >Team A</button>
+                          </div>
+                          <div class="span1 center"> VS </div>
+                          <div class="span2 center">
+                            <button id="playersB" class="btn danger large" >Team B</button>
+                          </div>
+                      </div> <!-- endRow -->
+                      
+                      <div class="row">
+                          <div class="span2 center">
+                            <input id ="scoreA" class="micro score" type="text" placeholder="Score" maxlength="3"/>
+                          </div>
+                          <div class="span1"> &nbsp;</div>
+                          <div class="span2 center">
+                            <input id ="scoreB"class="micro score" type="text" placeholder="Score" maxlength="3"/>
+                          </div>
+                      </div> <!-- endRow -->
+                  </div>
+                  <div class="span1"> &nbsp;</div>
+              </div>
           </div><!-- /clearfix -->
 
           <div class="clearfix">
@@ -154,7 +184,7 @@
               </ul>
             </div>
           </div> /clearfix -->
-            <div class="clearfix">
+            <div id="social-switches" class="clearfix center">
                 <img src="/assets/images/social/facebook_32.png" /><div id="fbSwitch" class="inline"> </div>
                 <img src="/assets/images/social/twitter_32.png" /><div id="twitterSwitch" class="inline"> </div>
             </div>
@@ -220,8 +250,8 @@
     
     
     //Scores
-    var scoreA = 0;
-    var scoreB = 0;
+    var scoreA = null;
+    var scoreB = null;
 
     sponsorPicsFolder='/assets/images/sponsors/';
     sponsorBannersFolder=sponsorPicsFolder+'banners/';

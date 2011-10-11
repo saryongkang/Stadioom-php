@@ -17,7 +17,7 @@ body {
 
 /* MAIN MENU */
 #leftmenu{
-    margin-left: 0px;
+    
 }
 
 #leftmenu ul{ /* remove bullets and list indents */
@@ -54,10 +54,10 @@ body {
 }
 
 
-#user-pic-container{
+/*#user-pic-container{
 	padding-top:5px;
 	margin:auto;
-}
+}*/
 
 #user-pic-img{
 	height:100px;

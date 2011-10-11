@@ -104,3 +104,10 @@
     padding-left:8px;
     margin-top:-5px;
 }
+
+.input-micro,
+input.micro,
+textarea.micro,
+select.micro {
+  width: 40px;
+}

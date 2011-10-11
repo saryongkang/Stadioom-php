@@ -119,6 +119,7 @@ root {
     font-size:20px;
     height:40px;
     line-height:30px;
+    margin-left: -30px;
 }
 
 .alert-message{
@@ -137,4 +138,14 @@ root {
 
 #teamSelect li label {
     display:inline;
+}
+
+#social-switches{
+    margin-left: -30px;
+}
+
+/*rewrite from bootstrap */
+
+.form-stacked{
+    margin-left: 0px;
 }

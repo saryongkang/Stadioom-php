@@ -90,8 +90,27 @@ $('#submitMatch').click(function(event) {
     $("#fbErrorDiv").hide();
     $("#matchSuccess").hide();
     $("#fbShareSuccess").hide();
+    $("#scoreAErrorDiv").hide();
+    $("#scoreBErrorDiv").hide();
+    
+    window.scoreA = $('#scoreA').val();
+    window.scoreB = $('#scoreB').val();
     
     //Validation
+    if(!window.scoreA){
+        errors.push( {type: 'scoreA', value: true});
+        $("#scoreAErrorDiv").fadeIn();
+    }else{
+        //TODO: code for validation
+    }
+    
+    if(window.scoreB==null){
+        errors.push( {type: 'scoreB', value: true});
+        $("#scoreBErrorDiv").fadeIn();
+    }else{
+        //TODO: code for validation
+    }
+    
     if(window.selectedSponsor==null){
         errors.push( {type: 'sponsor', value: true});
         $("#sponsorErrorDiv").fadeIn();
@@ -129,8 +148,9 @@ $('#submitMatch').click(function(event) {
             teamBFBPlayers.push(window.user['fbId']);
         }
         console.log(window.user['fbId']);
+        console.log('ScoreA ='+window.scoreA + " " + 'ScoreB ='+window.scoreB);
+        console.log('Belongteam ='+belongTeam);
         
-
         params = {
             "sportId" : window.selectedSportId,
             "brandId": window.selectedSponsor.id ,
@@ -207,3 +227,19 @@ $('#submitMatch').click(function(event) {
 
 
 }); //End of Submit Match
+
+
+//Score validation
+
+$(".score").keydown(function(event) {
+        // Allow only backspace and delete
+    if ( event.keyCode == 46 || event.keyCode == 8 ) {
+        // let it happen, don't do anything
+    }
+    else {
+        // Ensure that it is a number and stop the keypress
+        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+            event.preventDefault(); 
+        }   
+    }
+});

@@ -4,14 +4,21 @@
     <?php foreach ($matches as $match):?>
       <div class='match-banner'>
         <div class='match-banner-title'>
-        <?php echo $sports[$match->getSportId()-1]->getName(); ?> Match, sponsored by <?php echo $brands[$match->getBrandId()-1]->getName();?>
+        <?php echo $match['title'];?>
         </div>
         <div class='match-banner-body'>
           <div class='match-team-left' id='match-player1'>
-            <img class='match-player-img' id='match-player1-img' src="/assets/images/default_user_100x100.png" width="50" height="50" />
+              <?php
+               
+                
+               ?>
+            <img class='match-player-img' id='match-player1-img' src="<?php echo $match['summaryPlayersAPic'] ?>" width="50" height="50" />
             <div class="match-player-text">
-            {$player1Name} <br />
-            <?php echo $match->getScoreA() ?>
+               
+            <?php echo $match['summaryPlayersAText'] ?> <br />
+            
+            
+            <?php echo $match['scoreA'] ?>
             </div>
           </div><!-- End match-teamleft -->
           <div class='match-vs'>
@@ -21,13 +28,15 @@
           <div class='match-team-right' id='match-player2'>
             <div class="match-player-text">
             {$player2Name} <br />
-            <?php echo $match->getScoreB() ?>
+            ScoreB
             </div>
             <img class='match-player-img' id='match-player2-img' src="/assets/images/default_user_100x100.png" width="50" height="50" />
           </div><!-- End match-player2 -->
 
         </div> <!-- End match-banner-body -->
       </div> <!-- End match-banner -->
+      
+      <?php echo $match['playersADetailDiv'] ?>
     <?php endforeach;?>
     
 </div>
