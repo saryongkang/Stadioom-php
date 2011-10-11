@@ -94,10 +94,10 @@ class Match extends FBAuth_Controller {
                 }
 
                 if($isPlayerInTeam===true){
-                    $summaryPlayersText = 'You + '.sizeof($players). 'more';
+                    $summaryPlayersText = 'You &amp; '.sizeof($players). '+';
                     $summaryPlayersPic ='https://graph.facebook.com/'.$data['session']['fbUser']['id'].'/picture';
                 }else{
-                    $summaryPlayersText = $firstPlayer['name'].' + '.($numberOfPlayers-1). ' more';
+                    $summaryPlayersText = $firstPlayer['name'].' &amp; '.($numberOfPlayers-1). '+';
                     $summaryPlayersPic ='https://graph.facebook.com/'.$firstPlayer['fbId'].'/picture';
                 }
 
