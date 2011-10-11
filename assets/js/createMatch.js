@@ -96,15 +96,18 @@ $('#submitMatch').click(function(event) {
     window.scoreA = $('#scoreA').val();
     window.scoreB = $('#scoreB').val();
     
+    var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
+    
     //Validation
-    if(!window.scoreA){
+    if(!window.scoreA === undefined || window.scoreB === ''){
+        
         errors.push( {type: 'scoreA', value: true});
         $("#scoreAErrorDiv").fadeIn();
     }else{
         //TODO: code for validation
     }
     
-    if(window.scoreB==null){
+    if(window.scoreB === undefined || window.scoreB === ''  ){
         errors.push( {type: 'scoreB', value: true});
         $("#scoreBErrorDiv").fadeIn();
     }else{
@@ -117,13 +120,17 @@ $('#submitMatch').click(function(event) {
     }
     
     if(window.teamAFBSelector.getselectedFriendIds().length <1){
-         errors.push( {type: 'teamA', value: true});
-         $("#teamAErrorDiv").fadeIn();
+        if(belongTeam != 1){
+             errors.push( {type: 'teamA', value: true});
+             $("#teamAErrorDiv").fadeIn();
+        }
     }
     
     if(window.teamBFBSelector.getselectedFriendIds().length <1){
-         errors.push( {type: 'teamB', value: true});
-         $("#teamBErrorDiv").fadeIn();
+        if(belongTeam != 2){
+             errors.push( {type: 'teamB', value: true});
+             $("#teamBErrorDiv").fadeIn();
+        }
     }
     
     //console.log(errors);
@@ -139,7 +146,7 @@ $('#submitMatch').click(function(event) {
         
         var cct = $.cookie('safe_sdsk_stad');
         
-        var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
+        
         //console.log(belongTeam);
         
         if(belongTeam == 1){
@@ -147,9 +154,9 @@ $('#submitMatch').click(function(event) {
         }else if(belongTeam == 2){
             teamBFBPlayers.push(window.user['fbId']);
         }
-        console.log(window.user['fbId']);
-        console.log('ScoreA ='+window.scoreA + " " + 'ScoreB ='+window.scoreB);
-        console.log('Belongteam ='+belongTeam);
+//        console.log(window.user['fbId']);
+//        console.log('ScoreA ='+window.scoreA + " " + 'ScoreB ='+window.scoreB);
+//        console.log('Belongteam ='+belongTeam);
         
         params = {
             "sportId" : window.selectedSportId,

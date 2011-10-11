@@ -199,7 +199,6 @@
     <div id="results">
     </div>
 
-    Score<br />
 
 </div>
 <div class="span4">
@@ -251,8 +250,8 @@
     
     
     //Scores
-    var scoreA = null;
-    var scoreB = null;
+    var scoreA;
+    var scoreB;
 
     sponsorPicsFolder='/assets/images/sponsors/';
     sponsorBannersFolder=sponsorPicsFolder+'banners/';
