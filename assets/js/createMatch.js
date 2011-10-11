@@ -181,6 +181,10 @@ $('#submitMatch').click(function(event) {
         //Show success message and post to FB
         submitMatch.success( function(){
             $("#matchSuccess").fadeIn();
+            window.scoreA='';
+            window.scoreB='';
+            $('#scoreA').val('');
+            $('#scoreB').val('');
             
             if(FBShare==true){
                 try{

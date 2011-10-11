@@ -41,8 +41,8 @@ class Main extends FBAuth_Controller {
                 $summaryPlayersText= '';
                 $firstPlayer= array();
                 $isPlayerInTeam= false;
-                $numberOfPlayers = sizeof($players)+1;
-                for ($i=0; $i<($numberOfPlayers-1); $i++){
+                $numberOfPlayers = sizeof($players);
+                for ($i=0; $i<($numberOfPlayers); $i++){
                     $player =$players[$i];
                     //$player = $this->UserDao->find($player->getId());
                     if($i==0);
@@ -60,11 +60,16 @@ class Main extends FBAuth_Controller {
                     $playersDetailDiv .='<div class="playerInfo"><img src="https://graph.facebook.com/'.$player->getFbId().'/picture" /> '.$player->getName().'</div>';
                 }
 
+                $otherPlayers = ($numberOfPlayers-1);
+                $othersText='';
+                if($otherPlayers>0){
+                    $othersText = ' &amp; '.$otherPlayers. '+';
+                }
                 if($isPlayerInTeam===true){
-                    $summaryPlayersText = 'You &amp; '.sizeof($players). '+';
+                    $summaryPlayersText = '<strong>You</strong>'. $othersText;
                     $summaryPlayersPic ='https://graph.facebook.com/'.$data['session']['fbUser']['id'].'/picture';
                 }else{
-                    $summaryPlayersText = $firstPlayer['name'].' &amp; '.($numberOfPlayers-1). '+';
+                    $summaryPlayersText = $firstPlayer['name'].$othersText;
                     $summaryPlayersPic ='https://graph.facebook.com/'.$firstPlayer['fbId'].'/picture';
                 }
 
