@@ -385,9 +385,11 @@
     var appId = <?php echo $this->config->item('fbAppId'); ?>;
 </script>
 
+<?php $filemtime = filemtime(FCPATH.'assets/js/createMatchFBFriendSelector.js'); ?>
+<script src="/assets/js/createMatchFBFriendSelector.js?<?php echo $filemtime ?>"></script>
+<?php $filemtime = filemtime(FCPATH.'assets/js/createMatch.js'); ?>
+<script src="/assets/js/createMatch.js?<?php echo $filemtime ?>"></script>
 
-<script src="/assets/js/createMatch.js"></script>
-<script src="/assets/js/createMatchFBFriendSelector.js"></script>
 
 
 
