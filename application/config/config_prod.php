@@ -248,12 +248,12 @@ $config['encryption_key'] = 'shockedrabbitinthehole';
   | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
   |
  */
-$config['sess_cookie_name'] = 'sdsk_stadioom_session';
+$config['sess_cookie_name'] = 'stdmse';
 $config['sess_expiration'] = 7200;
 $config['sess_expire_on_close'] = FALSE;
 $config['sess_encrypt_cookie'] = TRUE;
 $config['sess_use_database'] = FALSE;
-$config['sess_table_name'] = 'stad_sessions';
+$config['sess_table_name'] = 'stadtable';
 $config['sess_match_ip'] = FALSE;
 $config['sess_match_useragent'] = TRUE;
 $config['sess_time_to_update'] = 300;
@@ -299,7 +299,7 @@ $config['global_xss_filtering'] = FALSE;
  */
 $config['csrf_protection'] = FALSE;
 $config['csrf_token_name'] = 'sdsk_stad_tok';
-$config['csrf_cookie_name'] = 'safe_sdsk_stad';
+$config['csrf_cookie_name'] = 'safesdskstad';
 $config['csrf_expire'] = 7200;
 
 /*

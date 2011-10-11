@@ -144,7 +144,7 @@ $('#submitMatch').click(function(event) {
         var currentDate = new Date();
         var title = window.selectedSponsor.id +" " + window.selectedSportId + " match: " +window.scoreA +" - "+window.scoreB;
         
-        var cct = $.cookie('safe_sdsk_stad');
+        var cct = $.cookie('safesdskstad');
         
         
         //console.log(belongTeam);
@@ -161,7 +161,7 @@ $('#submitMatch').click(function(event) {
         params = {
             "sportId" : window.selectedSportId,
             "brandId": window.selectedSponsor.id ,
-            "title" : null,
+//            "title" : null,
             //@"1", @"leagueType",
             "userId" : window.user['id'],
             "scoreA" : window.scoreA,
