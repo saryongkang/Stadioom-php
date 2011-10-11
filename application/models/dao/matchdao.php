@@ -136,93 +136,7 @@ class MatchDao extends CI_Model {
         log_message('debug', "completeMembers: exit.");
         $this->em->flush();
     }
-//    public function completeMembers(&$match, &$memberFbIdsA, &$memberFbIdsB) {
-//        log_message('debug', "completeMembers: enter.");
-//
-//        if (is_array($memberFbIdsA)) {
-////            $me = $this->em->find('Entities\User', $match->getOwnerId());
-//            foreach ($memberFbIdsA as $fbId) {
-//                $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
-//                if ($user == null) {
-//                    $user = new Entities\User();
-//
-//                    $fbFriend = file_get_contents("http://graph.facebook.com/" . $fbId);
-//                    $fbFriend = json_decode($fbFriend);
-//
-//                    // fill user table
-//                    $user->setFbId($fbId);
-//                    $user->setName($fbFriend->name);
-//                    $user->setGender($fbFriend->gender);
-//                    $user->setFbLinked(false);
-//                    $user->setFbAuthorized(false);
-//                    $user->setVerified(false);
-//
-//                    $this->em->persist($user);
-//
-//                    // fill user fb table.
-//                    $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
-//                    if ($userFb == null) {
-//                        $userFb = new Entities\UserFb();
-//                        $userFb->setFbId($fbId);
-//                    }
-//                    $userFb->setName($fbFriend->name);
-//                    $userFb->setGender($fbFriend->gender);
-//                    $userFb->setLocale($fbFriend->locale);
-//
-//                    $this->em->persist($userFb);
-//                    $this->em->flush();
-//                }
-//
-//                $newMember = new Entities\MatchRecordMemberA();
-//                $newMember->setUserId($user->getId());
-//                $newMember->setMatch($match);
-//                $match->addMemberIdsA($newMember);
-//            }
-//        }
-//        if (is_array($memberFbIdsB)) {
-//            foreach ($memberFbIdsB as $fbId) {
-//                $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
-//                if ($user == null) {
-//                    $user = new Entities\User();
-//
-//                    $fbFriend = file_get_contents("http://graph.facebook.com/" . $fbId);
-//                    $fbFriend = json_decode($fbFriend);
-//
-//                    // fill user table
-//                    $user->setFbId($fbId);
-//                    $user->setName($fbFriend->name);
-//                    $user->setGender($fbFriend->gender);
-//                    $user->setFbLinked(false);
-//                    $user->setFbAuthorized(false);
-//                    $user->setVerified(false);
-//
-//                    $this->em->persist($user);
-//
-//                    // fill user fb table.
-//                    $userFb = $this->em->getRepository('Entities\UserFb')->findOneByFbId($fbId);
-//                    if ($userFb == null) {
-//                        $userFb = new Entities\UserFb();
-//                        $userFb->setFbId($fbId);
-//                    }
-//                    $userFb->setName($fbFriend->name);
-//                    $userFb->setGender($fbFriend->gender);
-//                    $userFb->setLocale($fbFriend->locale);
-//
-//                    $this->em->persist($userFb);
-//                    $this->em->flush();
-//                }
-//
-//                $newMember = new Entities\MatchRecordMemberB();
-//                $newMember->setUserId($user->getId());
-//                $newMember->setMatch($match);
-//                $match->addMemberIdsB($newMember);
-//            }
-//        }
-//
-//        log_message('debug', "completeMembers: exit.");
-//        $this->em->flush();
-//    }
-//
+
     private function completeTitle($match) {
         log_message('debug', "completeTitle: enter.");
 
@@ -230,7 +144,8 @@ class MatchDao extends CI_Model {
         if ($title == null || $title == "" || $title == "null") {
             // get sport name
             $sportId = $match->getSportId();
-            $sportName = $this->em->createQuery("SELECT s.name FROM Entities\Sport s WHERE s.id = " . $sportId);
+            $sportName = $this->em->createQuery("SELECT s.name FROM Entities\Sport s WHERE s.id = " . $sportId)->getResult();
+            ;
             if (count($sportName) == 0) {
                 throw new Exception("Unknown Sport: " . $sportId, 404);
             }
@@ -239,11 +154,11 @@ class MatchDao extends CI_Model {
             // get brand name (if exists)
             $brandId = $match->getBrandId();
             if ($brandId != null) {
-                $brandName = $this->em->createQuery("SELECT b.name FROM Entities\Brand b WHERE b.id = " . $brandId);
+                $brandName = $this->em->createQuery("SELECT b.name FROM Entities\Brand b WHERE b.id = " . $brandId)->getResult();
+                ;
                 if (count($brandName) == 0) {
                     throw new Exception("Unknown Brand: " . $sportId, 404);
                 }
-
                 $title .= ' ' . $brandName[0]['name'];
             }
 
