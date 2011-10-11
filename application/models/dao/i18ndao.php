@@ -100,7 +100,7 @@ class I18nDao extends CI_Model {
         }
         // TODO: Current it ignores the language code. Fix it later.
         $lang = strtok($lang, "_");
-        
+
         if ($category == null || !is_numeric($after)) {
             log_message('error', "'category' and 'after' are required.");
             throw new Exception("'category' and 'after' are required.", 400);
@@ -113,21 +113,27 @@ class I18nDao extends CI_Model {
         }
         $lastUpdated = intval($this->lang->line("__last_updated"));
         if ($lastUpdated > $after) {
-            $all = $this->lang->all();
-            $keys = array_keys($all);
+            $origin = $this->lang->all();
+            $keys = array_keys($origin);
             foreach ($keys as $key) {
-                $all[$key] = $this->replace($all[$key], $clientType);
+                $origin[$key] = $this->replace($origin[$key], $clientType);
             }
 
-            $_lastUpdated = $all['__last_updated'];
-            unset($all['__last_updated']);
+            $_lastUpdated = $origin['__last_updated'];
+            unset($origin['__last_updated']);
+
+            $keys = array_keys($origin);
+            $result = array();
+            foreach ($keys as $key) {
+                array_push($result, array('id' => $key, 'message' => $origin[$key]));
+            }
 
             log_message('debug', "getDelta: exit.");
-            return array('lastUpdated' => $_lastUpdated, 'data' => array($all));
+            return array('lastUpdated' => $_lastUpdated, 'data' => $result);
         }
 
         log_message('debug', "getDelta: exit.");
-        return array("lastUpdated" => $this->lang->line("__last_updated"));
+        return array("lastUpdated" => $this->lang->line("__last_updated"), 'data' => array());
     }
 
     /**
