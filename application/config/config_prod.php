@@ -195,7 +195,7 @@ $config['log_threshold'] = 2;
   | application/logs/ folder. Use a full server path with trailing slash.
   |
  */
-$config['log_path'] = '';
+$config['log_path'] = '/tmp/stadioom_logs/';
 
 /*
   |--------------------------------------------------------------------------
