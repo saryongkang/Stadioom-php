@@ -314,46 +314,46 @@ class MatchDao extends CI_Model {
 
         $dql = 'SELECT m';
         if ($memberId != null) {
-            $dql = $dql . ', a, b';
+            $dql .= ', a, b';
         }
-        $dql = $dql . ' FROM Entities\MatchRecord m';
+        $dql .= ' FROM Entities\MatchRecord m';
         if ($memberId != null) {
-            $dql = $dql . ' JOIN m.membersA a JOIN m.membersB b';
+            $dql .= ' JOIN m.membersA a JOIN m.membersB b';
         }
         if ($since != null || $sportId != null || $ownerId != null || $memberId != null) {
-            $dql = $dql . ' WHERE';
+            $dql .= ' WHERE';
 
             $first = true;
             if ($since != null) {
                 if (!$first) {
-                    $dql = $dql . ' AND';
+                    $dql .= ' AND';
                 }
-                $dql = $dql . ' m.lastUpdated >= ' . $since;
+                $dql .= ' m.lastUpdated >= ' . $since;
                 $first = false;
             }
             if ($sportId != null) {
                 if (!$first) {
-                    $dql = $dql . ' AND';
+                    $dql .= ' AND';
                 }
-                $dql = $dql . ' m.sportId = ' . $sportId;
+                $dql .= ' m.sportId = ' . $sportId;
                 $first = false;
             }
             if ($ownerId != null) {
                 if (!$first) {
-                    $dql = $dql . ' AND';
+                    $dql .= ' AND';
                 }
-                $dql = $dql . ' m.ownerId >= ' . $ownerId;
+                $dql .= ' m.ownerId >= ' . $ownerId;
                 $first = false;
             }
             if ($memberId != null) {
                 if (!$first) {
-                    $dql = $dql . ' AND';
+                    $dql .= ' AND';
                 }
-                $dql = $dql . ' (a.id = ' . $memberId . ' OR b.id = ' . $memberId . ')';
+                $dql .= ' (a.id = ' . $memberId . ' OR b.id = ' . $memberId . ')';
                 $first = false;
             }
         }
-        $dql = $dql . ' ORDER BY m.lastUpdated DESC';
+        $dql .= ' ORDER BY m.lastUpdated DESC';
         error_log('=============' . $dql);
         $q = $this->em->createQuery($dql);
         $q->setMaxResults($limit);

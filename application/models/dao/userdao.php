@@ -562,11 +562,11 @@ class UserDao extends CI_Model {
         log_message('debug', "search: enter.");
         $dql = 'select u from Entities\User u where';
         if ($type == 'name') {
-            $dql = $dql . " u.name LIKE '%" . $keyword . "%'";
+            $dql .= " u.name LIKE '%" . $keyword . "%'";
         } else if ($type == 'email') {
-            $dql = $dql . " u.email LIKE '%" . $keyword . "%'";
+            $dql .= " u.email LIKE '%" . $keyword . "%'";
         } else {
-            $dql = $dql . " u.name LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%'";
+            $dql .= " u.name LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%'";
         }
 
         $q = $this->em->createQuery($dql);
@@ -713,10 +713,10 @@ class UserDao extends CI_Model {
     public function getLatestMatches($userId, $maxNumber) {
         log_message('debug', "getLatestMatches: enter.");
         $dql = "SELECT m, a, b";
-        $dql = $dql . " FROM Entities\MatchRecord m";
-        $dql = $dql . " JOIN m.membersA a JOIN m.membersB b";
-        $dql = $dql . " WHERE a.id = " . $userId . " OR b.id = " . $userId;
-        $dql = $dql . ' ORDER BY m.lastUpdated DESC';
+        $dql .= " FROM Entities\MatchRecord m";
+        $dql .= " JOIN m.membersA a JOIN m.membersB b";
+        $dql .= " WHERE a.id = " . $userId . " OR b.id = " . $userId;
+        $dql .= ' ORDER BY m.lastUpdated DESC';
         $q = $this->em->createQuery($dql);
         $q->setMaxResults($maxNumber);
         $result = $q->getResult();
