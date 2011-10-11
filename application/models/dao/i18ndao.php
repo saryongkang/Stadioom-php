@@ -54,7 +54,7 @@ class I18nDao extends CI_Model {
      * @param type $clientType  (optional) The client type ('ios', 'js')
      */
     public function translate($id, $lang = null, $clientType = null) {
-        log_message('debug', "translate: enter.");
+//        log_message('debug', "translate: enter.");
 
         if ($lang == null || !$this->isSupported($lang)) {
             $lang = "en";
@@ -67,12 +67,12 @@ class I18nDao extends CI_Model {
         $this->lang->load($category, $lang);
         $originalText = $this->lang->line($id);
 
-        log_message('debug', "translate: exit.");
+ //       log_message('debug', "translate: exit.");
         return $this->replace($originalText, $clientType);
     }
 
     private function replace(&$translated, &$clientType) {
-        log_message('debug', "replace: enter.");
+//        log_message('debug', "replace: enter.");
 
         if ($clientType == 'ios') {
             $pattern = "/%(\d*)s/";
@@ -80,7 +80,7 @@ class I18nDao extends CI_Model {
             $translated = preg_replace($pattern, $replacement, $translated);
         }
 
-        log_message('debug', "replace: exit.");
+//        log_message('debug', "replace: exit.");
         return $translated;
     }
 
