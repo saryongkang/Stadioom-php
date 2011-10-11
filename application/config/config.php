@@ -17,8 +17,8 @@ if (!defined('BASEPATH'))
   | path to your installation.
   |
  */
-$config['base_url'] = 'http://stadioomtest.com/';
-$config['base_ssl_url'] = 'https://stadioomtest.com/';
+$config['base_url'] = "http".((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "")."://".$_SERVER['HTTP_HOST'].str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+$config['base_ssl_url'] = 'https://stadioom.com/';
 
 /*
   |--------------------------------------------------------------------------
@@ -184,7 +184,7 @@ $config['directory_trigger'] = 'd'; // experimental not currently in use
   | your log files will fill up very fast.
   |
  */
-$config['log_threshold'] = 4;
+$config['log_threshold'] = 2;
 
 /*
   |--------------------------------------------------------------------------
@@ -270,7 +270,7 @@ $config['sess_time_to_update'] = 300;
   |
  */
 $config['cookie_prefix'] = "";
-$config['cookie_domain'] = ".stadioomtest.com";
+$config['cookie_domain'] = ".stadioom.com";
 $config['cookie_path'] = "/";
 $config['cookie_secure'] = FALSE;
 
@@ -301,6 +301,7 @@ $config['csrf_protection'] = FALSE;
 $config['csrf_token_name'] = 'sdsk_stad_tok';
 $config['csrf_cookie_name'] = 'safe_sdsk_stad';
 $config['csrf_expire'] = 7200;
+
 /*
   |--------------------------------------------------------------------------
   | Output Compression
@@ -379,9 +380,6 @@ $config['email_charset'] = 'utf-8';
 $config['email_from'] = 'stadioom@seedshock.com';
 $config['email_from_display_name'] = 'SeedShock';
 $config['email_bcc'] = 'wegra.lee@gmail.com';
-
-$config['test_account'] = 'test@seedshock.com';
-$config['test_account_password'] = 'pesdwhrc';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

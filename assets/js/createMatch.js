@@ -232,7 +232,7 @@ $('#submitMatch').click(function(event) {
 //Score validation
 
 $(".score").keydown(function(event) {
-        // Allow only backspace and delete
+        // Allow only backspace, delete, left and 
     if ( event.keyCode == 46 || event.keyCode == 8 ) {
         // let it happen, don't do anything
     }
@@ -249,7 +249,7 @@ $(".score").keydown(function(event) {
 
 
 $(function(){
-    $('#matchDate').datepicker();
+    $('#matchDate').datepicker({ defaultDate: +0 });
     //For Date RANGE
 //    $('#matchDate').daterangepicker({arrows:true}); 
  });

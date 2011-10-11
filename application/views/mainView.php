@@ -4,8 +4,12 @@
     Total points: {$totalPoints}
     <br />
 
-
+    
+    
     <div id='last-match' class='mini-section'>
+        <?php if (sizeof($lastMatch)>0): ?>
+        <?php $match=$lastMatch[0]; ?>
+        
       <div id='last-match-header' class='minisection-header'>
         <div id='last-match-header-text' class="minisection-header-text">
            Last match:
@@ -14,8 +18,7 @@
           <a href="#">View all matches</a>
         </div>
       </div>
-        
-        <?php $match=$lastMatch[0]; ?>
+=
       <div class='match-banner'>
         <div class='match-banner-title'>
         <?php echo $sports[$match->getSportId()-1]->getName(); ?> Match, sponsored by <?php echo $brands[$match->getBrandId()-1]->getName();?>
@@ -42,9 +45,12 @@
 
         </div> <!-- End match-banner-body -->
       </div> <!-- End match-banner -->
+      <?php else: ?>
+        You didn't play any games yet.
+    <?php endif; ?>
 
     </div>  <!-- End last-match -->
-
+    
 </div>
 <div class="span4">
   Ads

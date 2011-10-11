@@ -8,16 +8,11 @@
         </div>
         <div class='match-banner-body'>
           <div class='match-team-left' id='match-player1'>
-              <?php
-               
-                
-               ?>
+
             <img class='match-player-img' id='match-player1-img' src="<?php echo $match['summaryPlayersAPic'] ?>" width="50" height="50" />
             <div class="match-player-text">
                
             <?php echo $match['summaryPlayersAText'] ?> <br />
-            
-            
             <?php echo $match['scoreA'] ?>
             </div>
           </div><!-- End match-teamleft -->
@@ -27,16 +22,17 @@
 
           <div class='match-team-right' id='match-player2'>
             <div class="match-player-text">
-            {$player2Name} <br />
-            ScoreB
+            <?php echo $match['summaryPlayersBText'] ?> <br />
+            <?php echo $match['scoreB'] ?>
             </div>
-            <img class='match-player-img' id='match-player2-img' src="/assets/images/default_user_100x100.png" width="50" height="50" />
+            <img class='match-player-img' id='match-player2-img' src="<?php echo $match['summaryPlayersBPic'] ?>" width="50" height="50" />
           </div><!-- End match-player2 -->
 
         </div> <!-- End match-banner-body -->
       </div> <!-- End match-banner -->
       
       <?php echo $match['playersADetailDiv'] ?>
+      <?php echo $match['playersBDetailDiv'] ?>
     <?php endforeach;?>
     
 </div>
