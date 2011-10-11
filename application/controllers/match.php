@@ -110,7 +110,7 @@ class Match extends FBAuth_Controller {
             }
         }
                 
-        $this->template->add_css('matchesview');
+        $this->template->add_css('matchesView');
         $this->template->add_css('main');
         
         $this->template->add_js('jquery.timeago');
