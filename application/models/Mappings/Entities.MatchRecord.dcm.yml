@@ -59,15 +59,6 @@ Entities\MatchRecord:
     lastUpdated:
       type: integer
       nullable: true
-#  oneToMany:
-#    memberIdsA:
-#      targetEntity: MatchRecordMemberA
-#      mappedBy: match
-#      cascade: [all]
-#    memberIdsB:
-#      targetEntity: MatchRecordMemberB
-#      mappedBy: match
-#      cascade: [all]
   manyToMany:
     membersA:
       targetEntity: User
