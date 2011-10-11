@@ -47,7 +47,7 @@ class I18nDao extends CI_Model {
     }
 
     /**
-     * Returns the translated message of the given msg (specified by 'msgId').
+     * Returns the translated message of the given message (specified by 'id').
      * 
      * @param type $msgId The ID of message to translate ('integer' or 'string')
      * @param type $lang (optional) The language code to translate.
@@ -90,7 +90,7 @@ class I18nDao extends CI_Model {
      * @param string $category message category.
      * @param string $lang language code.
      * @param integer $after timestamp.
-     * @return array array of updated message including '__last_modified'.
+     * @return array array of updated messages. Return format is like this {"lastUpdated":"1318234635", "data":[{"id":"msg_id","message":"msg_content"}, ..]}
      */
     public function getDelta($category, $after, $lang = null, $clientType = null) {
         log_message('debug', "getDelta: enter.");
