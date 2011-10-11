@@ -233,7 +233,7 @@ $('#submitMatch').click(function(event) {
     }
 
 
-}); //End of Submit Match
+}); //End of Submit Match Click Event
 
 
 //Score validation

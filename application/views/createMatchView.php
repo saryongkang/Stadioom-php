@@ -309,7 +309,7 @@
           
           
             $('#sponsorOK').click(function() {
-                if(tempSelectedSponsor!=null){
+                if(window.tempSelectedSponsor!=null){
                     window.selectedSponsor = window.tempSelectedSponsor;
                     //console.log(window.selectedSponsor);
                     window.hideModal();

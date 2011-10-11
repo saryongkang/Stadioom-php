@@ -78,8 +78,8 @@ window.fbAsyncInit = function () {
 //			callbackMaxSelection     : callbackMaxSelection,
 			callbackSubmit           : callbackSubmitB,
 			maxSelection             : 12,
-			friendsPerPage           : 4,
-			autoDeselection          : true
+			friendsPerPage           : 4
+//			autoDeselection          : true
 		});
 
 //		FB.getLoginStatus(function(response) {
