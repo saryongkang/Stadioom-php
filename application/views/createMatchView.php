@@ -284,6 +284,15 @@
     matchFbMessages['tied_plural'] = "<?php echo lang('fbmessage_tied_plural'); ?>";
     matchFbMessages['didntplay'] = "<?php echo lang('fbmessage_didntplay'); ?>";
     
+    matchFbMessages['caption_won_singular'] = "<?php echo lang('fbmessage_caption_won_singular'); ?>";
+    matchFbMessages['caption_won_plural'] = "<?php echo lang('fbmessage_caption_won_plural'); ?>";
+    matchFbMessages['caption_lost_singular'] = "<?php echo lang('fbmessage_caption_lost_singular'); ?>";
+    matchFbMessages['caption_lost_plural'] = "<?php echo lang('fbmessage_caption_lost_plural'); ?>";
+    matchFbMessages['caption_tied_singular'] = "<?php echo lang('fbmessage_caption_tied_singular'); ?>";
+    matchFbMessages['caption_tied_plural'] = "<?php echo lang('fbmessage_caption_tied_plural'); ?>";
+    
+    matchFbMessages['andOthers'] = "<?php echo lang('fbmessage_andOthers'); ?>";
+    
     
 <?php foreach ($sports as $sport):?>
     sportsList[<?php echo $sport->getId(); ?>] = [];

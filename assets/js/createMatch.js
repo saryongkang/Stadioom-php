@@ -153,6 +153,8 @@ $('#submitMatch').click(function(event) {
         var cct = $.cookie('safesdskstad');
         
         
+        
+        
         //console.log(belongTeam);
         
         if(belongTeam == 1){
@@ -220,13 +222,13 @@ $('#submitMatch').click(function(event) {
     var onPostToWallCompleted = function(){
         $("#fbShareSuccess").fadeIn();
     }
+    var winnerTeam;
     
     var checkWinner= function(){
         //Check winner
         var belongTeam = window.belongTeam;
         var scoreA = window.scoreA;
         var scoreB = window.scoreB;
-        var winnerTeam;
         if (scoreA>scoreB){
             winnerTeam = 1; //A is winner
         }else if (scoreA<scoreB){
@@ -234,6 +236,7 @@ $('#submitMatch').click(function(event) {
         }else if (scoreA==scoreB){
             winnerTeam = 3; //none
         }
+        console.log(winnerTeam);
         //console.log ('ScoreA: ' + scoreA + 'ScoreB: ' + scoreB);
         //console.log ('WinnerTeam: ' + winnerTeam);
         var userWinningStatus = 0; //0 didn't play //1 won //2 lost //3 tie
@@ -263,44 +266,129 @@ $('#submitMatch').click(function(event) {
         var userWinningStatus = checkWinner();
 
         // User's team (to check if he played alone or with a team) singular or plural
-        var singular = true;
+        var numeral = "singular";
         //console.log('winningStatus: '+userWinningStatus);
-        if(userWinningStatus!=0)
-            if(window.userTeam.length>0) singular= false;
+        if(userWinningStatus!=0){
+            if (window.userTeam.length>0) numeral="plural";
+        }
         //console.log('userTeam Size '+ window.userTeam.length);
 
         var message; //Depending on the winning status
+        var stringWinningStatus = '';
         //0 didn't play //1 won //2 lost //3 tie
-        switch(userWinningStatus)
-        {
-        case 0:
-          message = fbMessages['didntplay'];
-          //message = (condition) ? true-value : false-value;
-          break;
-        case 1:
-          message = (singular===true) ? fbMessages['won_singular'] : fbMessages['won_plural'];
-          break;
-        case 2:
-          message = (singular===true) ? fbMessages['lost_singular'] : fbMessages['lost_plural'];
-          break;
-        case 3:
-          message = (singular===true) ? fbMessages['tied_singular'] : fbMessages['tied_plural'];
-          break;
+        if(userWinningStatus!=0){
+            switch(userWinningStatus){
+            case 1:
+              stringWinningStatus= 'won_'+numeral;
+              break;
+            case 2:
+              stringWinningStatus = 'lost_'+numeral;
+              break;
+            case 3:
+              stringWinningStatus = 'tied_'+numeral;
+              //message = (singular===true) ? fbMessages['tied_singular'] : fbMessages['tied_plural'];
+              break;
+            }
+            message = fbMessages[stringWinningStatus];
+            //console.log(stringWinningStatus);
+        }else{
+            message = fbMessages['didntplay'];
         }
+        
+        
+        
+        var properties = {};
+        var teamSummaryPlayers={};
+        
+        for(var i=1; i<=2; i++){
+            var score;
+            var teamId = '';
+            var teamPlayers= null;
+            if(i==1){
+                teamId = 'A';
+                score = window.scoreA;
+                teamPlayers = window.teamAFBSelector.getselectedFriendIds();
+            }else{
+                teamId = 'B';
+                score = window.scoreB;
+                teamPlayers = window.teamBFBSelector.getselectedFriendIds();
+            }
+            properties['Team '+teamId] = { "text": "Score: "+score, "href": window.baseUrl};
+            
+            
+            teamSummaryPlayers[teamId]={};
+            teamSummaryPlayers[teamId]['firstPlayerName'] = '';
+            
+            var counter=0;
+            if(window.belongTeam == i){
+                properties['- '+teamId+'.'+(1)]= { "text": window.user['name'], "href": window.baseUrl+'users/'+window.user['id']};
+                teamSummaryPlayers[teamId]['firstPlayerName'] = getFirstName(window.user['name']);
+                counter=1;
+            }
+            
+            var numPlayers=0;
+            $('#teamMates'+teamId+' .playerInTeamList').each(function(index) {
+                //alert(index + ': ' + $(this).text());
+                var name = $(this).text();
+                if(index===0 && (window.belongTeam != i)){
+                    teamSummaryPlayers[teamId]['firstPlayerName'] = getFirstName(name);
+                }
+                numPlayers++;
+                
+                properties['- '+teamId+'.'+(index+1+counter)]= { "text": name, "href": window.baseUrl+'users/fbId/'+teamPlayers[index]};
+              });
+            teamSummaryPlayers[teamId]['othersCount']=((numPlayers+counter)-1);
+            
+            if(teamSummaryPlayers[teamId]['othersCount'] >0){
+                teamSummaryPlayers[teamId]['postText'] = sprintf(fbMessages['andOthers'],teamSummaryPlayers[teamId]['firstPlayerName'],teamSummaryPlayers[teamId]['othersCount']);
+            }else{
+                teamSummaryPlayers[teamId]['postText'] = teamSummaryPlayers[teamId]['firstPlayerName'];
+            }
+            //console.log (teamSummaryPlayers[teamId]);
+        }
+        
+        var sportName = sportsList[selectedSportId].name;
+        
+        firstTeamAndOthers = teamSummaryPlayers['A']['postText'];
+        secondTeamAndOthers = teamSummaryPlayers['B']['postText'];
+        
+        if(stringWinningStatus==''){
+            numeral="singular";
+            if(winnerTeam==1){
+                if (teamSummaryPlayers['A']['othersCount']>0) numeral="plural";
+                stringWinningStatus = 'won_'+numeral;
+            }else if(winnerTeam==2){
+                firstTeamAndOthers = teamSummaryPlayers['B']['postText'];
+                secondTeamAndOthers = teamSummaryPlayers['A']['postText'];
+                if (teamSummaryPlayers['B']['othersCount']>0) numeral="plural";
+                stringWinningStatus = 'won_'+numeral;
+            }else{
+                if (teamSummaryPlayers['A']['othersCount']>0) numeral="plural";
+                stringWinningStatus = 'tied_'+numeral;
+            }
+        }else{
+            if(belongTeam==2){
+                firstTeamAndOthers = teamSummaryPlayers['B']['postText'];
+                secondTeamAndOthers = teamSummaryPlayers['A']['postText'];
+            }
+        }
+        
+        console.log(stringWinningStatus);
         
         var data=
         {
             message: message,
             //display: 'iframe',
-            caption: fbMessages['caption'],
-            name: fbMessages['title'],  
+            caption: sprintf(fbMessages['caption_'+stringWinningStatus],firstTeamAndOthers,secondTeamAndOthers,sportName),
+            name: sprintf(fbMessages['title'], window.selectedSponsor.name, sportName),  
             picture: sponsorShareIcon,    
             link: window.baseUrl,  // Go here if user click the picture
-            description: "Description field",
-            actions: [{ name: 'Enter the Stadioom', link: window.baseUrl }]			
+            //description: "Description field",
+            actions: [{ name: 'Cheer', link: window.baseUrl+'/match/id/cheer/teamA' }],
+            properties: properties
         }
         //console.log(data);    
-        //FB.api('/me/feed', 'post', data, onPostToWallCompleted);
+        FB.api('/me/feed', 'post', data, onPostToWallCompleted);
         $("#fbShareSuccess").fadeIn();
     }
 
@@ -386,3 +474,9 @@ $(function(){
  $("#matchDate").keydown(function(event) {
     event.preventDefault();
  });
+ 
+ //Auxiliar functions
+var getFirstName = function(fullName){
+    var splitName = jQuery.trim(fullName).split(" ");
+    return splitName[0];
+}
