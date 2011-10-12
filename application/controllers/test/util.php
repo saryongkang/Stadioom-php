@@ -33,7 +33,23 @@ class Util extends Stadioom_REST_Controller {
         echo '<br>';
         print_r($result);
     }
-    
+
+    public function date_get() {
+        $date = 1318362246534;
+        echo $date . '<br>';
+        $date = new DateTime();
+        $date = $date->getTimestamp();
+        echo $date . '<br>';
+
+        echo time() . '<br>';
+        $utc_str = gmdate("M d Y H:i:s", time());
+        echo $utc_str . '<br>';
+        $utc = strtotime($utc_str);
+        echo $utc . '<br>';
+        $utc = strtotime(gmdate("M d Y H:i:s", time()));
+        echo $utc . '<br>';
+    }
+
 }
 
 ?>

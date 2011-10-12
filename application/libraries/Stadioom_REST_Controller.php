@@ -43,9 +43,7 @@ class Stadioom_REST_Controller extends REST_Controller {
             throw new Exception("Invaild access token. (" . $magicCode . ':' . $userId . ':' . $expired . ")", 400);
         }
 
-        $curDate = new DateTime();
-        $curDate = $curDate->getTimestamp();
-        if ($expired != 0 && $expired < $curDate) {
+        if ($expired != 0 && $expired < time()) {
             throw new Exception("Token expired.", 401);
         }
 
