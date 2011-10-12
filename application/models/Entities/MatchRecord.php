@@ -467,21 +467,20 @@ class MatchRecord
      * @prePersist
      */
     public function prePersist() {
-        $now = new \DateTime();
-        $timestamp = $now->getTimestamp();
+        $gmt = strtotime(gmdate("M d Y H:i:s", time()));
+        
         if ($this->created == null) {
-            $this->created = $timestamp;
+            $this->created = $gmt;
         }
-        $this->lastUpdated = $timestamp;
+        $this->lastUpdated = $gmt;
     }
 
     /**
      * @preUpdate
      */
     public function preUpdate() {
-        $now = new \DateTime();
-        $timestamp = $now->getTimestamp();
-        $this->lastUpdated = $timestamp;
+        $gmt = strtotime(gmdate("M d Y H:i:s", time()));
+        $this->lastUpdated = $gmt;
     }
 
     public function toArray() {
