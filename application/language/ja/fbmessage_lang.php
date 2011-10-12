@@ -1,4 +1,5 @@
 <?php
+$lang['fbmessage_didntplay'] = "Amazing match!";
 
 $lang['fbmessage_won_singular'] = "승리!";
 $lang['fbmessage_won_plural'] = "승리!";
@@ -12,7 +13,7 @@ $lang['fbmessage_caption_plural'] = "%1s가 %3s 경기에서 %2s에 대항하여
 
 $lang['fbmessage_title'] = "%1s배 %2s경기";
 $lang['fbmessage_score'] = "최종 점수: %1s %2s - %3s %4s";
-$lang['fbmessage_link'] = "http://stadioom.com/match/view/%s";
-$lang['fbmessage_icon'] = "http://stadioom.com/assets/images/sponsors/shareicons/%1s_%2s_shareicon.gif";
+$lang['fbmessage_link'] = "match/view/%s";
+$lang['fbmessage_icon'] = "assets/images/sponsors/shareicons/%1s_%2s_shareicon.gif";
 
 $lang['__last_updated'] = '1318234635';

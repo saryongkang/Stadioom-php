@@ -13,7 +13,7 @@ $lang['fbmessage_caption_plural'] = "%1s vencieron a %2s en un intenso partido d
 
 $lang['fbmessage_title'] = "Partido de %1s %2s";
 $lang['fbmessage_score'] = "Puntuación final: %1s %2s - %3s %4s";
-$lang['fbmessage_link'] = "http://stadioom.com/match/view/%s";
-$lang['fbmessage_icon'] = "http://stadioom.com/assets/images/sponsors/shareicons/%1s_%2s_shareicon.gif";
+$lang['fbmessage_link'] = "match/view/%s";
+$lang['fbmessage_icon'] = "assets/images/sponsors/shareicons/%1s_%2s_shareicon.gif";
 
 $lang['__last_updated'] = '1318234635';
