@@ -1,4 +1,5 @@
 <?php
+$lang['fbmessage_didntplay'] = "Amazing match!";
 
 $lang['fbmessage_won_singular'] = "I won!";
 $lang['fbmessage_won_plural'] = "We won the match!";
