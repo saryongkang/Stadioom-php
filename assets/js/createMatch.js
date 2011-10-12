@@ -95,8 +95,8 @@ $('#submitMatch').click(function(event) {
     $("#scoreAErrorDiv").hide();
     $("#scoreBErrorDiv").hide();
     
-    window.scoreA = $('#scoreA').val();
-    window.scoreB = $('#scoreB').val();
+    window.scoreA = parseInt($('#scoreA').val());
+    window.scoreB = parseInt($('#scoreB').val());
     
     var belongTeam = window.belongTeam;
     
@@ -166,7 +166,7 @@ $('#submitMatch').click(function(event) {
 //        console.log('ScoreA ='+window.scoreA + " " + 'ScoreB ='+window.scoreB);
 //        console.log('Belongteam ='+belongTeam);
 
-        
+        var currentTimeInSecs = Math.round(currentDate.getTime()/1000);
         
         params = {
             "sportId" : window.selectedSportId,
@@ -180,9 +180,9 @@ $('#submitMatch').click(function(event) {
             "memberFbIdsA[]" : teamAFBPlayers,
             //@"", @"memberIdsB",
             "memberFbIdsB[]" : teamBFBPlayers,
-            "started" : currentDate.getTime(),
+            "started" : currentTimeInSecs,
             "sdsk_stad_tok": cct ,
-            "ended" : currentDate.getTime()
+            "ended" : currentTimeInSecs
         };
 
         //Make AJAX POST
@@ -229,6 +229,8 @@ $('#submitMatch').click(function(event) {
         var belongTeam = window.belongTeam;
         var scoreA = window.scoreA;
         var scoreB = window.scoreB;
+//        console.log ('scoreA '+scoreA);
+//        console.log ('scoreB '+scoreB);
         if (scoreA>scoreB){
             winnerTeam = 1; //A is winner
         }else if (scoreA<scoreB){
@@ -236,7 +238,6 @@ $('#submitMatch').click(function(event) {
         }else if (scoreA==scoreB){
             winnerTeam = 3; //none
         }
-        console.log(winnerTeam);
         //console.log ('ScoreA: ' + scoreA + 'ScoreB: ' + scoreB);
         //console.log ('WinnerTeam: ' + winnerTeam);
         var userWinningStatus = 0; //0 didn't play //1 won //2 lost //3 tie
@@ -373,7 +374,7 @@ $('#submitMatch').click(function(event) {
             }
         }
         
-        console.log(stringWinningStatus);
+        //console.log(stringWinningStatus);
         
         var data=
         {

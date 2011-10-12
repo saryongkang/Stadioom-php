@@ -267,6 +267,8 @@
 
     sportsList = [];
     
+    var winnerTeam;
+    
     // FB and twitter switch
     var twitterShare = false;
     var FBShare = true;
