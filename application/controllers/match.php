@@ -19,7 +19,13 @@ class Match extends FBAuth_Controller {
         
         $this->security->csrf_verify();
         
+        //Language Stuff
+        $language = 'en';
+        $this->lang->load('fbmessage', $language);
+        $this->load->helper('language');    
         
+        
+        // All JS
         $this->template->add_js('tdfriendselector');
         $this->template->add_js('jquery.iphone-switch');
         $this->template->add_js('jquery.cookie');

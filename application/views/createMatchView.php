@@ -270,6 +270,19 @@
     var twitterShare = false;
     var FBShare = true;
     
+    //messages
+    var matchFbMessages = [];
+    matchFbMessages['title'] = "<?php echo lang('fbmessage_title'); ?>";
+    matchFbMessages['caption'] = "<?php echo lang('fbmessage_caption'); ?>";
+    matchFbMessages['score'] = "<?php echo lang('fbmessage_score'); ?>";
+    matchFbMessages['won_singular'] = "<?php echo lang('fbmessage_won_singular'); ?>";
+    matchFbMessages['won_plural'] = "<?php echo lang('fbmessage_won_plural'); ?>";
+    matchFbMessages['lost_singular'] = "<?php echo lang('fbmessage_lost_singular'); ?>";
+    matchFbMessages['lost_plural'] = "<?php echo lang('fbmessage_lost_plural'); ?>";
+    matchFbMessages['tied_singular'] = "<?php echo lang('fbmessage_tied_singular'); ?>";
+    matchFbMessages['tied_plural'] = "<?php echo lang('fbmessage_tied_plural'); ?>";
+    
+    
 <?php foreach ($sports as $sport):?>
     sportsList[<?php echo $sport->getId(); ?>] = [];
     sportsList[<?php echo $sport->getId(); ?>]['name'] = '<?php echo $sport->getName(); ?>';
