@@ -5,7 +5,7 @@ class Main extends FBAuth_Controller {
 	{
         $data['session'] = $this->session->userdata;
         
-        
+        $this->security->csrf_verify();
         
         $this->load->model('dao/UserDao');
         $matchesData = $this->UserDao->getLatestMatches($data['session']['user']['id'], 1);
