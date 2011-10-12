@@ -5,6 +5,7 @@ class I18nDao extends CI_Model {
     private $ll_cc = array(
         'en' => 'English',
         'es' => 'Spanish',
+        'ja' => 'Japanese',
         'ko' => 'Korean'
     );
     private $em;
