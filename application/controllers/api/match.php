@@ -32,62 +32,43 @@ class Match extends Stadioom_REST_Controller {
                     throw new Exception("'userId' was not set.", 400);
                 }
             }
-            log_message('debug', "got user ID.");
 
             // fill data
             $match = new Entities\MatchRecord();
-            $match->setBrandId($this->post('brandId'));
-            $match->setCanceled($this->post('canceled'));
-            $match->setLatitude($this->post('latitude'));
-            $match->setLocation($this->post('location'));
-            $match->setLongitude($this->post('longitude'));
             $match->setOwnerId($userId);
+            
+            $match->setBrandId($this->post('brandId'));
             $match->setSportId($this->post('sportId'));
+            
             $match->setStarted($this->post('started'));
             $match->setEnded($this->post('ended'));
+            $match->setCanceled($this->post('canceled'));
 
+            $match->setLocation($this->post('location'));
+            $match->setLatitude($this->post('latitude'));
+            $match->setLongitude($this->post('longitude'));
+
+            $match->setTitle($this->post('title'));
+            
             $match->setScoreA($this->post('scoreA'));
             $match->setScoreB($this->post('scoreB'));
-            $match->setTitle($this->post('title'));
-
-            $this->post('shared');
-
-            log_message('debug', "here 1.");
+            
             $match->setTeamAId($this->post('teamA'));
             $match->setTeamBId($this->post('teamB'));
 
-            $memberIds = $this->post('memberIdsA');
-            if (is_array($memberIds)) {
-                foreach ($memberIds as $id) {
-                    $member = new Entities\MatchRecordMemberA();
-                    $member->setUserId($id);
-                    $match->addMemberIdsA($member);
-                    $member->setMatch($match);
-                }
-            }
-            log_message('debug', "here 2.");
-            $memberIds = $this->post('memberIdsB');
-            if (is_array($memberIds)) {
-                foreach ($memberIds as $id) {
-                    $member = new Entities\MatchRecordMemberB();
-                    $member->setUserId($id);
-                    $match->addMemberIdsB($member);
-                    $member->setMatch($match);
-                }
-            }
-
-            log_message('debug', "here 3.");
+            $memberIdsA = $this->post('memberIdsA');
+            $memberIdsB = $this->post('memberIdsB');
             $memberFbIdsA = $this->post('memberFbIdsA');
             $memberFbIdsB = $this->post('memberFbIdsB');
 
             log_message('debug', "trying to register.");
-            $matchId = $this->MatchDao->register($match, $memberFbIdsA, $memberFbIdsB);
+            $matchId = $this->MatchDao->register($match, $memberIdsA, $memberIdsB, $memberFbIdsA, $memberFbIdsB);
             log_message('debug', "done.");
 
             log_message('debug', "index_post exit.");
             $this->responseOk(array("id" => $matchId));
         } catch (Exception $e) {
-            log_message('debug', "index_post exit with error.");
+            log_message('debug', "index_post exit with error: " . $e->getMessage());
             $this->responseError($e);
         }
     }

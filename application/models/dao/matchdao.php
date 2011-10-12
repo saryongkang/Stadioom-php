@@ -19,12 +19,12 @@ class MatchDao extends CI_Model {
      * @param array $memberFbIdsB 
      * @param string $fbAccessToken 
      */
-    public function register($match, $memberFbIdsA, $memberFbIdsB) {
+    public function register($match, $memberIdsA, $memberIdsB, $memberFbIdsA, $memberFbIdsB) {
         log_message('debug', "register: enter.");
-        $this->validateMatch($match, $memberFbIdsA, $memberFbIdsB);
+        $this->fillMembers($match, $memberIdsA, $memberIdsB, $memberFbIdsA, $memberFbIdsB);
 
-        $this->completeMembers($match, $memberFbIdsA, $memberFbIdsB);
-        $this->completeTitle($match);
+        $this->fillTitle($match);
+        $this->validateMatch($match);
 
         $this->em->persist($match);
         $this->em->flush();
@@ -40,8 +40,69 @@ class MatchDao extends CI_Model {
      * @param array $memberFbIdsA
      * @param array $memberFbIdsB 
      */
-    private function validateMatch($match, $memberFbIdsA, $memberFbIdsB) {
+    private function validateMatch($match) {
         log_message('debug', "validateMatch: enter.");
+        // check sport/brand and their sponsorship
+        $result = $this->em->createQuery("SELECT count(b) FROM Entities\Brand b JOIN b.sports s WHERE b.id = " . $match->getBrandId() . " AND s.id = " . $match->getSportId())->getResult();
+        if (intval($result[0][1]) == 0) {
+            log_message('error', "Invalid brand ID or sport ID, or the brand does not support the sport.");
+            throw new Exception("Invalid brand ID or sport ID, or the brand does not support the sport.", 400);
+        }
+
+        // title length (> 0)
+        $title = $match->getTitle();
+        if ($title == null || strlen($title) == 0) {
+            log_message('error', "Match title is required.");
+            throw new Exception("Match title is required.", 400); 
+        }
+        // leagueTupe (1, 2, or 3)
+        $leagueType = $match->getLeagueType();
+        if ($leagueType == null) {
+            $match->setLeagueType(1);
+        } else if ($leagueType < 0 && $leagueType > 3) {
+            log_message('error', "Unsupported league type: " . $leagueType);
+            throw new Exception("Unsupported league type: " . $leagueType, 400);
+        }
+        // teamAId/teamBId (later)
+        // score (null or >= 0)
+        $scoreA = $match->getScoreA();
+        $scoreB = $match->getScoreB();
+        if (($scoreA != null && $scoreA < 0)
+                || ($scoreB != null && $scoreB < 0)) {
+            log_message('error', "Scores must be grater than or equal to 0 (or empty)");
+            throw new Exceptoin("Scores must be grater than or equal to 0 (or empty)", 400);
+        }
+
+        // count(memberA) > 1
+        // count(memberB) > 1
+        $memberA = $match->getMembersA();
+        $memberB = $match->getMembersB();
+        if (count($memberA) == 0 || count($memberB) == 0) {
+            log_message('error', "Team does not have members.");
+            throw new Exception("Team does not have members.", 400);
+        }
+
+        // started/ended/canceled (null or >=0)
+        $started = $match->getStarted();
+        $ended = $match->getEnded();
+        $canceled = $match->getCanceled();
+        if (($started != null && $started < 0)
+                || ($ended != null && $ended < 0)
+                || ($canceled != null && $canceled < 0)) {
+            log_message('error', "Started/ended/canceled time must be grater than or equal to 0 (or empty)");
+            throw new Exceptoin("Started/ended/canceled time must be grater than or equal to 0 (or empty)", 400);
+        }
+
+        // location (what should I check?)
+        // latitude/longitude (null or >=0)
+        $latitude = $match->getLatitude();
+        $longitude = $match->getLongitude();
+        if (($latitude != null && $latitude < 0)
+                || ($longitude != null && $longitude < 0)) {
+            log_message('error', "Latitude and longitude must be grater than or equal to 0 (or empty)");
+            throw new Exceptoin("Latitude and longitude must be grater than or equal to 0 (or empty)", 400);
+        }
+
         log_message('debug', "validateMatch: exit.");
     }
 
@@ -56,10 +117,11 @@ class MatchDao extends CI_Model {
         return $sharedInfo->getId();
     }
 
-    public function completeMembers(&$match, &$memberFbIdsA, &$memberFbIdsB) {
-        log_message('debug', "completeMembers: enter.");
+    private function fillMembers(&$match, &$memberIdsA, &$memberIdsB, &$memberFbIdsA, &$memberFbIdsB) {
+        log_message('debug', "fillMembers: enter.");
 
-//            $me = $this->em->find('Entities\User', $match->getOwnerId());
+        // TODO validate memberIdsA and memberIdsB
+        // validates members in memberFbIdsA
         if (is_array($memberFbIdsA)) {
             foreach ($memberFbIdsA as $fbId) {
                 $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
@@ -72,7 +134,9 @@ class MatchDao extends CI_Model {
                     // fill user table
                     $user->setFbId($fbId);
                     $user->setName($fbFriend->name);
-                    $user->setGender($fbFriend->gender);
+                    if (isset($fbFriend->gender)) {
+                        $user->setGender($fbFriend->gender);
+                    }
                     $user->setFbLinked(false);
                     $user->setFbAuthorized(false);
                     $user->setVerified(false);
@@ -86,7 +150,7 @@ class MatchDao extends CI_Model {
                         $userFb->setFbId($fbId);
                     }
                     $userFb->setName($fbFriend->name);
-                    $userFb->setGender($fbFriend->gender);
+                    $userFb->setGender($user->getGender());
                     $userFb->setLocale($fbFriend->locale);
 
                     $this->em->persist($userFb);
@@ -96,6 +160,7 @@ class MatchDao extends CI_Model {
                 $match->addMembersA($user);
             }
         }
+        // validates members in memberFbIdsB
         if (is_array($memberFbIdsB)) {
             foreach ($memberFbIdsB as $fbId) {
                 $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
@@ -108,7 +173,9 @@ class MatchDao extends CI_Model {
                     // fill user table
                     $user->setFbId($fbId);
                     $user->setName($fbFriend->name);
-                    $user->setGender($fbFriend->gender);
+                    if (isset($fbFriend->gender)) {
+                        $user->setGender($fbFriend->gender);
+                    }
                     $user->setFbLinked(false);
                     $user->setFbAuthorized(false);
                     $user->setVerified(false);
@@ -122,7 +189,7 @@ class MatchDao extends CI_Model {
                         $userFb->setFbId($fbId);
                     }
                     $userFb->setName($fbFriend->name);
-                    $userFb->setGender($fbFriend->gender);
+                    $userFb->setGender($user->getGender());
                     $userFb->setLocale($fbFriend->locale);
 
                     $this->em->persist($userFb);
@@ -133,12 +200,12 @@ class MatchDao extends CI_Model {
             }
         }
 
-        log_message('debug', "completeMembers: exit.");
+        log_message('debug', "fillMembers: exit.");
         $this->em->flush();
     }
 
-    private function completeTitle($match) {
-        log_message('debug', "completeTitle: enter.");
+    private function fillTitle($match) {
+        log_message('debug', "fillTitle: enter.");
 
         $title = $match->getTitle();
         if ($title == null || $title == "" || $title == "null") {
@@ -167,7 +234,7 @@ class MatchDao extends CI_Model {
             $match->setTitle($title);
         }
 
-        log_message('debug', "completeTitle: exit.");
+        log_message('debug', "fillTitle: exit.");
     }
 
     public function find($matchId) {
