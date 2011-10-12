@@ -1,0 +1,25 @@
+Entities\LikesFb:
+  type: entity
+  fields:
+    id:
+      type: string
+      id: true
+      length: 255
+      nullable: false
+    fbId:
+      type: string
+      length: 32
+      nullable: false
+    name:
+      type: string
+      length: 100
+      nullable: true
+    category:
+      type: string
+      length: 100
+      nullable: true
+    createdType:
+      type: string
+      length: 100
+      nullable: true
+      

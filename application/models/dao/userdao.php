@@ -92,6 +92,7 @@ class UserDao extends CI_Model {
             log_message('error', "Insufficient data. fbId=" . $fbInfo['fbId'] . " fbAccessToken=" . $fbInfo['fbAccessToken'] . " fbExpires=" . $fbInfo['fbExpires']);
             throw new Exception("Insufficient data. fbId=" . $fbInfo['fbId'] . " fbAccessToken=" . $fbInfo['fbAccessToken'] . " fbExpires=" . $fbInfo['fbExpires'], 400);
         }
+        log_message('debug', "fbId: " . $fbInfo['fbId'] . ", fbAccessToken: " . $fbInfo['fbAccessToken']);
 
         $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbInfo['fbId']);
         $result = array('id' => null, 'fullName' => null, 'accessToken' => null);
@@ -104,12 +105,13 @@ class UserDao extends CI_Model {
 
             try {
                 $fbMe = $this->fb_connect->api('/me', 'GET');
+                $fbLikes = $this->fb_connect->api('/me/likes', 'GET');
             } catch (FacebookApiException $e) {
                 log_message('error', "Failed to get authorized by Facebook.");
                 throw new Exception("Failed to get authorized by Facebook.", 401, $e);
             }
 
-            $this->storeUserFb($fbInfo, $fbMe);
+            $this->storeUserFb($fbInfo, $fbMe, $fbLikes);
 
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
             // check whether the same email is already in User table.
@@ -635,7 +637,7 @@ class UserDao extends CI_Model {
      * @param array $fbInfo
      * @param array $fbMe 
      */
-    private function storeUserFb($fbInfo, $fbMe) {
+    private function storeUserFb($fbInfo, $fbMe, $fbLikes) {
         log_message('debug', "storeUserFb: enter.");
         // TODO: check duplication first.
         // add Facebook user info to UserFB table.
