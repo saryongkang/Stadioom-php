@@ -54,7 +54,7 @@ disableSponsorSelect= function(){
 }
 
 
-sportsChanged= function() {
+sportsChanged = function() {
     disableSponsorSelect();
     
     window.selectedSportId = $("#sportSelect").val();
@@ -67,6 +67,7 @@ sportsChanged= function() {
     });
 }
 
+// to check on page load
 sportsChanged();
 
 //Listener for change in sport select
@@ -162,6 +163,8 @@ $('#submitMatch').click(function(event) {
 //        console.log(window.user['fbId']);
 //        console.log('ScoreA ='+window.scoreA + " " + 'ScoreB ='+window.scoreB);
 //        console.log('Belongteam ='+belongTeam);
+
+        
         
         params = {
             "sportId" : window.selectedSportId,
@@ -186,10 +189,6 @@ $('#submitMatch').click(function(event) {
         //Show success message and post to FB
         submitMatch.success( function(){
             $("#matchSuccess").fadeIn();
-            window.scoreA='';
-            window.scoreB='';
-            $('#scoreA').val('');
-            $('#scoreB').val('');
             
             if(FBShare==true){
                 try{
@@ -200,6 +199,11 @@ $('#submitMatch').click(function(event) {
                     console.log(error);
                 }
             }
+            
+//            window.scoreA='';
+//            window.scoreB='';
+            $('#scoreA').val('');
+            $('#scoreB').val('');
 
         });
 
@@ -217,27 +221,86 @@ $('#submitMatch').click(function(event) {
         $("#fbShareSuccess").fadeIn();
     }
     
+    var checkWinner= function(){
+        //Check winner
+        var belongTeam = window.belongTeam;
+        var scoreA = window.scoreA;
+        var scoreB = window.scoreB;
+        var winnerTeam;
+        if (scoreA>scoreB){
+            winnerTeam = 1; //A is winner
+        }else if (scoreA<scoreB){
+            winnerTeam = 2; //B is winner
+        }else if (scoreA==scoreB){
+            winnerTeam = 3; //none
+        }
+        //console.log ('ScoreA: ' + scoreA + 'ScoreB: ' + scoreB);
+        //console.log ('WinnerTeam: ' + winnerTeam);
+        var userWinningStatus = 0; //0 didn't play //1 won //2 lost //3 tie
+        //console.log ('Belongteam: ' + belongTeam);
+        if (belongTeam != 0){
+            if (belongTeam == winnerTeam){
+                userWinningStatus = 1;
+            }else if(winnerTeam==3){
+                userWinningStatus = 3;
+            }else{
+                userWinningStatus = 2;
+            }
+        }else{
+            userWinningStatus = 0;
+        }
+        
+        return userWinningStatus;
+    }
+    
     var postToWallUsingFBApi = function(){
+        
+        var fbMessages = window.matchFbMessages;
+        
         var sponsorShareIcon = window.baseUrl+window.sponsorShareIconsFolder+window.selectedSponsor.stringId +'_'+sportsList[selectedSportId].stringId+'_shareicon'+'.gif';
+        
+        //check the winning status of the player in the match
+        var userWinningStatus = checkWinner();
 
-        var message = window.user['name'];
+        // User's team (to check if he played alone or with a team) singular or plural
+        var singular = true;
+        //console.log('winningStatus: '+userWinningStatus);
+        if(userWinningStatus!=0)
+            if(window.userTeam.length>0) singular= false;
+        //console.log('userTeam Size '+ window.userTeam.length);
 
-
-        var name = selectedSponsor.name +" "+sportsList[selectedSportId].stringId+ " Match";
-
+        var message; //Depending on the winning status
+        //0 didn't play //1 won //2 lost //3 tie
+        switch(userWinningStatus)
+        {
+        case 0:
+          message = fbMessages['didntplay'];
+          //message = (condition) ? true-value : false-value;
+          break;
+        case 1:
+          message = (singular===true) ? fbMessages['won_singular'] : fbMessages['won_plural'];
+          break;
+        case 2:
+          message = (singular===true) ? fbMessages['lost_singular'] : fbMessages['lost_plural'];
+          break;
+        case 3:
+          message = (singular===true) ? fbMessages['tied_singular'] : fbMessages['tied_plural'];
+          break;
+        }
+        
         var data=
         {
-            message: "Great Game!",
+            message: message,
             //display: 'iframe',
-            caption: "An amazing game",
-            name: name,  
+            caption: fbMessages['caption'],
+            name: fbMessages['title'],  
             picture: sponsorShareIcon,    
             link: window.baseUrl,  // Go here if user click the picture
             description: "Description field",
             actions: [{ name: 'Enter the Stadioom', link: window.baseUrl }]			
         }
         //console.log(data);    
-        FB.api('/me/feed', 'post', data, onPostToWallCompleted);
+        //FB.api('/me/feed', 'post', data, onPostToWallCompleted);
         $("#fbShareSuccess").fadeIn();
     }
 
@@ -246,7 +309,7 @@ $('#submitMatch').click(function(event) {
 
 //Change button names wen selecting belonging team
 
-$('input[name=belongTeam]').change( function(){
+var belongTeamChanged = function(){
     var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
     if(belongTeam == 1){
         $('#playersA').text('My Team');
@@ -257,6 +320,7 @@ $('input[name=belongTeam]').change( function(){
         }else{
             $("#userPlayerInB").html('');
         }
+        window.userTeam = window.teamAFBSelector.getselectedFriendIds();
     
     }else if(belongTeam == 2){
         $('#playersA').text('Opponent Team');
@@ -267,6 +331,7 @@ $('input[name=belongTeam]').change( function(){
         }else{
             $("#userPlayerInA").html('');
         }
+        window.userTeam = window.teamBFBSelector.getselectedFriendIds();
     }else{
         $('#playersA').text('Team A');
         $('#playersB').text('Team B');
@@ -282,8 +347,14 @@ $('input[name=belongTeam]').change( function(){
         }else{
             $("#userPlayerInB").html('');
         }
+        window.userTeam = null;
     }
     window.belongTeam = belongTeam;
+}
+
+
+$('input[name=belongTeam]').change( function(){
+   belongTeamChanged();
 });
 
 //Score validation

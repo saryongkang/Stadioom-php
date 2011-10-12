@@ -150,4 +150,7 @@ window.fbAsyncInit = function () {
 			$("#results").append('<div>' + new Date() + ' - ' + message + '</div>');
 		};
 	});
+    
+    //to make sure everything is on sync
+    window.belongTeamChanged(); //to check onpage load
 };

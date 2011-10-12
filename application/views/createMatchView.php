@@ -239,7 +239,8 @@
     
     //BelongTeam
     var belongTeam;
-    belongteam =0;
+    belongTeam =0;
+    var userTeam = null;
     
     //Sport and Brands
     var sportsList, selectedSponsor, selectedSportId;
@@ -281,6 +282,7 @@
     matchFbMessages['lost_plural'] = "<?php echo lang('fbmessage_lost_plural'); ?>";
     matchFbMessages['tied_singular'] = "<?php echo lang('fbmessage_tied_singular'); ?>";
     matchFbMessages['tied_plural'] = "<?php echo lang('fbmessage_tied_plural'); ?>";
+    matchFbMessages['didntplay'] = "<?php echo lang('fbmessage_didntplay'); ?>";
     
     
 <?php foreach ($sports as $sport):?>
