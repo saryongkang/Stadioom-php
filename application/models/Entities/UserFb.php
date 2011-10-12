@@ -307,4 +307,83 @@ class UserFb
     {
         return $this->name;
     }
+    /**
+     * @var Entities\LikesFb
+     */
+    private $likes;
+
+    public function __construct()
+    {
+        $this->likes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add likes
+     *
+     * @param Entities\LikesFb $likes
+     */
+    public function addLikes(\Entities\LikesFb $likes)
+    {
+        $this->likes[] = $likes;
+    }
+
+    /**
+     * Get likes
+     *
+     * @return Doctrine\Common\Collections\Collection $likes
+     */
+    public function getLikes()
+    {
+        return $this->likes;
+    }
+    /**
+     * @var Entities\ActivitiesFb
+     */
+    private $activities;
+
+
+    /**
+     * Add activities
+     *
+     * @param Entities\ActivitiesFb $activities
+     */
+    public function addActivities(\Entities\ActivitiesFb $activities)
+    {
+        $this->activities[] = $activities;
+    }
+
+    /**
+     * Get activities
+     *
+     * @return Doctrine\Common\Collections\Collection $activities
+     */
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+    /**
+     * @var Entities\InterestsFb
+     */
+    private $interests;
+
+
+    /**
+     * Add interests
+     *
+     * @param Entities\InterestsFb $interests
+     */
+    public function addInterests(\Entities\InterestsFb $interests)
+    {
+        $this->interests[] = $interests;
+    }
+
+    /**
+     * Get interests
+     *
+     * @return Doctrine\Common\Collections\Collection $interests
+     */
+    public function getInterests()
+    {
+        return $this->interests;
+    }
 }

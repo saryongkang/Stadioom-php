@@ -53,7 +53,7 @@ class MatchDao extends CI_Model {
         $title = $match->getTitle();
         if ($title == null || strlen($title) == 0) {
             log_message('error', "Match title is required.");
-            throw new Exception("Match title is required.", 400); 
+            throw new Exception("Match title is required.", 400);
         }
         // leagueTupe (1, 2, or 3)
         $leagueType = $match->getLeagueType();
@@ -347,6 +347,23 @@ class MatchDao extends CI_Model {
         }
 
         log_message('debug', "deleteMatch: exit.");
+    }
+
+    public function getRecord($userId) {
+        if ($userId == null || !is_numeric($userId)) {
+            throw new Exception("Valid 'userId' is required.", 400);
+        }
+
+        $record = array();
+        $total = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND (a.id = " . $userId . " OR b.id = " . $userId . ")")->getResult();
+        $record['total'] = intval($total[0][1]);
+        $win = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND ((a.id = " . $userId . " AND m.scoreA > m.scoreB) OR (b.id = " . $userId . " AND m.scoreA < m.scoreB))")->getResult();
+        $record['win'] = intval($win[0][1]);
+        $tie = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND m.scoreA = m.scoreB AND (a.id = " . $userId . " OR b.id = " . $userId . ")")->getResult();
+        $record['tie'] = intval($tie[0][1]);
+        $record['lose'] = $record['total'] - $record['win'] - $record['tie'];
+
+        return $record;
     }
 
 }

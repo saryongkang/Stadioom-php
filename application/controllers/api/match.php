@@ -36,10 +36,10 @@ class Match extends Stadioom_REST_Controller {
             // fill data
             $match = new Entities\MatchRecord();
             $match->setOwnerId($userId);
-            
+
             $match->setBrandId($this->post('brandId'));
             $match->setSportId($this->post('sportId'));
-            
+
             $match->setStarted($this->post('started'));
             $match->setEnded($this->post('ended'));
             $match->setCanceled($this->post('canceled'));
@@ -49,10 +49,10 @@ class Match extends Stadioom_REST_Controller {
             $match->setLongitude($this->post('longitude'));
 
             $match->setTitle($this->post('title'));
-            
+
             $match->setScoreA($this->post('scoreA'));
             $match->setScoreB($this->post('scoreB'));
-            
+
             $match->setTeamAId($this->post('teamA'));
             $match->setTeamBId($this->post('teamB'));
 
@@ -164,6 +164,19 @@ class Match extends Stadioom_REST_Controller {
             $this->responseError($e);
         }
         $this->responseError(new Exception("Not Implemented.", 501));
+    }
+
+    /**
+     * Returns the historical record of the specified user.
+     */
+    public function record_get() {
+        $userId = $this->get('userId');
+        try {
+            $record = $this->MatchDao->getRecord($userId);
+            $this->responseOk($record);
+        } catch (Exception $e) {
+            $this->responseError($e);
+        }
     }
 
 }

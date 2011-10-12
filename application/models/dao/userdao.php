@@ -97,8 +97,8 @@ class UserDao extends CI_Model {
         $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbInfo['fbId']);
         $result = array('id' => null, 'fullName' => null, 'accessToken' => null);
 
-        // TODO: consider transaction.
         if ($user == null) {
+            log_message('debug', "New user: " . $fbInfo['fbId'] . '.. gathering user info from Facebook.');
             // get user data from FB.
             $this->load->library('fb_connect');
             $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
@@ -106,29 +106,36 @@ class UserDao extends CI_Model {
             try {
                 $fbMe = $this->fb_connect->api('/me', 'GET');
                 $fbLikes = $this->fb_connect->api('/me/likes', 'GET');
+                $fbActivities = $this->fb_connect->api('/me/activities', 'GET');
+                $fbInterests = $this->fb_connect->api('/me/interests', 'GET');
             } catch (FacebookApiException $e) {
                 log_message('error', "Failed to get authorized by Facebook.");
                 throw new Exception("Failed to get authorized by Facebook.", 401, $e);
             }
+            log_message('debug', "Gathering done.");
 
-            $this->storeUserFb($fbInfo, $fbMe, $fbLikes);
+            $userFb = $this->storeUserFb($fbInfo, $fbMe, $fbLikes, $fbActivities, $fbInterests);
 
+            log_message('debug', "Check whether the same email already exist.");
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
             // check whether the same email is already in User table.
             $user = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
 
             if ($user != null) {
+                log_message('debug', "Already exists. Makes it FB linked/authorized.");
                 // update User table.
-                $user->setFbId($fbInfo['fbId']);
+//                $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
+                $user->setUserFb($userFb);
 
                 $this->em->persist($user);
                 $this->em->flush();
             } else {
+                log_message('debug', "Not exist. Creates a new account.");
                 // create user account.
                 $user = new Entities\User();
-                $user->setFbId($fbInfo['fbId']);
+//                $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
                 $user->setName($result['fullName']);
@@ -141,22 +148,28 @@ class UserDao extends CI_Model {
                     }
                 }
                 $user->setVerified(TRUE);
+                $user->setUserFb($userFb);
+                
                 $this->em->persist($user);
                 $this->em->flush();
 
                 $user = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
                 $result['id'] = $user->getId();
 
+                log_message('debug', "Check email invitation table.");
                 $invitee = $this->em->getRepository('Entities\Invitee')->findOneByInviteeEmail($fbMe['email']);
                 if ($invitee != null) {
+                    log_message('debug', "Invited user. Make the invitation being accepted.");
                     // update 'acceptedDate' in Invitee table.
                     $invitee->setAcceptedDate(new DateTime());
                     $this->em->persist($invitee);
                     $this->em->flush();
                 }
             }
+            log_message('debug', "Check Facebook invitation table.");
             $inviteeFb = $this->em->getRepository('Entities\InviteeFb')->findOneByInviteeFbId($fbInfo['fbId']);
             if ($inviteeFb != null) {
+                log_message('debug', "Invited user. Make the invitation being accepted.");
                 // update 'acceptedData' in InviteeFB table.
                 $inviteeFb->setAcceptedDate(new DateTime());
                 $this->em->persist($inviteeFb);
@@ -164,22 +177,28 @@ class UserDao extends CI_Model {
             }
         } else {
             // already registered
+            log_message('debug', "User account already exists.");
 
             if (!$user->getFbLinked()) {                // auto-generated.
+                log_message('debug', "Auto-generated user: " . $fbInfo['fbId'] . "... gathering user info from Facebook.");
                 // get data from FB.
                 $this->load->library('fb_connect');
                 $this->fb_connect->setAccessToken($fbInfo['fbAccessToken']);
 
                 try {
                     $fbMe = $this->fb_connect->api('/me', 'GET');
+                    $fbLikes = $this->fb_connect->api('/me/likes', 'GET');
+                    $fbActivities = $this->fb_connect->api('/me/activities', 'GET');
+                    $fbInterests = $this->fb_connect->api('/me/interests', 'GET');
                 } catch (FacebookApiException $e) {
                     log_message('error', "Failed to get authorized by Facebook.");
                     throw new Exception("Failed to get authorized by Facebook.", 401, $e);
                 }
 
                 // add to UserFB table.
-                $this->storeUserFb($fbInfo, $fbMe);
+                $userFb = $this->storeUserFb($fbInfo, $fbMe, $fbLikes, $fbActivities, $fbInterests);
 
+                log_message('debug', "Update user info with Facebook data");
                 // fill user data and persist it.
                 $user->setName($fbMe['first_name'] . ' ' . $fbMe['last_name']);
                 $user->setEmail($fbMe['email']);
@@ -196,9 +215,11 @@ class UserDao extends CI_Model {
                 $prevUser = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
                 if ($prevUser != null) {
                     // TODO (critical????) merge data.
+                    log_message('debug', "Same email is already occupied by others. Merge them.");
                 }
 
                 $user->setFbLinked(true);
+                $user->setUserFb($userFb);
             }
 
             $result['id'] = $user->getId();
@@ -211,7 +232,10 @@ class UserDao extends CI_Model {
             }
         }
 
+        // TODO(?) store the token in DB and reuse it.
+        log_message('debug', "Generate access token.");
         $result['accessToken'] = $this->generateAccessToken($user);
+        
         log_message('debug', "fbConnect: exit.");
         return $result;
     }
@@ -635,9 +659,12 @@ class UserDao extends CI_Model {
      * Stores Facebook user data to UserFb table.
      * 
      * @param array $fbInfo
-     * @param array $fbMe 
+     * @param array $fbMe
+     * @param array $fbLikes
+     * 
+     * @return Entities\UserFb
      */
-    private function storeUserFb($fbInfo, $fbMe, $fbLikes) {
+    private function storeUserFb($fbInfo, $fbMe, $fbLikes, $fbActivities, $fbInterests) {
         log_message('debug', "storeUserFb: enter.");
         // TODO: check duplication first.
         // add Facebook user info to UserFB table.
@@ -698,10 +725,54 @@ class UserDao extends CI_Model {
                 $userFb->setFavoriteTeams(implode(",", $teams));
             }
         }
+        
+        // stores likes
+        log_message('debug', "Stores 'likes': begin.");
+        $likes = $fbLikes['data'];
+        foreach($likes as $like) {
+            // TODO add filter.
+            $likesFb = new Entities\LikesFb();
+            $likesFb->setId($like['id']);
+            $likesFb->setName($like['name']);
+            $likesFb->setCategory($like['category']);
+            $likesFb->setCreatedTime($like['created_time']);
+            $userFb->addLikes($likesFb);
+        }
+        log_message('debug', "Stores 'likes': ended.");
 
+        // stores activites
+        log_message('debug', "Stores 'activities': begin.");
+        $activities = $fbActivities['data'];
+        foreach($activities as $activity) {
+            // TODO add filter.
+            $activitiesFb = new Entities\ActivitiesFb();
+            $activitiesFb->setId($activity['id']);
+            $activitiesFb->setName($activity['name']);
+            $activitiesFb->setCategory($activity['category']);
+            $activitiesFb->setCreatedTime($activity['created_time']);
+            $userFb->addLikes($activitiesFb);
+        }
+        log_message('debug', "Stores 'activities': ended.");
+
+        // stores interests
+        log_message('debug', "Stores 'interests': begin.");
+        $interests = $fbInterests['data'];
+        foreach($interests as $interest) {
+            // TODO add filter.
+            $interestsFb = new Entities\InterestsFb();
+            $interestsFb->setId($interest['id']);
+            $interestsFb->setName($interest['name']);
+            $interestsFb->setCategory($interest['category']);
+            $interestsFb->setCreatedTime($interest['created_time']);
+            $userFb->addLikes($interestsFb);
+        }
+        log_message('debug', "Stores 'interests': ended.");
+        
         $this->em->persist($userFb);
-        $this->em->flush();
+//        $this->em->flush();
         log_message('debug', "storeUserFb: exit.");
+        
+        return $userFb;
     }
 
     /**

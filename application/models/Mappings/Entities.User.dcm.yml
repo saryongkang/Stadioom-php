@@ -47,6 +47,13 @@ Entities\User:
     lastUpdated:
       type: integer
       nullable: true
+  oneToOne:
+    userFb:
+      targetEntity: UserFb
+      joinColumn:
+        name: fbId
+        referencedColumnName: fbId
+      cascade: [all]
   lifecycleCallbacks:
     prePersist: [prePersist]
     preUpdate: [preUpdate]

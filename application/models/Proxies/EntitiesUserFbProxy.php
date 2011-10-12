@@ -180,10 +180,46 @@ class EntitiesUserFbProxy extends \Entities\UserFb implements \Doctrine\ORM\Prox
         return parent::getName();
     }
 
+    public function addLikes(\Entities\LikesFb $likes)
+    {
+        $this->__load();
+        return parent::addLikes($likes);
+    }
+
+    public function getLikes()
+    {
+        $this->__load();
+        return parent::getLikes();
+    }
+
+    public function addActivities(\Entities\ActivitiesFb $activities)
+    {
+        $this->__load();
+        return parent::addActivities($activities);
+    }
+
+    public function getActivities()
+    {
+        $this->__load();
+        return parent::getActivities();
+    }
+
+    public function addInterests(\Entities\InterestsFb $interests)
+    {
+        $this->__load();
+        return parent::addInterests($interests);
+    }
+
+    public function getInterests()
+    {
+        $this->__load();
+        return parent::getInterests();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'fbId', 'fbAccessToken', 'fbExpires', 'name', 'gender', 'locale', 'timezone', 'birthday', 'hometown', 'location', 'favorite_athletes', 'favorite_teams');
+        return array('__isInitialized__', 'fbId', 'fbAccessToken', 'fbExpires', 'name', 'gender', 'locale', 'timezone', 'birthday', 'hometown', 'location', 'favorite_athletes', 'favorite_teams', 'likes', 'activities', 'interests');
     }
 
     public function __clone()

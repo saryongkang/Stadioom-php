@@ -42,12 +42,6 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::getId();
     }
 
-    public function setFbId($fbId)
-    {
-        $this->__load();
-        return parent::setFbId($fbId);
-    }
-
     public function getFbId()
     {
         $this->__load();
@@ -192,10 +186,28 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::toArray();
     }
 
+    public function setUserFb(\Entities\UserFb $userFb)
+    {
+        $this->__load();
+        return parent::setUserFb($userFb);
+    }
+
+    public function getUserFb()
+    {
+        $this->__load();
+        return parent::getUserFb();
+    }
+
+    public function setFbId($fbId)
+    {
+        $this->__load();
+        return parent::setFbId($fbId);
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'fbId', 'fbLinked', 'fbAuthorized', 'password', 'name', 'email', 'gender', 'dob', 'verified', 'created', 'lastUpdated');
+        return array('__isInitialized__', 'id', 'fbId', 'fbLinked', 'fbAuthorized', 'password', 'name', 'email', 'gender', 'dob', 'verified', 'created', 'lastUpdated', 'userFb');
     }
 
     public function __clone()
