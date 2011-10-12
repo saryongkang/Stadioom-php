@@ -1,24 +1,20 @@
-Entities\LikesFb:
+Entities\ActivitiesFb:
   type: entity
   fields:
     id:
       type: string
       id: true
-      length: 255
-      nullable: false
-    fbId:
-      type: string
       length: 32
       nullable: false
     name:
       type: string
-      length: 100
+      length: 50
       nullable: true
     category:
       type: string
-      length: 100
+      length: 50
       nullable: true
-    createdType:
+    createdTime:
       type: string
       length: 100
       nullable: true
