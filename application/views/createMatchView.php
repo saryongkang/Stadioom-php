@@ -96,7 +96,7 @@
                 <ul id="teamSelect" class="inputs-list">
                     <li>
                       <label>
-                        <input checked="yes" type="radio" name="belongTeam" value=1 />
+                        <input type="radio" name="belongTeam" value=1 />
                         <span>Team A</span>
                       </label>
                     </li>
@@ -109,7 +109,7 @@
                     </li>
                     <li>
                       <label>
-                        <input  type="radio" name="belongTeam" value=0 />
+                        <input checked="yes" type="radio" name="belongTeam" value=0 />
                         <span>None</span>
                       </label>
                     </li>
@@ -124,11 +124,11 @@
                   <div class="span6">
                       <div class="row">
                           <div class="span2 center">
-                            <button id="playersA" class="btn success large" >Team A</button>
+                            <button id="playersA" class="btn success large teamBtn" >Team A</button>
                           </div>
                           <div class="span1 center"> VS </div>
                           <div class="span2 center">
-                            <button id="playersB" class="btn danger large" >Team B</button>
+                            <button id="playersB" class="btn danger large teamBtn" >Team B</button>
                           </div>
                       </div> <!-- endRow -->
                       
@@ -206,13 +206,15 @@
     <div id="teamADesc" class="teamDesc">
         <div class="teamName">Team A</div>
         <div id="teamAPlayersList" class="playersList">
-            No players Selected
+            <div id="userPlayerInA" class="playerInTeamList">No players selected</div>
+            <div id="teamMatesA"> </div>
         </div>
     </div>
     <div id="teamBDesc" class="teamDesc">
         <div class="teamName">Team B</div>
         <div id="teamBPlayersList" class="playersList">
-            No players Selected
+            <div id="userPlayerInB" class="playerInTeamList">No players selected</div>
+            <div id="teamMatesB"> </div>
         </div>
     </div>
 </div>
@@ -235,6 +237,9 @@
     //Friends Selector
     var teamAFBSelector, teamBFBSelector;
     
+    //BelongTeam
+    var belongTeam;
+    belongteam =0;
     
     //Sport and Brands
     var sportsList, selectedSponsor, selectedSportId;

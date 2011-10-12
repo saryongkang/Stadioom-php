@@ -48,14 +48,14 @@ window.fbAsyncInit = function () {
 		// When the user clicks OK, log a message
 		callbackSubmitA = function(selectedFriendIds) {
             //console.log(selectedFriendIds);
-			updatePlayersDiv(selectedFriendIds, 'teamAPlayersList');
+			updatePlayersDiv(selectedFriendIds, 'A');
             
             window.teamBFBSelector.setDisabledFriendIds(selectedFriendIds);
 		};
         
         callbackSubmitB = function(selectedFriendIds) {
             //console.log(selectedFriendIds);
-			updatePlayersDiv(selectedFriendIds, 'teamBPlayersList');
+			updatePlayersDiv(selectedFriendIds, 'B');
             window.teamAFBSelector.setDisabledFriendIds(selectedFriendIds);
 		};
 
@@ -119,11 +119,30 @@ window.fbAsyncInit = function () {
 			window.teamBFBSelector.showFriendSelector();
 		});
         
-        updatePlayersDiv = function (playersIds, divId) {
-            $("#"+divId).html('');
+        updatePlayersDiv = function (playersIds, teamId) {
+            $("#teamMates"+teamId).html('');
             for (i = 0, len = playersIds.length; i < len; i += 1) {
-                $("#"+divId).append('<div class="playerInTeamList"><img src="https://graph.facebook.com/'+playersIds[i]+'/picture" /> ' +TDFriendSelector.getFriendById(playersIds[i])['name']+ '</div>');
+                $("#teamMates"+teamId).append('<div class="playerInTeamList"><img src="https://graph.facebook.com/'+playersIds[i]+'/picture" /> ' +TDFriendSelector.getFriendById(playersIds[i])['name']+ '</div>');
                 //console.log(TDFriendSelector.getFriendById(playersIds[i]));
+            }
+            
+            if(playersIds.length>0){
+                if(teamId == 'A'){
+                    if(window.belongTeam != 1){
+                        $("#userPlayerInA").html('');
+                    }
+                } else if(teamId == 'B'){
+                    if(window.belongTeam != 2){
+                        $("#userPlayerInB").html('');
+                    }
+                }
+            }else{
+                if(teamId == 'A' && window.belongTeam!=1){
+                    $("#userPlayerInA").html('No players selected');
+                }
+                else if(teamId == 'B' && window.belongTeam!=2){
+                    $("#userPlayerInB").html('No players selected');
+                }
             }
 		};
         

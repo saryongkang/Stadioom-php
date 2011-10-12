@@ -97,7 +97,7 @@ $('#submitMatch').click(function(event) {
     window.scoreA = $('#scoreA').val();
     window.scoreB = $('#scoreB').val();
     
-    var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
+    var belongTeam = window.belongTeam;
     
 //    console.log('belongTeam '+belongTeam);
 //    console.log('LengthA '+window.teamAFBSelector.getselectedFriendIds().length);
@@ -220,7 +220,7 @@ $('#submitMatch').click(function(event) {
     var postToWallUsingFBApi = function(){
         var sponsorShareIcon = window.baseUrl+window.sponsorShareIconsFolder+window.selectedSponsor.stringId +'_'+sportsList[selectedSportId].stringId+'_shareicon'+'.gif';
 
-        var message = window.user['fullName'];
+        var message = window.user['name'];
 
 
         var name = selectedSponsor.name +" "+sportsList[selectedSportId].stringId+ " Match";
@@ -244,6 +244,47 @@ $('#submitMatch').click(function(event) {
 
 }); //End of Submit Match Click Event
 
+//Change button names wen selecting belonging team
+
+$('input[name=belongTeam]').change( function(){
+    var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
+    if(belongTeam == 1){
+        $('#playersA').text('My Team');
+        $('#playersB').text('Opponent Team');
+        $("#userPlayerInA").html('<img src="https://graph.facebook.com/'+window.user['fbId']+'/picture" /> ' +window.user['name']);
+        if(window.teamBFBSelector.getselectedFriendIds().length <1){
+            $("#userPlayerInB").html('No Players Selected');
+        }else{
+            $("#userPlayerInB").html('');
+        }
+    
+    }else if(belongTeam == 2){
+        $('#playersA').text('Opponent Team');
+        $('#playersB').text('My Team');
+        $("#userPlayerInB").html('<img src="https://graph.facebook.com/'+window.user['fbId']+'/picture" /> ' +window.user['name']);
+        if(window.teamAFBSelector.getselectedFriendIds().length <1){
+            $("#userPlayerInA").html('No players selected');
+        }else{
+            $("#userPlayerInA").html('');
+        }
+    }else{
+        $('#playersA').text('Team A');
+        $('#playersB').text('Team B');
+
+        if(window.teamAFBSelector.getselectedFriendIds().length <1){
+            $("#userPlayerInA").html('No players selected');
+        }else{
+            $("#userPlayerInA").html('');
+        }
+        
+        if(window.teamBFBSelector.getselectedFriendIds().length <1){
+            $("#userPlayerInB").html('No players selected');
+        }else{
+            $("#userPlayerInB").html('');
+        }
+    }
+    window.belongTeam = belongTeam;
+});
 
 //Score validation
 
@@ -268,4 +309,9 @@ $(function(){
     $('#matchDate').datepicker({ defaultDate: +0 });
     //For Date RANGE
 //    $('#matchDate').daterangepicker({arrows:true}); 
+ });
+ 
+ 
+ $("#matchDate").keydown(function(event) {
+    event.preventDefault();
  });
