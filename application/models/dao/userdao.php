@@ -124,10 +124,10 @@ class UserDao extends CI_Model {
             if ($user != null) {
                 log_message('debug', "Already exists. Makes it FB linked/authorized.");
                 // update User table.
-//                $user->setFbId($fbInfo['fbId']);
+                $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
-                $user->setUserFb($userFb);
+//                $user->setUserFb($userFb);
 
                 $this->em->persist($user);
                 $this->em->flush();
@@ -135,7 +135,7 @@ class UserDao extends CI_Model {
                 log_message('debug', "Not exist. Creates a new account.");
                 // create user account.
                 $user = new Entities\User();
-//                $user->setFbId($fbInfo['fbId']);
+                $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
                 $user->setName($result['fullName']);
@@ -148,7 +148,7 @@ class UserDao extends CI_Model {
                     }
                 }
                 $user->setVerified(TRUE);
-                $user->setUserFb($userFb);
+//                $user->setUserFb($userFb);
                 
                 $this->em->persist($user);
                 $this->em->flush();
@@ -219,7 +219,7 @@ class UserDao extends CI_Model {
                 }
 
                 $user->setFbLinked(true);
-                $user->setUserFb($userFb);
+//                $user->setUserFb($userFb);
             }
 
             $result['id'] = $user->getId();

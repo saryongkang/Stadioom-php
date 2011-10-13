@@ -291,32 +291,6 @@ class User {
     }
 
     /**
-     * @var Entities\UserFb
-     */
-    private $userFb;
-
-
-    /**
-     * Set userFb
-     *
-     * @param Entities\UserFb $userFb
-     */
-    public function setUserFb(\Entities\UserFb $userFb)
-    {
-        $this->userFb = $userFb;
-    }
-
-    /**
-     * Get userFb
-     *
-     * @return Entities\UserFb $userFb
-     */
-    public function getUserFb()
-    {
-        return $this->userFb;
-    }
-
-    /**
      * Set fbId
      *
      * @param string $fbId

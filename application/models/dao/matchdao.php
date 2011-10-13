@@ -124,10 +124,13 @@ class MatchDao extends CI_Model {
         // validates members in memberFbIdsA
         if (is_array($memberFbIdsA)) {
             foreach ($memberFbIdsA as $fbId) {
+        log_message('debug', "findByFbId.");
                 $user = $this->em->getRepository('Entities\User')->findOneByFbId($fbId);
                 if ($user == null) {
+        log_message('debug', "not found");
                     $user = new Entities\User();
 
+        log_message('debug', "get user info from FB");
                     $fbFriend = file_get_contents("http://graph.facebook.com/" . $fbId);
                     $fbFriend = json_decode($fbFriend);
 
@@ -141,6 +144,7 @@ class MatchDao extends CI_Model {
                     $user->setFbAuthorized(false);
                     $user->setVerified(false);
 
+        log_message('debug', "persist user.");
                     $this->em->persist($user);
 
                     // fill user fb table.
@@ -148,15 +152,19 @@ class MatchDao extends CI_Model {
                     if ($userFb == null) {
                         $userFb = new Entities\UserFb();
                         $userFb->setFbId($fbId);
+                        $this->em->persist($userFb);
                     }
                     $userFb->setName($fbFriend->name);
                     $userFb->setGender($user->getGender());
                     $userFb->setLocale($fbFriend->locale);
 
-                    $this->em->persist($userFb);
+//        log_message('debug', "persist userFb.");
+//                    $user->setUserFb($userFb);
+        log_message('debug', "flush.");
                     $this->em->flush();
                 }
 
+        log_message('debug', "add member to A: " . $user->getId());
                 $match->addMembersA($user);
             }
         }
@@ -187,15 +195,17 @@ class MatchDao extends CI_Model {
                     if ($userFb == null) {
                         $userFb = new Entities\UserFb();
                         $userFb->setFbId($fbId);
+                        $this->em->persist($userFb);
                     }
                     $userFb->setName($fbFriend->name);
                     $userFb->setGender($user->getGender());
                     $userFb->setLocale($fbFriend->locale);
 
-                    $this->em->persist($userFb);
+//                    $user->setUserFb($userFb);
                     $this->em->flush();
                 }
 
+        log_message('debug', "add member to B: " . $user->getId());
                 $match->addMembersB($user);
             }
         }
@@ -350,12 +360,17 @@ class MatchDao extends CI_Model {
     }
 
     public function getRecord($userId) {
+        log_message('debug', "getRecord: enter.");
         if ($userId == null || !is_numeric($userId)) {
+            log_message('error', "Valid 'userId' is required.");
             throw new Exception("Valid 'userId' is required.", 400);
         }
 
         $record = array();
+        $q = "SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND (a.id = " . $userId . " OR b.id = " . $userId . ")";
+        log_message('debug', 'query: ' . $q);
         $total = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND (a.id = " . $userId . " OR b.id = " . $userId . ")")->getResult();
+        log_message('debug', 'total: ' . $total[0][1]);
         $record['total'] = intval($total[0][1]);
         $win = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND ((a.id = " . $userId . " AND m.scoreA > m.scoreB) OR (b.id = " . $userId . " AND m.scoreA < m.scoreB))")->getResult();
         $record['win'] = intval($win[0][1]);
@@ -363,6 +378,7 @@ class MatchDao extends CI_Model {
         $record['tie'] = intval($tie[0][1]);
         $record['lose'] = $record['total'] - $record['win'] - $record['tie'];
 
+        log_message('debug', "getRecord: exit.");
         return $record;
     }
 
