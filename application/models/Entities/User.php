@@ -95,6 +95,16 @@ class User {
     }
 
     /**
+     * Set fbId
+     *
+     * @param string $fbId
+     */
+    public function setFbId($fbId)
+    {
+        $this->fbId = $fbId;
+    }
+
+    /**
      * Get fbLinked
      *
      * @return boolean $fbLinked
@@ -288,15 +298,5 @@ class User {
 
     public function toArray() {
         return get_object_vars($this);
-    }
-
-    /**
-     * Set fbId
-     *
-     * @param string $fbId
-     */
-    public function setFbId($fbId)
-    {
-        $this->fbId = $fbId;
     }
 }

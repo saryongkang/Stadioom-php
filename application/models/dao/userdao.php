@@ -135,24 +135,32 @@ class UserDao extends CI_Model {
                 log_message('debug', "Not exist. Creates a new account.");
                 // create user account.
                 $user = new Entities\User();
+                log_message('debug', "1");
                 $user->setFbId($fbInfo['fbId']);
                 $user->setFbLinked(TRUE);
                 $user->setFbAuthorized(TRUE);
+                log_message('debug', "2");
                 $user->setName($result['fullName']);
                 $user->setEmail($fbMe['email']);
                 $user->setGender($fbMe['gender']);
+                log_message('debug', "3");
                 if (array_key_exists('birthday', $fbMe)) {
+                    log_message('debug', "3-in");
                     $birthday = $fbMe['birthday'];
+                    log_message('debug', "3-in-in");
                     if ($birthday != null) {
                         $user->setDob(new DateTime($birthday));
                     }
                 }
+                log_message('debug', "4");
                 $user->setVerified(TRUE);
 //                $user->setUserFb($userFb);
-                
+
+                log_message('debug', "5");
                 $this->em->persist($user);
                 $this->em->flush();
 
+                log_message('debug', "6");
                 $user = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
                 $result['id'] = $user->getId();
 
@@ -201,18 +209,25 @@ class UserDao extends CI_Model {
                 log_message('debug', "Update user info with Facebook data");
                 // fill user data and persist it.
                 $user->setName($fbMe['first_name'] . ' ' . $fbMe['last_name']);
+                log_message('debug', $user->getName());
                 $user->setEmail($fbMe['email']);
+                log_message('debug', $user->getEmail());
                 $user->setGender($fbMe['gender']);
+                log_message('debug', $user->getGender());
                 if (array_key_exists('birthday', $fbMe)) {
+                    log_message('debug', 'birthday exists');
                     $birthday = $fbMe['birthday'];
                     if ($birthday != null) {
                         $user->setDob(new DateTime($birthday));
                     }
+                    log_message('debug', 'birthday set');
                 }
                 $user->setVerified(TRUE);
 
+                log_message('debug', 'find user by email.');
                 // is the FB email exist in the User table?
                 $prevUser = $this->em->getRepository('Entities\User')->findOneByEmail($fbMe['email']);
+                log_message('debug', 'user table.');
                 if ($prevUser != null) {
                     // TODO (critical????) merge data.
                     log_message('debug', "Same email is already occupied by others. Merge them.");
@@ -222,11 +237,13 @@ class UserDao extends CI_Model {
 //                $user->setUserFb($userFb);
             }
 
+            log_message('debug', 'done..');
             $result['id'] = $user->getId();
             $result['fullName'] = $user->getName();
             if (!$user->getFbAuthorized()) {
                 $user->setFbAuthorized(TRUE);
 
+                log_message('debug', 'finally.. lets persist.');
                 $this->em->persist($user);
                 $this->em->flush();
             }
@@ -235,7 +252,7 @@ class UserDao extends CI_Model {
         // TODO(?) store the token in DB and reuse it.
         log_message('debug', "Generate access token.");
         $result['accessToken'] = $this->generateAccessToken($user);
-        
+
         log_message('debug', "fbConnect: exit.");
         return $result;
     }
@@ -725,53 +742,71 @@ class UserDao extends CI_Model {
                 $userFb->setFavoriteTeams(implode(",", $teams));
             }
         }
-        
-        // stores likes
-        log_message('debug', "Stores 'likes': begin.");
-        $likes = $fbLikes['data'];
-        foreach($likes as $like) {
-            // TODO add filter.
-            $likesFb = new Entities\LikesFb();
-            $likesFb->setId($like['id']);
-            $likesFb->setName($like['name']);
-            $likesFb->setCategory($like['category']);
-            $likesFb->setCreatedTime($like['created_time']);
-            $userFb->addLikes($likesFb);
-        }
-        log_message('debug', "Stores 'likes': ended.");
 
-        // stores activites
-        log_message('debug', "Stores 'activities': begin.");
-        $activities = $fbActivities['data'];
-        foreach($activities as $activity) {
-            // TODO add filter.
-            $activitiesFb = new Entities\ActivitiesFb();
-            $activitiesFb->setId($activity['id']);
-            $activitiesFb->setName($activity['name']);
-            $activitiesFb->setCategory($activity['category']);
-            $activitiesFb->setCreatedTime($activity['created_time']);
-            $userFb->addActivities($activitiesFb);
-        }
-        log_message('debug', "Stores 'activities': ended.");
-
-        // stores interests
-        log_message('debug', "Stores 'interests': begin.");
-        $interests = $fbInterests['data'];
-        foreach($interests as $interest) {
-            // TODO add filter.
-            $interestsFb = new Entities\InterestsFb();
-            $interestsFb->setId($interest['id']);
-            $interestsFb->setName($interest['name']);
-            $interestsFb->setCategory($interest['category']);
-            $interestsFb->setCreatedTime($interest['created_time']);
-            $userFb->addInterests($interestsFb);
-        }
-        log_message('debug', "Stores 'interests': ended.");
-        
-        $this->em->persist($userFb);
+//        // stores likes
+//        log_message('debug', "Stores 'likes': begin.");
+//        $likes = $fbLikes['data'];
+//        foreach ($likes as $like) {
+//            // TODO add filter.
+//            $likesFb = $this->em->getRepository("Entities\LikesFb")->findOneById($like['id']);
+//            if ($likesFb == null) {
+//                $likesFb = new Entities\LikesFb();
+//                $likesFb->setId($like['id']);
+//                $likesFb->setName($like['name']);
+//                $likesFb->setCategory($like['category']);
+//                $this->em->persist($likesFb);
+//            }
+//
+//            $userFb->addLikes($likesFb);
+//        }
 //        $this->em->flush();
+//
+//        log_message('debug', "Stores 'likes': ended.");
+//
+//        // stores activites
+//        log_message('debug', "Stores 'activities': begin.");
+//        $activities = $fbActivities['data'];
+//        foreach ($activities as $activity) {
+//            // TODO add filter.
+//            $activitiesFb = $this->em->getRepository("Entities\ActivitiesFb")->findOneById($activity['id']);
+//            if ($activitiesFb == null) {
+//                $activitiesFb = new Entities\ActivitiesFb();
+//                $activitiesFb->setId($activity['id']);
+//                $activitiesFb->setName($activity['name']);
+//                $activitiesFb->setCategory($activity['category']);
+//                $this->em->persist($activitiesFb);
+//            }
+//
+//            $userFb->addActivities($activitiesFb);
+//        }
+//        $this->em->flush();
+//
+//        log_message('debug', "Stores 'activities': ended.");
+//
+//        // stores interests
+//        log_message('debug', "Stores 'interests': begin.");
+//        $interests = $fbInterests['data'];
+//        foreach ($interests as $interest) {
+//            // TODO add filter.
+//            $interestsFb = $this->em->getRepository("Entities\InterestsFb")->findOneById($interest['id']);
+//            if ($interestsFb == null) {
+//                $interestsFb = new Entities\InterestsFb();
+//                $interestsFb->setId($interest['id']);
+//                $interestsFb->setName($interest['name']);
+//                $interestsFb->setCategory($interest['category']);
+//                $this->em->persist($interestsFb);
+//            }
+//
+//            $userFb->addInterests($interestsFb);
+//        }
+//        $this->em->flush();
+//
+//        log_message('debug', "Stores 'interests': ended.");
+
+        $this->em->persist($userFb);
+        $this->em->flush();
         log_message('debug', "storeUserFb: exit.");
-        
+
         return $userFb;
     }
 

@@ -59,7 +59,7 @@ Entities\UserFb:
         inverseJoinColumns:
           fb_likes_id:
             referencedColumnName: id
-      cascade: [all]
+#      cascade: [all]
     activities:
       targetEntity: ActivitiesFb
       joinTable:
@@ -70,7 +70,7 @@ Entities\UserFb:
         inverseJoinColumns:
           fb_activities_id:
             referencedColumnName: id
-      cascade: [all]
+#      cascade: [all]
     interests:
       targetEntity: InterestsFb
       joinTable:
@@ -81,4 +81,4 @@ Entities\UserFb:
         inverseJoinColumns:
           fb_interests_id:
             referencedColumnName: id
-      cascade: [all]
+#      cascade: [all]

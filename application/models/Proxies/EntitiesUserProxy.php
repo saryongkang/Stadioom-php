@@ -54,6 +54,12 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
         return parent::setFbLinked($fbLinked);
     }
 
+    public function setFbId($fbId)
+    {
+        $this->__load();
+        return parent::setFbId($fbId);
+    }
+
     public function getFbLinked()
     {
         $this->__load();
@@ -184,12 +190,6 @@ class EntitiesUserProxy extends \Entities\User implements \Doctrine\ORM\Proxy\Pr
     {
         $this->__load();
         return parent::toArray();
-    }
-
-    public function setFbId($fbId)
-    {
-        $this->__load();
-        return parent::setFbId($fbId);
     }
 
 

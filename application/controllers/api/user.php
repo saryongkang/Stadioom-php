@@ -4,7 +4,7 @@ require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class User extends Stadioom_REST_Controller {
 
-    private $filterKeys = array('password', 'verified');
+    private $filterKeys = array('password', 'verified', 'likes', 'activities', 'interests');
 
     function __construct() {
         parent::__construct();

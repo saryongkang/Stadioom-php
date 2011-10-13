@@ -315,6 +315,8 @@ class UserFb
     public function __construct()
     {
         $this->likes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->interests = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
