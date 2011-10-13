@@ -114,7 +114,7 @@ class UserDao extends CI_Model {
             }
             log_message('debug', "Gathering done.");
 
-            $userFb = $this->storeUserFb($fbInfo, $fbMe/*, $fbLikes, $fbActivities, $fbInterests*/);
+            $userFb = $this->storeUserFb($fbInfo, $fbMe/* , $fbLikes, $fbActivities, $fbInterests */);
 
             log_message('debug', "Check whether the same email already exist.");
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
@@ -204,7 +204,7 @@ class UserDao extends CI_Model {
                 }
 
                 // add to UserFB table.
-                $userFb = $this->storeUserFb($fbInfo, $fbMe/*, $fbLikes, $fbActivities, $fbInterests*/);
+                $userFb = $this->storeUserFb($fbInfo, $fbMe/* , $fbLikes, $fbActivities, $fbInterests */);
 
                 log_message('debug', "Update user info with Facebook data");
                 // fill user data and persist it.
@@ -680,7 +680,7 @@ class UserDao extends CI_Model {
      * 
      * @return Entities\UserFb
      */
-    private function storeUserFb($fbInfo, $fbMe/*, $fbLikes, $fbActivities, $fbInterests*/) {
+    private function storeUserFb($fbInfo, $fbMe/* , $fbLikes, $fbActivities, $fbInterests */) {
         log_message('debug', "storeUserFb: enter.");
         // TODO: check duplication first.
         // add Facebook user info to UserFB table.
@@ -810,14 +810,15 @@ class UserDao extends CI_Model {
     }
 
     /**
-     * Returns the latest matches the specfied user has played.
-     * (ordered by the last updated time (desc).)
+     * Returns the latest matches the specfied user has played or registered.
+     * (ordered by the last updated time (DESC).)
      * 
-     * @param integer $userId The ID of the user who's played the matches.
-     * @param integer $maxNumber The maximum number of result.
+     * @param integer $userId The ID of the user who's played or registered the matches.
+     * @param integer $firstOffset The offset of the first element.
+     * @param integer $maxRestul The maximum number of result.
      * @return array of Entities\MatchRecord 
      */
-    public function getLatestMatches($userId, $maxNumber) {
+    public function getLatestMatches($userId, $firstOffset, $maxRestul) {
         log_message('debug', "getLatestMatches: enter.");
         $dql = "SELECT m, a, b";
         $dql .= " FROM Entities\MatchRecord m";
@@ -825,13 +826,112 @@ class UserDao extends CI_Model {
         $dql .= " WHERE m.ownerId = " . $userId . " OR a.id = " . $userId . " OR b.id = " . $userId;
         $dql .= ' ORDER BY m.lastUpdated DESC';
         $q = $this->em->createQuery($dql);
-        $q->setMaxResults($maxNumber);
+        $q->setFirstResult($firstOffset);
+        $q->setMaxResults($maxRestul);
         $result = $q->getResult();
 
         log_message('debug', "getLatestMatches: exit.");
         return $result;
     }
 
+    /**
+     * Returns the latest matches the specfied user has played and won.
+     * (ordered by the ended time (DESC).)
+     * 
+     * @param integer $userId The ID of the user who's played the matches.
+     * @param integer $firstOffset The offset of the first element.
+     * @param integer $maxRestul The maximum number of result.
+     * @return array of Entities\MatchRecord 
+     */
+    public function getLastestWonMatches($userId, $firstOffset, $maxResult) {
+        $q = $this->em->createQuery("SELECT DISTINCT m"
+                . " FROM Entities\MatchRecord m"
+                . " JOIN m.membersA a JOIN m.membersB b"
+                . " WHERE m.ended > '1970-01-01 00:00:00' AND ((a.id = " . $userId . " AND m.scoreA > m.scoreB) OR (b.id = " . $userId . " AND m.scoreA < m.scoreB))"
+                . " ORDER BY m.ended DESC");
+        $q->setFirstResult($firstOffset);
+        $q->setMaxResults($maxResult);
+        return $q->getResult();
+    }
+
+    /**
+     * Returns the latest matches the specfied user has played and lost.
+     * (ordered by the ended time (DESC).)
+     * 
+     * @param integer $userId The ID of the user who's played the matches.
+     * @param integer $firstOffset The offset of the first element.
+     * @param integer $maxRestul The maximum number of result.
+     * @return array of Entities\MatchRecord 
+     */
+    public function getLastestLostMatches($userId, $startOffset, $maxResult) {
+        $q = $this->em->createQuery("SELECT DISTINCT m"
+                . " FROM Entities\MatchRecord m"
+                . " JOIN m.membersA a JOIN m.membersB b"
+                . " WHERE m.ended > '1970-01-01 00:00:00' AND ((a.id = " . $userId . " AND m.scoreA < m.scoreB) OR (b.id = " . $userId . " AND m.scoreA > m.scoreB))"
+                . " ORDER BY m.ended DESC");
+        $q->setFirstResult($firstOffset);
+        $q->setMaxResults($$maxResult);
+        return $q->getResult();
+    }
+
+    /**
+     * Returns the latest matches the specfied user has played and tied.
+     * (ordered by the ended time (DESC).)
+     * 
+     * @param integer $userId The ID of the user who's played the matches.
+     * @param integer $firstOffset The offset of the first element.
+     * @param integer $maxRestul The maximum number of result.
+     * @return array of Entities\MatchRecord 
+     */
+    public function getLastestTiedMatches($userId, $startOffset, $maxResult) {
+        $q = $this->em->createQuery("SELECT DISTINCT m"
+                . " FROM Entities\MatchRecord m"
+                . " JOIN m.membersA a JOIN m.membersB b"
+                . " WHERE m.ended > '1970-01-01 00:00:00' AND m.scoreA = m.scoreB AND (a.id = " . $userId . " OR b.id = " . $userId . ")"
+                . " ORDER BY m.ended DESC");
+        $q->setFirstResult($firstOffset);
+        $q->setMaxResults($maxResult);
+        return $q->getResult();
+    }
+
+    /**
+     * Returns the latest matches the specfied user has played (excluded the user registered but not played).
+     * (ordered by the ended time (DESC).)
+     * 
+     * @param integer $userId The ID of the user who's played the matches.
+     * @param integer $firstOffset The offset of the first element.
+     * @param integer $maxRestul The maximum number of result.
+     * @return array of Entities\MatchRecord 
+     */
+    public function getLastestPlayedMatches($userId, $firstOffset, $maxResult) {
+        $q = $this->em->createQuery("SELECT DISTINCT m"
+                . " FROM Entities\MatchRecord m"
+                . " JOIN m.membersA a JOIN m.membersB b"
+                . " WHERE m.ended > '1970-01-01 00:00:00' AND (a.id = " . $userId . " OR b.id = " . $userId . ")"
+                . " ORDER BY m.ended DESC");
+        $q->setFirstResult($firstOffset);
+        $q->setMaxResults($maxResult);
+        return $q->getResult();
+    }
+
+    /**
+     * Returns the latest matches the specfied user has registered (regardless of played or not).
+     * (ordered by the last updated time (DESC).)
+     * 
+     * @param integer $userId The ID of the user who's registered the matches.
+     * @param integer $firstOffset The offset of the first element.
+     * @param integer $maxRestul The maximum number of result.
+     * @return array of Entities\MatchRecord 
+     */
+    public function getLastestRegisteredMatches($userId, $firstOffset, $maxResult) {
+        $q = $this->em->createQuery("SELECT DISTINCT m"
+                . " FROM Entities\MatchRecord m"
+                . " WHERE m.ownerId = " . $userId
+                . " ORDER BY m.lastUpdated DESC");
+        $q->setFirstResult($firstOffset);
+        $q->setMaxResults($maxResult);
+        return $q->getResult();
+    }
 }
 
 ?>
