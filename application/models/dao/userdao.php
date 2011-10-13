@@ -815,10 +815,11 @@ class UserDao extends CI_Model {
      * 
      * @param integer $userId The ID of the user who's played or registered the matches.
      * @param integer $firstOffset The offset of the first element.
-     * @param integer $maxRestul The maximum number of result.
+     * @param integer $maxResult The maximum number of result.
      * @return array of Entities\MatchRecord 
      */
-    public function getLatestMatches($userId, $firstOffset, $maxRestul) {
+    public function getLatestMatches($userId, $firstOffset, $maxResult
+            ) {
         log_message('debug', "getLatestMatches: enter.");
         $dql = "SELECT m, a, b";
         $dql .= " FROM Entities\MatchRecord m";
@@ -827,7 +828,7 @@ class UserDao extends CI_Model {
         $dql .= ' ORDER BY m.lastUpdated DESC';
         $q = $this->em->createQuery($dql);
         $q->setFirstResult($firstOffset);
-        $q->setMaxResults($maxRestul);
+        $q->setMaxResults($maxResult);
         $result = $q->getResult();
 
         log_message('debug', "getLatestMatches: exit.");
