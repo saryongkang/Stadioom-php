@@ -11,7 +11,7 @@
 
 window.fbAsyncInit = function () {
 
-	FB.init({appId: window.appId, status: true, cookie: false, xfbml: false, oauth: true});
+	FB.init({appId: window.appId, status: true, cookie: true, xfbml: false, oauth: true, frictionlessRequests : true});
 //    FB.getLoginStatus(fbLoginStatus);
 //    FB.Event.subscribe('auth.statusChange', fbLoginStatus);
 
