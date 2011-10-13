@@ -246,24 +246,6 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
         return parent::getLastUpdated();
     }
 
-    public function prePersist()
-    {
-        $this->__load();
-        return parent::prePersist();
-    }
-
-    public function preUpdate()
-    {
-        $this->__load();
-        return parent::preUpdate();
-    }
-
-    public function toArray()
-    {
-        $this->__load();
-        return parent::toArray();
-    }
-
     public function addMembersA(\Entities\User $membersA)
     {
         $this->__load();
@@ -286,6 +268,18 @@ class EntitiesMatchRecordProxy extends \Entities\MatchRecord implements \Doctrin
     {
         $this->__load();
         return parent::getMembersB();
+    }
+
+    public function prePersist()
+    {
+        $this->__load();
+        return parent::prePersist();
+    }
+
+    public function preUpdate()
+    {
+        $this->__load();
+        return parent::preUpdate();
     }
 
 

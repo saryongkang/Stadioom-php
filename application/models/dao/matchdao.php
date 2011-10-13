@@ -82,16 +82,7 @@ class MatchDao extends CI_Model {
             throw new Exception("Team does not have members.", 400);
         }
 
-        // started/ended/canceled (null or >=0)
-        $started = $match->getStarted();
-        $ended = $match->getEnded();
-        $canceled = $match->getCanceled();
-        if (($started != null && $started < 0)
-                || ($ended != null && $ended < 0)
-                || ($canceled != null && $canceled < 0)) {
-            log_message('error', "Started/ended/canceled time must be grater than or equal to 0 (or empty)");
-            throw new Exceptoin("Started/ended/canceled time must be grater than or equal to 0 (or empty)", 400);
-        }
+        // started/ended/canceled (nobody cares.)
 
         // location (what should I check?)
         // latitude/longitude (null or >=0)

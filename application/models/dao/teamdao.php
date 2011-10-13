@@ -19,11 +19,6 @@ class TeamDao extends CI_Model {
     public function add(&$team) {
         log_message('debug', "add: enter.");
 
-        if (!$this->isInRange($team->getName(), 5, 32)) {
-            log_message('error', "Invalid name (5 <= name <= 32).");
-            throw new Exception("Invalid name (5 <= name <= 32).", 400);
-        }
-
         // TODO (low) need optimization.
         $prev = $this->em->getRepository('Entities\Team')->findOneByName($team->getName());
         if ($prev == null) {

@@ -42,10 +42,10 @@ Entities\User:
       nullable: false
       dafault: 0
     created:
-      type: integer
+      type: datetime
       nullable: true
     lastUpdated:
-      type: integer
+      type: datetime
       nullable: true
   lifecycleCallbacks:
     prePersist: [prePersist]

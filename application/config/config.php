@@ -369,6 +369,8 @@ $config['proxy_ips'] = '';
  */
 $config['user_verification_enabled'] = FALSE;
 
+$config['date_time_format'] = "Y-m-d H:i:s";
+
 $config['email_protocol'] = 'smtp';
 $config['email_smtp_host'] = 'ssl://smtp.gmail.com';
 $config['email_smtp_port'] = 465;

@@ -40,10 +40,22 @@ class Match extends Stadioom_REST_Controller {
             $match->setBrandId($this->post('brandId'));
             $match->setSportId($this->post('sportId'));
 
-            $match->setStarted($this->post('started'));
-            $match->setEnded($this->post('ended'));
-            $match->setCanceled($this->post('canceled'));
 
+
+            $format = "Y-m-d H:i:s";
+            $started = DateTime::createFromFormat($format, $this->posrt('started'), new DateTimeZone("GMT"));
+            if ($started != null) {
+                $match->setStarted($started);
+            }
+            $ended = DateTime::createFromFormat($format, $this->post('ended'), new DateTimeZone("GMT"));
+            if ($ended != null) {
+                $match->setEnded($ended);
+            }
+            $canceled = DateTime::createFromFormat($format, $this->post('canceled'), new DateTimeZone("GMT"));
+            if ($canceled != null) {
+
+                $match->setCanceled($canceled);
+            }
             $match->setLocation($this->post('location'));
             $match->setLatitude($this->post('latitude'));
             $match->setLongitude($this->post('longitude'));

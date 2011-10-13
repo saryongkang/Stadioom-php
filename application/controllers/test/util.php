@@ -35,32 +35,8 @@ class Util extends Stadioom_REST_Controller {
     }
 
     public function date_get() {
-echo date_default_timezone_get() . '<br>';
-echo date('H:i:s') . '<br>';
-date_default_timezone_set('GMT');
-echo date_default_timezone_get() . '<br>';
-echo date('H:i:s') . '<br>';
-//$date = new DateTime();
-//        $date = $date->getTimestamp();
-//        echo $date . '<br>';
-//
-//        echo 'time: ' . time() . '<br>';
-//        $utc_str = gmdate("M d Y H:i:s", time());
-//        echo 'gmtime: ' . $utc_str . '<br>';
-//        $utc = strtotime($utc_str);
-//        echo $utc . '<br>';
-//        $utc = strtotime(gmdate("M d Y H:i:s", time()));
-//        echo $utc . '<br>';
-//        
-//        echo '<br><br><br>';
-//        echo '<br><br><br>';
-//        echo '<br><br><br>';
-//        echo '<br><br><br>';
-//        
-//        $date = new DateTime();
-////        echo $date . "<br>";
-////        $date->setTimezone( new DateTimeZone('UTC') );
-//        echo $date->getTimestamp() . "<br>";
+        $started = DateTime::createFromFormat("Y-m-d H:i:s", "2011-10-05 16:01:23", new DateTimeZone("GMT"));
+        echo $started->format("Y-m-d H:i:s");
     }
 
 }

@@ -48,17 +48,17 @@ class MatchRecord
     private $teamBId;
 
     /**
-     * @var integer $started
+     * @var datetime $started
      */
     private $started;
 
     /**
-     * @var integer $ended
+     * @var datetime $ended
      */
     private $ended;
 
     /**
-     * @var integer $canceled
+     * @var datetime $canceled
      */
     private $canceled;
 
@@ -88,29 +88,29 @@ class MatchRecord
     private $longitude;
 
     /**
-     * @var integer $created
+     * @var datetime $created
      */
     private $created;
 
     /**
-     * @var integer $lastUpdated
+     * @var datetime $lastUpdated
      */
     private $lastUpdated;
 
     /**
-     * @var Entities\MatchRecordMemberA
+     * @var Entities\User
      */
-    private $memberIdsA;
+    private $membersA;
 
     /**
-     * @var Entities\MatchRecordMemberB
+     * @var Entities\User
      */
-    private $memberIdsB;
+    private $membersB;
 
     public function __construct()
     {
-        $this->memberIdsA = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->memberIdsB = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->membersA = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->membersB = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -266,7 +266,7 @@ class MatchRecord
     /**
      * Set started
      *
-     * @param integer $started
+     * @param datetime $started
      */
     public function setStarted($started)
     {
@@ -276,7 +276,7 @@ class MatchRecord
     /**
      * Get started
      *
-     * @return integer $started
+     * @return datetime $started
      */
     public function getStarted()
     {
@@ -286,7 +286,7 @@ class MatchRecord
     /**
      * Set ended
      *
-     * @param integer $ended
+     * @param datetime $ended
      */
     public function setEnded($ended)
     {
@@ -296,7 +296,7 @@ class MatchRecord
     /**
      * Get ended
      *
-     * @return integer $ended
+     * @return datetime $ended
      */
     public function getEnded()
     {
@@ -306,7 +306,7 @@ class MatchRecord
     /**
      * Set canceled
      *
-     * @param integer $canceled
+     * @param datetime $canceled
      */
     public function setCanceled($canceled)
     {
@@ -316,7 +316,7 @@ class MatchRecord
     /**
      * Get canceled
      *
-     * @return integer $canceled
+     * @return datetime $canceled
      */
     public function getCanceled()
     {
@@ -426,7 +426,7 @@ class MatchRecord
     /**
      * Set created
      *
-     * @param integer $created
+     * @param datetime $created
      */
     public function setCreated($created)
     {
@@ -436,7 +436,7 @@ class MatchRecord
     /**
      * Get created
      *
-     * @return integer $created
+     * @return datetime $created
      */
     public function getCreated()
     {
@@ -446,7 +446,7 @@ class MatchRecord
     /**
      * Set lastUpdated
      *
-     * @param integer $lastUpdated
+     * @param datetime $lastUpdated
      */
     public function setLastUpdated($lastUpdated)
     {
@@ -456,66 +456,12 @@ class MatchRecord
     /**
      * Get lastUpdated
      *
-     * @return integer $lastUpdated
+     * @return datetime $lastUpdated
      */
     public function getLastUpdated()
     {
         return $this->lastUpdated;
     }
-
-    /**
-     * @prePersist
-     */
-    public function prePersist() {
-        $gmt = strtotime(gmdate("M d Y H:i:s", time()));
-        
-        if ($this->created == null) {
-            $this->created = $gmt;
-        }
-        $this->lastUpdated = $gmt;
-    }
-
-    /**
-     * @preUpdate
-     */
-    public function preUpdate() {
-        $gmt = strtotime(gmdate("M d Y H:i:s", time()));
-        $this->lastUpdated = $gmt;
-    }
-
-    public function toArray() {
-        $array = get_object_vars($this);
-
-        $memberIdsA = array();
-        $memberIdsB = array();
-
-        $membersA = $this->getMembersA();
-        foreach ($membersA as $member) {
-            array_push($memberIdsA, $member->getId());
-        }
-        $membersB = $this->getMembersB();
-        foreach ($membersB as $member) {
-            array_push($memberIdsB, $member->getId());
-        }
-
-        $array['memberIdsA'] = $memberIdsA;
-        $array['memberIdsB'] = $memberIdsB;
-        
-        unset($array['membersA']);
-        unset($array['membersB']);
-
-        return $array;
-    }
-    /**
-     * @var Entities\User
-     */
-    private $membersA;
-
-    /**
-     * @var Entities\User
-     */
-    private $membersB;
-
 
     /**
      * Add membersA
@@ -556,4 +502,66 @@ class MatchRecord
     {
         return $this->membersB;
     }
+    
+    /**
+     * @prePersist
+     */
+    public function prePersist() {
+  //      $gmt = strtotime(gmdate("M d Y H:i:s", time()));
+        $gmt = new \DateTime("now", new \DateTimeZone("GMT"));
+        
+        if ($this->created == null) {
+            $this->created = $gmt;
+        }
+        $this->lastUpdated = $gmt;
+    }
+
+    /**
+     * @preUpdate
+     */
+    public function preUpdate() {
+  //      $gmt = strtotime(gmdate("M d Y H:i:s", time()));
+        $gmt = new \DateTime("now", new \DateTimeZone("GMT"));
+        $this->lastUpdated = $gmt;
+    }
+
+    public function toArray() {
+        $array = get_object_vars($this);
+        
+        // TODO review more carefully later.
+        $format = "Y-m-d H:i:s";
+        if ($this->getStarted() !== null) {
+            $array['started'] = $this->getStarted()->format($format);
+        }
+        if ($this->getEnded() !== null) {
+            $array['ended'] = $this->getEnded()->format($format);
+        }
+        if ($this->getCanceled() !== null) {
+            $array['canceled'] = $this->getCanceled()->format($format);
+        }
+        
+        $array['created'] = $this->getCreated()->format($format);
+        $array['lastUpdated'] = $this->getLastUpdated()->format($format);
+
+        $memberIdsA = array();
+        $memberIdsB = array();
+
+        $membersA = $this->getMembersA();
+        foreach ($membersA as $member) {
+            array_push($memberIdsA, $member->getId());
+        }
+        $membersB = $this->getMembersB();
+        foreach ($membersB as $member) {
+            array_push($memberIdsB, $member->getId());
+        }
+
+        $array['memberIdsA'] = $memberIdsA;
+        $array['memberIdsB'] = $memberIdsB;
+        
+        unset($array['membersA']);
+        unset($array['membersB']);
+
+        return $array;
+    }
+
 }

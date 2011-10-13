@@ -127,7 +127,7 @@ class Team
      * @prePersist
      */
     public function prePersist() {
-        $gmt = new DateTime("now", new DateTimeZone("GMT"));
+        $gmt = new \DateTime("now", new \DateTimeZone("GMT"));
         
         if ($this->created == null) {
             $this->created = $gmt;
@@ -139,7 +139,7 @@ class Team
      * @preUpdate
      */
     public function preUpdate() {
-        $gmt = new DateTime("now", new DateTimeZone("GMT"));
+        $gmt = new \DateTime("now", new \DateTimeZone("GMT"));
         $this->lastUpdated = $gmt;
     }
 

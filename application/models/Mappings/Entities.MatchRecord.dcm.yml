@@ -29,13 +29,13 @@ Entities\MatchRecord:
       type: integer
       nullable: true
     started:  #started date/time
-      type: integer
+      type: datetime
       nullable: true
     ended:  #ended date/time
-      type: integer
+      type: datetime
       nullable: true
     canceled: #canceled data/time
-      type: integer
+      type: datetime
       nullable: true
     scoreA: #score of team A
       type: integer
@@ -54,10 +54,10 @@ Entities\MatchRecord:
       type: integer
       nullable: true
     created:
-      type: integer
+      type: datetime
       nullable: true
     lastUpdated:
-      type: integer
+      type: datetime
       nullable: true
   manyToMany:
     membersA:
