@@ -28,6 +28,7 @@ class Brand extends Stadioom_REST_Controller {
             $brand->setName($this->post('name'));
             $brand->setDescription($this->post('desc'));
             $brand->setPriority($this->post('priority'));
+            $brand->setUrl($this->post('url'));
             $brand->setFirstRevision($this->post('firstRevision'));
             $brand->setLatestRevision($this->post('latestRevision'));
             $brand->setUpdateFlag($this->post('updateFlag'));
