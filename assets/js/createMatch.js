@@ -174,7 +174,7 @@ $('#submitMatch').click(function(event) {
 //        console.log('ScoreA ='+window.scoreA + " " + 'ScoreB ='+window.scoreB);
 //        console.log('Belongteam ='+belongTeam);
 
-        var startDateTimeUTC = window.matchDateTime.format("yy-mm-dd hh:mm:ss", true);
+        var startDateTimeUTC = window.matchDateTime.format("yyyy-mm-dd hh:mm:ss", true);
 //        console.log ("UTC: "+startDateTimeUTC);
 //        console.log ("Local: "+window.matchDateTime.format("yy-mm-dd hh:mm:ss"));
         params = {
