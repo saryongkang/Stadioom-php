@@ -76,7 +76,7 @@ class I18nDao extends CI_Model {
 //        log_message('debug', "replace: enter.");
 
         if ($clientType == 'ios') {
-            $pattern = "/%(\d*)s/";
+            $pattern = "/%(\d*)\\\$(s|d)/";
             $replacement = '%\1$@';
             $translated = preg_replace($pattern, $replacement, $translated);
         }

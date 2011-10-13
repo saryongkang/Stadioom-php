@@ -818,8 +818,7 @@ class UserDao extends CI_Model {
      * @param integer $maxResult The maximum number of result.
      * @return array of Entities\MatchRecord 
      */
-    public function getLatestMatches($userId, $firstOffset, $maxResult
-            ) {
+    public function getLatestMatches($userId, $firstOffset, $maxResult) {
         log_message('debug', "getLatestMatches: enter.");
         $dql = "SELECT m, a, b";
         $dql .= " FROM Entities\MatchRecord m";

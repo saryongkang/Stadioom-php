@@ -22,7 +22,7 @@ $lang['fbmessage_andOthers'] = "%1\$s & %2\$d+";
 
 $lang['fbmessage_title'] = "%1\$s %2\$s match";
 $lang['fbmessage_score'] = "Final score: %1\$s %2\$s - %3\$s %4\$s";
-$lang['fbmessage_link'] = "match/view/%s";
+$lang['fbmessage_link'] = "match/view/%1\$s";
 $lang['fbmessage_icon'] = "assets/images/sponsors/shareicons/%1\$s_%2\$s_shareicon.gif";
 
 $lang['__last_updated'] = '1318234635';

@@ -14,7 +14,7 @@ $lang['fbmessage_caption_plural'] = "%1\$s vencieron a %2\$s en un intenso parti
 
 $lang['fbmessage_title'] = "Partido de %1\$s %2\$s";
 $lang['fbmessage_score'] = "Puntuación final: %1\$s %2\$s - %3\$s %4\$s";
-$lang['fbmessage_link'] = "match/view/%1s";
+$lang['fbmessage_link'] = "match/view/%1\$s";
 $lang['fbmessage_icon'] = "assets/images/sponsors/shareicons/%1\$s_%2\$s_shareicon.gif";
 
 
