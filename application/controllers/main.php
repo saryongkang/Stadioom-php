@@ -8,7 +8,8 @@ class Main extends FBAuth_Controller {
         $this->security->csrf_verify();
         
         $this->load->model('dao/UserDao');
-        $matchesData = $this->UserDao->getLatestMatches($data['session']['user']['id'], 1);
+        $matchesData = $this->UserDao->getLatestMatches($data['session']['user']['id'], 0, 1);
+        //getLatestMatches($userId, $firstOffset, $maxResult)
         
         $this->load->model('dao/SportDao');
         $sports= $this->SportDao->getAll();

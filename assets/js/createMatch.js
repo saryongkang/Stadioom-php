@@ -83,7 +83,6 @@ $("#sportSelect").change( function(){
 
 
 $('#submitMatch').click(function(event) {
-    console.log();
     event.preventDefault();
     var errors = [];
     $("#sponsorErrorDiv").hide();
@@ -99,8 +98,10 @@ $('#submitMatch').click(function(event) {
     window.scoreA = parseInt($('#scoreA').val());
     window.scoreB = parseInt($('#scoreB').val());
     window.matchDateTime = $('#matchDateTime').datetimepicker('getDate');
-    console.log(window.isDateTimeSelected);
-    
+    //console.log(window.isDateTimeSelected);
+//    console.log(scoreA);
+//    console.log(scoreB);
+//    
     var belongTeam = window.belongTeam;
     
 //    console.log('belongTeam '+belongTeam);
@@ -108,15 +109,14 @@ $('#submitMatch').click(function(event) {
 //    console.log('LengthB '+window.teamBFBSelector.getselectedFriendIds().length);
 //    
     //Validation
-    if(!window.scoreA === undefined || window.scoreA === ''){
-        
+    if(!window.scoreA === undefined || isNaN(window.scoreA)){
         errors.push( {type: 'scoreA', value: true});
         $("#scoreAErrorDiv").fadeIn();
     }else{
         //TODO: code for validation
     }
     
-    if(window.scoreB === undefined || window.scoreB === ''  ){
+    if(window.scoreB === undefined || isNaN(window.scoreB) ){
         errors.push( {type: 'scoreB', value: true});
         $("#scoreBErrorDiv").fadeIn();
     }else{

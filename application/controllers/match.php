@@ -78,7 +78,7 @@ class Match extends FBAuth_Controller {
     function viewMine(){
         $data['session'] = $this->session->userdata;    
         $this->load->model('dao/UserDao');
-        $matchesData = $this->UserDao->getLatestMatches($data['session']['user']['id'], 10);
+        $matchesData = $this->UserDao->getLatestMatches($data['session']['user']['id'], 0, 10);
         $this->load->model('dao/SportDao');
         $sports = $this->SportDao->getAll();
         $this->load->model('dao/BrandDao');
