@@ -750,7 +750,7 @@ class UserDao extends CI_Model {
             $activitiesFb->setName($activity['name']);
             $activitiesFb->setCategory($activity['category']);
             $activitiesFb->setCreatedTime($activity['created_time']);
-            $userFb->addLikes($activitiesFb);
+            $userFb->addActivities($activitiesFb);
         }
         log_message('debug', "Stores 'activities': ended.");
 
@@ -764,7 +764,7 @@ class UserDao extends CI_Model {
             $interestsFb->setName($interest['name']);
             $interestsFb->setCategory($interest['category']);
             $interestsFb->setCreatedTime($interest['created_time']);
-            $userFb->addLikes($interestsFb);
+            $userFb->addInterests($interestsFb);
         }
         log_message('debug', "Stores 'interests': ended.");
         
