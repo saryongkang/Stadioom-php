@@ -91,30 +91,45 @@
           </div><!-- /clearfix -->
 
           <div class="clearfix">
-          <label id="optionsRadio">On which team are you playing? </label>
-              <div class="input">
-                <ul id="teamSelect" class="inputs-list">
-                    <li>
-                      <label>
-                        <input type="radio" name="belongTeam" value=1 />
-                        <span>Team A</span>
-                      </label>
-                    </li>
-                    <li>
+              <div class="row">
+              <div class="span4">
+                  <label id="optionsRadio">On which team are you playing? </label>
+                      <div class="input">
+                        <ul id="teamSelect" class="inputs-list">
+                            <li>
+                              <label>
+                                <input type="radio" name="belongTeam" value=1 />
+                                <span>Team A</span>
+                              </label>
+                            </li>
+                            <li>
 
-                      <label>
-                        <input type="radio" name="belongTeam" value=2 />
-                        <span>Team B</span>
-                      </label>
-                    </li>
-                    <li>
-                      <label>
-                        <input checked="yes" type="radio" name="belongTeam" value=0 />
-                        <span>None</span>
-                      </label>
-                    </li>
-                </ul>
-              </div>
+                              <label>
+                                <input type="radio" name="belongTeam" value=2 />
+                                <span>Team B</span>
+                              </label>
+                            </li>
+                            <li>
+                              <label>
+                                <input checked="yes" type="radio" name="belongTeam" value=0 />
+                                <span>None</span>
+                              </label>
+                            </li>
+                        </ul>
+                      </div>
+              </div> <!-- Span finish -->
+              <div class="span3">
+                <label>Date and time</label>
+                <div class="input">
+                  <div class="inline-inputs">
+    <!--                <input class="small" type="text" value="May 1, 2011" />
+                    <input class="mini" type="text" value="2:00pm" />-->
+                      <input id="matchDateTime" value="Date/Time" type="text" />
+    <!--                <span class="help-inline">Time is Pacific Standard Time (GMT -08:00).</span>-->
+                  </div>
+                </div>
+              </div> <!-- Span3 finish -->
+            </div><!-- row -->
           </div><!-- /clearfix -->
           
           <div class="clearfix">
@@ -142,23 +157,9 @@
                           </div>
                       </div> <!-- endRow -->
                   </div>
-                  <div class="span1"> &nbsp;</div>
               </div>
           </div><!-- /clearfix -->
-
-          <div class="clearfix">
-            <label>Date</label>
-            <div class="input">
-              <div class="inline-inputs">
-<!--                <input class="small" type="text" value="May 1, 2011" />
-                <input class="mini" type="text" value="2:00pm" />-->
-                  <input id="matchDate" class="small" value="Choose a Date" type="text" />
-<!--                <span class="help-inline">Time is Pacific Standard Time (GMT -08:00).</span>-->
-              </div>
-            </div>
-          </div>
-          
-          <div class="clearfix">
+           <div class="clearfix">
               <label> Sponsor </label>
               <div id="sponsorSelect" data-controls-modal="sponsors-modal">
                   <p class="sponsorSelecText">Select Match Sponsor</p>

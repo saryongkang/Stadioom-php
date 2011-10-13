@@ -466,13 +466,13 @@ $(".score").keydown(function(event) {
 
 
 $(function(){
-    $('#matchDate').datepicker({ defaultDate: +0 });
+    $('#matchDateTime').datetimepicker({ampm: true});
     //For Date RANGE
 //    $('#matchDate').daterangepicker({arrows:true}); 
  });
  
  
- $("#matchDate").keydown(function(event) {
+ $("#matchDateTime").keydown(function(event) {
     event.preventDefault();
  });
  
