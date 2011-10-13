@@ -273,7 +273,8 @@ class MatchDao extends CI_Model {
         if ($since == null) {
             $since = new DateTime();
             $since = $since->sub(new DateInterval('P1M'));   // a month ago.
-            $since = $since->getTimestamp();
+        } else {
+            $since = $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $since, new DateTimeZone("GMT"));
         }
 
         $dql = 'SELECT m';
@@ -358,14 +359,14 @@ class MatchDao extends CI_Model {
         }
 
         $record = array();
-        $q = "SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND (a.id = " . $userId . " OR b.id = " . $userId . ")";
+        $q = "SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > '1970-01-01 00:00:00' AND (a.id = " . $userId . " OR b.id = " . $userId . ")";
         log_message('debug', 'query: ' . $q);
-        $total = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND (a.id = " . $userId . " OR b.id = " . $userId . ")")->getResult();
+        $total = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > '1970-01-01 00:00:00' AND (a.id = " . $userId . " OR b.id = " . $userId . ")")->getResult();
         log_message('debug', 'total: ' . $total[0][1]);
         $record['total'] = intval($total[0][1]);
-        $win = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND ((a.id = " . $userId . " AND m.scoreA > m.scoreB) OR (b.id = " . $userId . " AND m.scoreA < m.scoreB))")->getResult();
+        $win = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > '1970-01-01 00:00:00' AND ((a.id = " . $userId . " AND m.scoreA > m.scoreB) OR (b.id = " . $userId . " AND m.scoreA < m.scoreB))")->getResult();
         $record['win'] = intval($win[0][1]);
-        $tie = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > 0 AND m.scoreA = m.scoreB AND (a.id = " . $userId . " OR b.id = " . $userId . ")")->getResult();
+        $tie = $this->em->createQuery("SELECT count(DISTINCT m) FROM Entities\MatchRecord m JOIN m.membersA a JOIN m.membersB b WHERE m.ended > '1970-01-01 00:00:00' AND m.scoreA = m.scoreB AND (a.id = " . $userId . " OR b.id = " . $userId . ")")->getResult();
         $record['tie'] = intval($tie[0][1]);
         $record['lose'] = $record['total'] - $record['win'] - $record['tie'];
 
