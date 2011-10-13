@@ -58,6 +58,10 @@ root {
     border-style: dotted;
 }
 
+#sponsorSelect:hover{
+    cursor: pointer;
+}
+
 #sponsorSelect p{
     font-size: 24px;
 }

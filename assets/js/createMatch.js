@@ -400,39 +400,45 @@ $('#submitMatch').click(function(event) {
 
 var belongTeamChanged = function(){
     var belongTeam = $('input[name=belongTeam]:checked', '#newMatchForm').val();
+    var myTeamTxt = window.myTeamTxt;
+    var oppTeamTxt = window.oppTeamTxt;
+    var teamATxt = window.teamATxt;
+    var teamBTxt = window.teamBTxt;
+    var noPlayersTxt = window.noPlayersTxt;
+     
     if(belongTeam == 1){
-        $('#playersA').text('My Team');
-        $('#playersB').text('Opponent Team');
+        $('.teamANameSpan').text(myTeamTxt);
+        $('.teamBNameSpan').text(oppTeamTxt);
         $("#userPlayerInA").html('<img src="https://graph.facebook.com/'+window.user['fbId']+'/picture" /> ' +window.user['name']);
         if(window.teamBFBSelector.getselectedFriendIds().length <1){
-            $("#userPlayerInB").html('No Players Selected');
+            $("#userPlayerInB").html(noPlayersTxt);
         }else{
             $("#userPlayerInB").html('');
         }
         window.userTeam = window.teamAFBSelector.getselectedFriendIds();
     
     }else if(belongTeam == 2){
-        $('#playersA').text('Opponent Team');
-        $('#playersB').text('My Team');
+        $('.teamANameSpan').text(oppTeamTxt);
+        $('.teamBNameSpan').text(myTeamTxt);
         $("#userPlayerInB").html('<img src="https://graph.facebook.com/'+window.user['fbId']+'/picture" /> ' +window.user['name']);
         if(window.teamAFBSelector.getselectedFriendIds().length <1){
-            $("#userPlayerInA").html('No players selected');
+            $("#userPlayerInA").html(noPlayersTxt);
         }else{
             $("#userPlayerInA").html('');
         }
         window.userTeam = window.teamBFBSelector.getselectedFriendIds();
     }else{
-        $('#playersA').text('Team A');
-        $('#playersB').text('Team B');
+        $('.teamANameSpan').text(teamATxt);
+        $('.teamBNameSpan').text(teamBTxt);
 
         if(window.teamAFBSelector.getselectedFriendIds().length <1){
-            $("#userPlayerInA").html('No players selected');
+            $("#userPlayerInA").html(noPlayersTxt);
         }else{
             $("#userPlayerInA").html('');
         }
         
         if(window.teamBFBSelector.getselectedFriendIds().length <1){
-            $("#userPlayerInB").html('No players selected');
+            $("#userPlayerInB").html(noPlayersTxt);
         }else{
             $("#userPlayerInB").html('');
         }

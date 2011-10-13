@@ -1,6 +1,6 @@
 <div id="middleContent"class="span8">
 
-    <div id="fb-root"> &nbsp; </div>
+    <div id="fb-root"> </div>
 
 
     <!-- Necessary for the friends selector -->
@@ -57,19 +57,19 @@
     </div>
     <div id="teamAErrorDiv" class="alert-message error" style="display: none">
         <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You need to choose the players of team A.</p>
+        <p><strong>Oops!</strong> You need to choose the players of &quot;<span class="teamANameSpan"> </span>&quot;.</p>
     </div>
     <div id="teamBErrorDiv" class="alert-message error" style="display: none">
         <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You need to choose the players of team B.</p>
+        <p><strong>Oops!</strong> You need to choose the players of &quot;<span class="teamBNameSpan"> </span>&quot;.</p>
     </div>
     <div id="scoreAErrorDiv" class="alert-message error" style="display: none">
         <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You forgot to include the score for team A.</p>
+        <p><strong>Oops!</strong> You forgot to include the score for &quot;<span class="teamANameSpan"> </span>&quot;.</p>
     </div>
     <div id="scoreBErrorDiv" class="alert-message error" style="display: none">
         <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You forgot to include the score for team B.</p>
+        <p><strong>Oops!</strong> You forgot to include the score for &quot;<span class="teamBNameSpan"> </span>&quot;.</p>
     </div>
     
 
@@ -139,11 +139,11 @@
                   <div class="span6">
                       <div class="row">
                           <div class="span2 center">
-                            <button id="playersA" class="btn success large teamBtn" >Team A</button>
+                            <button id="playersA" class="btn success large teamBtn" ><span class="teamANameSpan"> </span></button>
                           </div>
                           <div class="span1 center"> VS </div>
                           <div class="span2 center">
-                            <button id="playersB" class="btn danger large teamBtn" >Team B</button>
+                            <button id="playersB" class="btn danger large teamBtn" ><span class="teamBNameSpan"> </span></button>
                           </div>
                       </div> <!-- endRow -->
                       
@@ -205,14 +205,14 @@
 <div class="span4">
     <h2>Teams Info </h2>
     <div id="teamADesc" class="teamDesc">
-        <div class="teamName">Team A</div>
+        <div class="teamName"><span class="teamANameSpan"> </span></div>
         <div id="teamAPlayersList" class="playersList">
             <div id="userPlayerInA" class="playerInTeamList">No players selected</div>
             <div id="teamMatesA"> </div>
         </div>
     </div>
     <div id="teamBDesc" class="teamDesc">
-        <div class="teamName">Team B</div>
+        <div class="teamName"><span class="teamBNameSpan"> </span></div>
         <div id="teamBPlayersList" class="playersList">
             <div id="userPlayerInB" class="playerInTeamList">No players selected</div>
             <div id="teamMatesB"> </div>
@@ -242,6 +242,12 @@
     var belongTeam;
     belongTeam =0;
     var userTeam = null;
+    
+    var myTeamTxt = 'My Team';
+    var oppTeamTxt = 'Opponent Team';
+    var teamATxt = 'Team A';
+    var teamBTxt = 'Team B';
+    var noPlayersTxt = 'No players selected.';
     
     //Sport and Brands
     var sportsList, selectedSponsor, selectedSportId;

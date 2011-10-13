@@ -26,30 +26,35 @@ body {
 	padding: 0;
 }
 
+#leftmenu li{ /* remove bullets and list indents */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 4px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ccc #888 #555 #bbb;
+    background: #efefef;
+}
+
+
 #leftmenu a, #leftmenu h2 {
-  font: bold 14px/16px arial, helvetica, sans-serif;
+  font: bold 18px arial, helvetica, sans-serif;
   display: block;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #ccc #888 #555 #bbb;
   margin: 0;
   /* padding: 2px 3px; */
 }
 
 #leftmenu h2 {
-  color: #fff;
-  background: #000;
   text-transform: uppercase;
+  color: #fff;
 }
 
 #leftmenu a {
   color: #000;
-  background: #efefef;
   text-decoration: none;
 }
 
-#leftmenu a:hover {
-	color: #063;
+#leftmenu li:hover {
 	background: #fff;
 }
 
