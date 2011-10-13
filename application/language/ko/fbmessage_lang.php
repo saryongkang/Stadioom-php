@@ -11,7 +11,7 @@ $lang['fbmessage_tied_plural'] = "오랫만에 적수를 만났군!";
 $lang['fbmessage_caption_won_singular'] = "%1\$s(이)가 %3\$s 경기에서 %2\$s를 눌렀습니다.";
 $lang['fbmessage_caption_won_plural'] = "%1\$s팀이 %3\$s 경기에서 %2\$s팀보다 한 수 위임을 증명했습니다.";
 
-$lang['fbmessage_caption_lost_singular'] = "%1\$s이가 %2\$s(으)로부터 %3\$s에 대해 한 수 가르침을 받았습니다.";
+$lang['fbmessage_caption_lost_singular'] = "%1\$s(이)가 %2\$s(으)로부터 %3\$s에 대해 한 수 가르침을 받았습니다.";
 $lang['fbmessage_caption_lost_plural'] = "%3\$s로 맞붙으면 %1\$s팀은 아직 %2\$s팀에게는 무리로군요.";
 
 $lang['fbmessage_caption_tied_singular'] = "치열한 %3\$s 경기였지만 맞수 %1\$s와(과) %2\$s는 이번에도 승부를 가리지 못했습니다.";
