@@ -253,7 +253,7 @@ class MatchDao extends CI_Model {
     public function findAll($options) {
         log_message('debug', "findAll: enter.");
 
-        $since = $options['since'];
+//        $since = $options['since'];
         $firstOffset = $options['firstOffset'];
         $limit = $options['limit'];
         $sportId = $options['sportId'];
@@ -270,12 +270,12 @@ class MatchDao extends CI_Model {
             $limit = 200;   // maximum limit is 200.
         }
 
-        if ($since == null) {
-            $since = new DateTime();
-            $since = $since->sub(new DateInterval('P1M'));   // a month ago.
-        } else {
-            $since = $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $since, new DateTimeZone("GMT"));
-        }
+//        if ($since == null) {
+//            $since = new DateTime();
+//            $since = $since->sub(new DateInterval('P1M'));   // a month ago.
+//        } else {
+//            $since = $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $since, new DateTimeZone("GMT"));
+//        }
 
         $dql = 'SELECT m';
         if ($memberId != null) {
@@ -285,17 +285,17 @@ class MatchDao extends CI_Model {
         if ($memberId != null) {
             $dql .= ' JOIN m.membersA a JOIN m.membersB b';
         }
-        if ($since != null || $sportId != null || $ownerId != null || $memberId != null) {
+        if (/*$since != null ||*/ $sportId != null || $ownerId != null || $memberId != null) {
             $dql .= ' WHERE';
 
             $first = true;
-            if ($since != null) {
-                if (!$first) {
-                    $dql .= ' AND';
-                }
-                $dql .= ' m.lastUpdated >= ' . $since;
-                $first = false;
-            }
+//            if ($since != null) {
+//                if (!$first) {
+//                    $dql .= ' AND';
+//                }
+//                $dql .= ' m.lastUpdated >= ' . $since;
+//                $first = false;
+//            }
             if ($sportId != null) {
                 if (!$first) {
                     $dql .= ' AND';

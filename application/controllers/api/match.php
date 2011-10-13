@@ -136,7 +136,7 @@ class Match extends Stadioom_REST_Controller {
                 $match = $this->MatchDao->find($matchId);
                 $this->responseOk($match);
             } else {
-                $options = array('since' => $this->get('since'),
+                $options = array(/*'since' => $this->get('since'),*/
                     'firstOffset' => $this->get('firstOffset'),
                     'limit' => $this->get('limit'),
                     'sportId' => $this->get('sportId'),
