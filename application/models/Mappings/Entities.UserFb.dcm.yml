@@ -48,37 +48,37 @@ Entities\UserFb:
       type: string
       length: 200
       nullable: true
-  manyToMany:
-    likes:
-      targetEntity: LikesFb
-      joinTable:
-        name: userfb_likes
-        joinColumns:
-          fb_user_Id:
-            referencedColumnName: fbId
-        inverseJoinColumns:
-          fb_likes_id:
-            referencedColumnName: id
-#      cascade: [all]
-    activities:
-      targetEntity: ActivitiesFb
-      joinTable:
-        name: userfb_activities
-        joinColumns:
-          fb_user_Id:
-            referencedColumnName: fbId
-        inverseJoinColumns:
-          fb_activities_id:
-            referencedColumnName: id
-#      cascade: [all]
-    interests:
-      targetEntity: InterestsFb
-      joinTable:
-        name: userfb_interests
-        joinColumns:
-          fb_user_Id:
-            referencedColumnName: fbId
-        inverseJoinColumns:
-          fb_interests_id:
-            referencedColumnName: id
-#      cascade: [all]
+#  manyToMany:
+#    likes:
+#      targetEntity: LikesFb
+#      joinTable:
+#        name: userfb_likes
+#        joinColumns:
+#          fb_user_Id:
+#            referencedColumnName: fbId
+#        inverseJoinColumns:
+#          fb_likes_id:
+#            referencedColumnName: id
+##      cascade: [all]
+#    activities:
+#      targetEntity: ActivitiesFb
+#      joinTable:
+#        name: userfb_activities
+#        joinColumns:
+#          fb_user_Id:
+#            referencedColumnName: fbId
+#        inverseJoinColumns:
+#          fb_activities_id:
+#            referencedColumnName: id
+##      cascade: [all]
+#    interests:
+#      targetEntity: InterestsFb
+#      joinTable:
+#        name: userfb_interests
+#        joinColumns:
+#          fb_user_Id:
+#            referencedColumnName: fbId
+#        inverseJoinColumns:
+#          fb_interests_id:
+#            referencedColumnName: id
+##      cascade: [all]

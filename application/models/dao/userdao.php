@@ -105,16 +105,16 @@ class UserDao extends CI_Model {
 
             try {
                 $fbMe = $this->fb_connect->api('/me', 'GET');
-                $fbLikes = $this->fb_connect->api('/me/likes', 'GET');
-                $fbActivities = $this->fb_connect->api('/me/activities', 'GET');
-                $fbInterests = $this->fb_connect->api('/me/interests', 'GET');
+//                $fbLikes = $this->fb_connect->api('/me/likes', 'GET');
+//                $fbActivities = $this->fb_connect->api('/me/activities', 'GET');
+//                $fbInterests = $this->fb_connect->api('/me/interests', 'GET');
             } catch (FacebookApiException $e) {
                 log_message('error', "Failed to get authorized by Facebook.");
                 throw new Exception("Failed to get authorized by Facebook.", 401, $e);
             }
             log_message('debug', "Gathering done.");
 
-            $userFb = $this->storeUserFb($fbInfo, $fbMe, $fbLikes, $fbActivities, $fbInterests);
+            $userFb = $this->storeUserFb($fbInfo, $fbMe/*, $fbLikes, $fbActivities, $fbInterests*/);
 
             log_message('debug', "Check whether the same email already exist.");
             $result['fullName'] = $fbMe['first_name'] . ' ' . $fbMe['last_name'];
@@ -195,16 +195,16 @@ class UserDao extends CI_Model {
 
                 try {
                     $fbMe = $this->fb_connect->api('/me', 'GET');
-                    $fbLikes = $this->fb_connect->api('/me/likes', 'GET');
-                    $fbActivities = $this->fb_connect->api('/me/activities', 'GET');
-                    $fbInterests = $this->fb_connect->api('/me/interests', 'GET');
+//                    $fbLikes = $this->fb_connect->api('/me/likes', 'GET');
+//                    $fbActivities = $this->fb_connect->api('/me/activities', 'GET');
+//                    $fbInterests = $this->fb_connect->api('/me/interests', 'GET');
                 } catch (FacebookApiException $e) {
                     log_message('error', "Failed to get authorized by Facebook.");
                     throw new Exception("Failed to get authorized by Facebook.", 401, $e);
                 }
 
                 // add to UserFB table.
-                $userFb = $this->storeUserFb($fbInfo, $fbMe, $fbLikes, $fbActivities, $fbInterests);
+                $userFb = $this->storeUserFb($fbInfo, $fbMe/*, $fbLikes, $fbActivities, $fbInterests*/);
 
                 log_message('debug', "Update user info with Facebook data");
                 // fill user data and persist it.

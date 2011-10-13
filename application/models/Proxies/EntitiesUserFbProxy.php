@@ -219,7 +219,7 @@ class EntitiesUserFbProxy extends \Entities\UserFb implements \Doctrine\ORM\Prox
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'fbId', 'fbAccessToken', 'fbExpires', 'name', 'gender', 'locale', 'timezone', 'birthday', 'hometown', 'location', 'favorite_athletes', 'favorite_teams', 'likes', 'activities', 'interests');
+        return array('__isInitialized__', 'fbId', 'fbAccessToken', 'fbExpires', 'name', 'gender', 'locale', 'timezone', 'birthday', 'hometown', 'location', 'favorite_athletes', 'favorite_teams');
     }
 
     public function __clone()
