@@ -896,7 +896,7 @@ class UserDao extends CI_Model {
     }
 
     /**
-     * Returns the latest matches the specfied user has played (excluded the user registered but not played).
+     * Returns the latest matches the specfied user has played (excluded the users who registered but not played).
      * (ordered by the ended time (DESC).)
      * 
      * @param integer $userId The ID of the user who's played the matches.
