@@ -18,7 +18,7 @@ class Home extends CI_Controller {
           
         $this->load->library('fb_connect');
         
-        $extraScope = ',user_interests,user_activities,user_hometown';
+        $extraScope = ',user_interests,user_activities,user_hometown,user_hometown,user_location';
 
         $fbLoginData = array(
             //'scope' => 'email,user_likes,user_interests,user_hometown,user_location,user_birthday,user_activities,publish_stream,offline_access',
