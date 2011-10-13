@@ -190,7 +190,7 @@ $('#submitMatch').click(function(event) {
             //@"", @"memberIdsB",
             "memberFbIdsB[]" : teamBFBPlayers,
             "started" : startDateTimeUTC,
-            "sdsk_stad_tok": cct ,
+            "sdsk_stad_tok": cct
 //            "ended" : startDateTimeUTC
         };
 
