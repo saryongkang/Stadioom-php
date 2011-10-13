@@ -6,9 +6,26 @@ class Match extends FBAuth_Controller {
         parent::__construct();
     }
 
-	function index()
+	function index($id)
 	{
-        echo "Unaccessible";
+        if($id==null)
+            echo "Unaccessible";
+        else{
+            $data['session'] = $this->session->userdata;
+            
+            $this->load->model('dao/SportDao');
+            $data['sports'] = $this->SportDao->getAll();
+            
+            $this->security->csrf_verify();
+            
+            //Language Stuff
+            $language = 'en';
+            
+            
+            $this->template->set_content('matchView', $data);
+            $this->template->build('main');
+            
+        }
     }
     
     function create(){
