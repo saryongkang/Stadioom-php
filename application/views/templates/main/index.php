@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="span4">
                             <div class="logo">
-                                <img id="stadioomLogo" src="/assets/images/stadioom-logo.png"/>
+                                <a href="/"><img id="stadioomLogo" src="/assets/images/stadioom-logo.png"/></a>
                             </div>
                         </div>
                         <div class="span12">
