@@ -677,11 +677,10 @@ class UserDao extends CI_Model {
      * 
      * @param array $fbInfo
      * @param array $fbMe
-     * @param array $fbLikes
      * 
      * @return Entities\UserFb
      */
-    private function storeUserFb($fbInfo, $fbMe, $fbLikes, $fbActivities, $fbInterests) {
+    private function storeUserFb($fbInfo, $fbMe/*, $fbLikes, $fbActivities, $fbInterests*/) {
         log_message('debug', "storeUserFb: enter.");
         // TODO: check duplication first.
         // add Facebook user info to UserFB table.
