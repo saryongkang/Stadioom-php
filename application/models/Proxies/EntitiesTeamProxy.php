@@ -90,6 +90,24 @@ class EntitiesTeamProxy extends \Entities\Team implements \Doctrine\ORM\Proxy\Pr
         return parent::getLastUpdated();
     }
 
+    public function prePersist()
+    {
+        $this->__load();
+        return parent::prePersist();
+    }
+
+    public function preUpdate()
+    {
+        $this->__load();
+        return parent::preUpdate();
+    }
+
+    public function toArray()
+    {
+        $this->__load();
+        return parent::toArray();
+    }
+
 
     public function __sleep()
     {

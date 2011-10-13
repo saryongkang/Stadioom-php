@@ -35,19 +35,32 @@ class Util extends Stadioom_REST_Controller {
     }
 
     public function date_get() {
-        $date = 1318362246534;
-        echo $date . '<br>';
-        $date = new DateTime();
-        $date = $date->getTimestamp();
-        echo $date . '<br>';
-
-        echo time() . '<br>';
-        $utc_str = gmdate("M d Y H:i:s", time());
-        echo $utc_str . '<br>';
-        $utc = strtotime($utc_str);
-        echo $utc . '<br>';
-        $utc = strtotime(gmdate("M d Y H:i:s", time()));
-        echo $utc . '<br>';
+echo date_default_timezone_get() . '<br>';
+echo date('H:i:s') . '<br>';
+date_default_timezone_set('GMT');
+echo date_default_timezone_get() . '<br>';
+echo date('H:i:s') . '<br>';
+//$date = new DateTime();
+//        $date = $date->getTimestamp();
+//        echo $date . '<br>';
+//
+//        echo 'time: ' . time() . '<br>';
+//        $utc_str = gmdate("M d Y H:i:s", time());
+//        echo 'gmtime: ' . $utc_str . '<br>';
+//        $utc = strtotime($utc_str);
+//        echo $utc . '<br>';
+//        $utc = strtotime(gmdate("M d Y H:i:s", time()));
+//        echo $utc . '<br>';
+//        
+//        echo '<br><br><br>';
+//        echo '<br><br><br>';
+//        echo '<br><br><br>';
+//        echo '<br><br><br>';
+//        
+//        $date = new DateTime();
+////        echo $date . "<br>";
+////        $date->setTimezone( new DateTimeZone('UTC') );
+//        echo $date->getTimestamp() . "<br>";
     }
 
 }

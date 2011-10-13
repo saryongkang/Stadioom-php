@@ -122,4 +122,28 @@ class Team
     {
         return $this->lastUpdated;
     }
+
+    /**
+     * @prePersist
+     */
+    public function prePersist() {
+        $gmt = new DateTime("now", new DateTimeZone("GMT"));
+        
+        if ($this->created == null) {
+            $this->created = $gmt;
+        }
+        $this->lastUpdated = $gmt;
+    }
+
+    /**
+     * @preUpdate
+     */
+    public function preUpdate() {
+        $gmt = new DateTime("now", new DateTimeZone("GMT"));
+        $this->lastUpdated = $gmt;
+    }
+
+    public function toArray() {
+        return get_object_vars($this);
+    }
 }

@@ -20,4 +20,6 @@ Entities\Team:
     lastUpdated:
       type: datetime
       nullable: false
-      
+  lifecycleCallbacks:
+    prePersist: [prePersist]
+    preUpdate: [preUpdate]
