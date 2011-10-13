@@ -43,7 +43,7 @@ class Match extends Stadioom_REST_Controller {
 
 
             $format = "Y-m-d H:i:s";
-            $started = DateTime::createFromFormat($format, $this->posrt('started'), new DateTimeZone("GMT"));
+            $started = DateTime::createFromFormat($format, $this->post('started'), new DateTimeZone("GMT"));
             if ($started != null) {
                 $match->setStarted($started);
             }
