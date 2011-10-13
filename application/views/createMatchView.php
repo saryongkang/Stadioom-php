@@ -61,7 +61,7 @@
           <div class="clearfix">
               <div class="row">
               <div class="span4">
-                  <label id="optionsRadio">On which team are you playing? </label>
+                  <label id="optionsRadio">In which team are you playing? </label>
                       <div class="input">
                         <ul id="teamSelect" class="inputs-list">
                             <li>
