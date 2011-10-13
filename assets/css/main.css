@@ -30,7 +30,8 @@ body {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 4px;
-    border-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
     border-style: solid;
     border-color: #ccc #888 #555 #bbb;
     background: #efefef;
@@ -38,7 +39,7 @@ body {
 
 
 #leftmenu a, #leftmenu h2 {
-  font: bold 18px arial, helvetica, sans-serif;
+  font: 18px arial, helvetica, sans-serif;
   display: block;
   margin: 0;
   /* padding: 2px 3px; */
@@ -52,6 +53,12 @@ body {
 #leftmenu a {
   color: #000;
   text-decoration: none;
+}
+
+#leftmenu a:hover{
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 #leftmenu li:hover {

@@ -94,9 +94,12 @@ $('#submitMatch').click(function(event) {
     $("#fbShareSuccess").hide();
     $("#scoreAErrorDiv").hide();
     $("#scoreBErrorDiv").hide();
+    $("#dateTimeErrorDiv").hide();
     
     window.scoreA = parseInt($('#scoreA').val());
     window.scoreB = parseInt($('#scoreB').val());
+    window.matchDateTime = $('#matchDateTime').datetimepicker('getDate');
+    console.log(window.isDateTimeSelected);
     
     var belongTeam = window.belongTeam;
     
@@ -139,6 +142,11 @@ $('#submitMatch').click(function(event) {
         }
     }
     
+    if(window.isDateTimeSelected === false){
+         errors.push( {type: 'dateTime', value: true});
+         $("#dateTimeErrorDiv").fadeIn();
+    }
+    
     //console.log(errors);
     //console.log("Errors: "+ errors.length);
 
@@ -166,8 +174,9 @@ $('#submitMatch').click(function(event) {
 //        console.log('ScoreA ='+window.scoreA + " " + 'ScoreB ='+window.scoreB);
 //        console.log('Belongteam ='+belongTeam);
 
-        var currentTimeInSecs = Math.round(currentDate.getTime()/1000);
-        
+        var startDateTimeUTC = window.matchDateTime.format("yy-mm-dd hh:mm:ss", true);
+//        console.log ("UTC: "+startDateTimeUTC);
+//        console.log ("Local: "+window.matchDateTime.format("yy-mm-dd hh:mm:ss"));
         params = {
             "sportId" : window.selectedSportId,
             "brandId": window.selectedSponsor.id ,
@@ -180,9 +189,9 @@ $('#submitMatch').click(function(event) {
             "memberFbIdsA[]" : teamAFBPlayers,
             //@"", @"memberIdsB",
             "memberFbIdsB[]" : teamBFBPlayers,
-            "started" : currentTimeInSecs,
+            "started" : startDateTimeUTC,
             "sdsk_stad_tok": cct ,
-            "ended" : currentTimeInSecs
+//            "ended" : startDateTimeUTC
         };
 
         //Make AJAX POST
@@ -202,13 +211,17 @@ $('#submitMatch').click(function(event) {
                 }
             }
             
-//            window.scoreA='';
-//            window.scoreB='';
-            $('#scoreA').val('');
-            $('#scoreB').val('');
+            resetForm();
 
         });
-
+        
+    var resetForm = function(){
+        $('#scoreA').val('');
+        $('#scoreB').val('');
+        window.isDateTimeSelected = false;
+        $('#matchDateTime').datetimepicker('setDate', (new Date()) );
+        $('#matchDateTime').val('');
+    }
 
 //   NSString *caption = [NSString stringWithFormat:@"%@ just defeated %@ in a fierce %@ match.", namesInTeamA, namesInTeamB, self.game.name];
 //    NSString *message = [NSString stringWithFormat:@"%@ won!", ([self.teamMembers count] > 0)? @"We" : @"I"];
@@ -467,15 +480,13 @@ $(".score").keydown(function(event) {
     }
 });
 
-
+var dateSelected = function(){
+    window.isDateTimeSelected = true;
+}
 //Date picker
+//, dateFormat: 'yy-mm-dd',timeFormat: 'hh:mm'
+$('#matchDateTime').datetimepicker({ampm: true, onSelect: dateSelected,stepMinute: 5});
 
-
-$(function(){
-    $('#matchDateTime').datetimepicker({ampm: true});
-    //For Date RANGE
-//    $('#matchDate').daterangepicker({arrows:true}); 
- });
  
  
  $("#matchDateTime").keydown(function(event) {

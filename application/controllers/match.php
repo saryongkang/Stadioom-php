@@ -53,6 +53,7 @@ class Match extends FBAuth_Controller {
         $this->template->add_js('ui/jquery.ui.datepicker.min');
         $this->template->add_js('ui/jquery.ui.slider.min');
         $this->template->add_js('ui/jquery-ui-timepicker-addon');
+        $this->template->add_js('date.format');
 //        $this->template->add_js('jquery-ui-1.7.1.custom.min');
 //        $this->template->add_js('daterangepicker.jQuery');
         

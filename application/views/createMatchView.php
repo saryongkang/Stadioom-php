@@ -38,39 +38,7 @@
 
     <h2>New Match</h2>
     
-    <!-- Error Messages -->
-    <div id="matchSuccess" class="alert-message success" style="display: none">
-        <a class="close" href="">×</a>
-        <p><strong>Hooray!</strong> Your match has been registered!.</p>
-    </div>
-    <div id="fbShareSuccess" class="alert-message info" style="display: none">
-        <a class="close" href="">×</a>
-        <p><strong>Sweet!</strong> This match was shared on Facebook as well.</p>
-    </div>
-    <div id="fbErrorDiv" class="alert-message warning" style="display: none">
-        <a class="close" href="">×</a>
-        <p><strong>Oh-Oh!</strong> There was a problem sharing to Facebook!.</p>
-    </div>
-    <div id="sponsorErrorDiv" class="alert-message error" style="display: none">
-        <a class="close" href="">×</a>
-        <p><strong>Oops!</strong> You forgot to choose a sponsor!.</p>
-    </div>
-    <div id="teamAErrorDiv" class="alert-message error" style="display: none">
-        <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You need to choose the players of &quot;<span class="teamANameSpan"> </span>&quot;.</p>
-    </div>
-    <div id="teamBErrorDiv" class="alert-message error" style="display: none">
-        <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You need to choose the players of &quot;<span class="teamBNameSpan"> </span>&quot;.</p>
-    </div>
-    <div id="scoreAErrorDiv" class="alert-message error" style="display: none">
-        <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You forgot to include the score for &quot;<span class="teamANameSpan"> </span>&quot;.</p>
-    </div>
-    <div id="scoreBErrorDiv" class="alert-message error" style="display: none">
-        <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> You forgot to include the score for &quot;<span class="teamBNameSpan"> </span>&quot;.</p>
-    </div>
+    
     
 
 
@@ -190,6 +158,46 @@
                 <img src="/assets/images/social/facebook_32.png" /><div id="fbSwitch" class="inline"> </div>
                 <img src="/assets/images/social/twitter_32.png" /><div id="twitterSwitch" class="inline"> </div>
             </div>
+    <div class="row">
+        <!-- Notification Messages -->
+        <div id="matchSuccess" class="alert-message success" style="display: none">
+            <a class="close" href="">×</a>
+            <p><strong>Hooray!</strong> Your match has been registered!.</p>
+        </div>
+        <div id="fbShareSuccess" class="alert-message info" style="display: none">
+            <a class="close" href="">×</a>
+            <p><strong>Sweet!</strong> This match was shared on Facebook as well.</p>
+        </div>
+        <div id="fbErrorDiv" class="alert-message warning" style="display: none">
+            <a class="close" href="">×</a>
+            <p><strong>Oh-Oh!</strong> There was a problem sharing to Facebook!.</p>
+        </div>
+        <div id="sponsorErrorDiv" class="alert-message error" style="display: none">
+            <a class="close" href="">×</a>
+            <p><strong>Oops!</strong> You forgot to choose a sponsor!.</p>
+        </div>
+        <div id="teamAErrorDiv" class="alert-message error" style="display: none">
+            <a class="close" href="#">×</a>
+            <p><strong>Oops!</strong> You need to choose the players of &quot;<span class="teamANameSpan"> </span>&quot;.</p>
+        </div>
+        <div id="teamBErrorDiv" class="alert-message error" style="display: none">
+            <a class="close" href="#">×</a>
+            <p><strong>Oops!</strong> You need to choose the players of &quot;<span class="teamBNameSpan"> </span>&quot;.</p>
+        </div>
+        <div id="scoreAErrorDiv" class="alert-message error" style="display: none">
+            <a class="close" href="#">×</a>
+            <p><strong>Oops!</strong> You forgot to include the score for &quot;<span class="teamANameSpan"> </span>&quot;.</p>
+        </div>
+        <div id="scoreBErrorDiv" class="alert-message error" style="display: none">
+            <a class="close" href="#">×</a>
+            <p><strong>Oops!</strong> You forgot to include the score for &quot;<span class="teamBNameSpan"> </span>&quot;.</p>
+        </div>
+        <div id="dateTimeErrorDiv" class="alert-message error" style="display: none">
+            <a class="close" href="#">×</a>
+            <p><strong>Oops!</strong> You didn&apos;t include the date.</p>
+        </div>
+        <!-- End Notification Messages -->
+    </div>
           <div class="actions center">
                     <input id="submitMatch" type="submit" class="btn primary large" value="Publish" />
 
@@ -265,6 +273,10 @@
     //Scores
     var scoreA;
     var scoreB;
+    
+    //Date
+    var matchDateTime = null;
+    var isDateTimeSelected = false;
 
     sponsorPicsFolder='/assets/images/sponsors/';
     sponsorBannersFolder=sponsorPicsFolder+'banners/';
