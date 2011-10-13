@@ -3,12 +3,17 @@
 require(APPPATH . '/libraries/Stadioom_REST_Controller.php');
 
 class Util extends Stadioom_REST_Controller {
-
+    const logSomething = "logSomething";
+    
+    private $evm;
+    
     function __construct() {
         parent::__construct();
         force_ssl();
 //        if (function_exists('force_ssl'))
 //            remove_ssl();
+        $this->evm = new \Doctrine\Common\EventManager();
+        $this->evm->addEventListener(array(self::logSomething), $this);
     }
 
     public function user_get() {
@@ -38,7 +43,16 @@ class Util extends Stadioom_REST_Controller {
         $started = DateTime::createFromFormat("Y-m-d H:i:s", "2011-10-05 16:01:23", new DateTimeZone("GMT"));
         echo $started->format("Y-m-d H:i:s");
     }
+    
+    public function event_get() {
+        log_message('debug', 'dispatching event.');
+        $this->evm->dispatchEvent(Util::logSomething);
+        echo 'Hello';
+    }
 
+    public function logSomething(\Doctrine\Common\EventArgs $e) {
+        log_message('debug', "Help~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! It's an error.");
+    }
 }
 
 ?>
