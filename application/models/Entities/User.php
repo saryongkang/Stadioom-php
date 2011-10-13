@@ -324,6 +324,7 @@ class User
     public function toArray() {
         $array = get_object_vars($this);
         
+        $format = "Y-m-d H:i:s";
         $array['created'] = $this->getCreated()->format($format);
         $array['lastUpdated'] = $this->getLastUpdated()->format($format);
         
