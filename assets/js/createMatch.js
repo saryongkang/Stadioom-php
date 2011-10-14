@@ -405,13 +405,16 @@ $('#submitMatch').click(function(event) {
         FB.api('/me/feed', 'post', data, onPostToWallCompleted);
         $("#fbShareSuccess").fadeIn();
         
+        var teamA = window.teamAFBSelector.getselectedFriendIds();
+        var teamB = window.teamBFBSelector.getselectedFriendIds();
+        
         //Send Requests
-        if(window.teamAFBSelector.getselectedFriendIds()>0){
+        if(teamA.length>0){
             FB.ui({method: 'apprequests',
             message: "We had a great match, let's follow up on Stadioom",
             to: window.teamAFBSelector.getselectedFriendIds()}, requestCallback);
         }
-        if(window.teamAFBSelector.getselectedFriendIds()>0){
+        if(teamB.length>0){
             FB.ui({method: 'apprequests',
             message: "We had a great match, let's follow up on Stadioom",
             to: window.teamBFBSelector.getselectedFriendIds()}, requestCallback);
