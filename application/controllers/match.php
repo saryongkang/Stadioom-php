@@ -34,7 +34,7 @@ class Match extends FBAuth_Controller {
         $this->load->model('dao/SportDao');
         $data['sports'] = $this->SportDao->getAll();
         
-        $this->security->csrf_set_cookie();
+        $this->security->csrf_verify();
         
         //Language Stuff
         $language = 'en';

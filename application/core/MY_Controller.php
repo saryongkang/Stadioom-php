@@ -37,49 +37,13 @@ class FBAuth_Controller extends MY_Controller{
         
     }
     
-    private function _checkFbRequests(){
-        
-        $facebook = $this->fb_connect->user_id;
-        
-        if(isset($_REQUEST['request_ids'])){
-           //get the request ids from the query parameter
-           $request_ids = explode(',', $_REQUEST['request_ids']);
-
-           //build the full_request_id from request_id and user_id 
-           function build_full_request_id($request_id, $user_id) {
-              return $request_id . '_' . $user_id; 
-           }
-
-           //for each request_id, build the full_request_id and delete request  
-           foreach ($request_ids as $request_id)
-           {
-              //echo ("reqeust_id=".$request_id."<br>");
-              $full_request_id = build_full_request_id($request_id, $user_id);  
-              //echo ("full_reqeust_id=".$full_request_id."<br>");
-
-              try {
-                 $delete_success = $facebook->api("/$full_request_id",'DELETE');
-                 if ($delete_success) {
-                     log_message('debug', "Successfully deleted " . $full_request_id); 
-                 }else {
-                     log_message('debug', "Delete failed".$full_request_id); 
-                 }
-                }          
-              catch (FacebookApiException $e) {
-                log_message('debug', "Error");
-              }
-            }
-        }
-    }
-    
     private function _login(){
         $this->load->helper('url');
         
         $this->load->library('fb_connect');
         // Get User ID
           if ($this->fb_connect->user_id){
-            
-            
+              
             $retry=true;
             $meAddress = '/me';
             $data['fbId'] = $this->fb_connect->user_id;
@@ -88,7 +52,7 @@ class FBAuth_Controller extends MY_Controller{
               try {
                 // Proceed knowing you have a logged in user who's authenticated.
                 $data['fbAccessToken'] = $this->fb_connect->getAccessToken();
-                //$this->_checkFbRequests();
+                
                 //echo "fbToken: ".$data['fbAccessToken'];
                 
                 
@@ -131,8 +95,6 @@ class FBAuth_Controller extends MY_Controller{
 
         }else{
             //echo "There is no FB User logged in / Redirect to Login";
-            $this->load->library('session');
-            $this->session->sess_destroy();
             redirect('/home', 'refresh');
         }
 
