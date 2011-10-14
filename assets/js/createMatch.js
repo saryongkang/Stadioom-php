@@ -406,14 +406,12 @@ $('#submitMatch').click(function(event) {
         $("#fbShareSuccess").fadeIn();
         
         //Send Requests
-        teamA = window.teamAFBSelector.getselectedFriendIds();
-        teamB = window.teamAFBSelector.getselectedFriendIds();
-        if(teamA.length>0){
+        if(teamSummaryPlayers['A']['othersCount']>0){
             FB.ui({method: 'apprequests',
             message: "We had a great match, let's follow up on Stadioom",
             to: window.teamAFBSelector.getselectedFriendIds()}, requestCallback);
         }
-        if(teamB.length>0){
+        if(teamSummaryPlayers['B']['othersCount']>0){
             FB.ui({method: 'apprequests',
             message: "We had a great match, let's follow up on Stadioom",
             to: window.teamBFBSelector.getselectedFriendIds()}, requestCallback);
