@@ -43,9 +43,11 @@ class Home extends CI_Controller {
 //		{
 //			//redirect('/signup/send', 'refresh');
 //		}
-        
-        
-        
+            
+        $this->load->library('session');
+        if ($this->session->userdata('loggedIn')){
+            $this->session->sess_destroy();
+        }
 	}
     
     function checkEmail() {
