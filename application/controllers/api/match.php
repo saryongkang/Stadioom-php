@@ -134,7 +134,7 @@ class Match extends Stadioom_REST_Controller {
             if ($matchId != null) {
                 // TODO this path is deprecated by 'match_get'.
                 $match = $this->MatchDao->find($matchId);
-                $this->responseOk($match);
+                $this->responseOk($match->toArray());
             } else {
                 $options = array(/*'since' => $this->get('since'),*/
                     'firstOffset' => $this->get('firstOffset'),
@@ -143,9 +143,12 @@ class Match extends Stadioom_REST_Controller {
                     'ownerId' => $this->get('ownerId'),
                     'memberId' => $this->get('memberId'));
 
-                $allMatches = $this->MatchDao->findAll($options);
-                $data = array('data' => $allMatches);
-                $this->responseOk($data);
+                $result = $this->MatchDao->findAll($options);
+                $allMatches = array();
+                foreach ($result as $match) {
+                    array_push($allMatches, $match->toArray());
+                }
+                $this->responseOk(array('data' => $allMatches));
             }
         } catch (Exception $e) {
             $this->responseError($e);
@@ -155,10 +158,10 @@ class Match extends Stadioom_REST_Controller {
     /**
      * Returns the specified match.
      */
-    public function match_get($id) {
+    public function match_get($matchId) {
         try {
             $match = $this->MatchDao->find($matchId);
-            $this->responseOk($match);
+            $this->responseOk($match->toArray());
         } catch (Exception $e) {
             $this->responseError($e);
         }

@@ -238,6 +238,12 @@ class MatchDao extends CI_Model {
         log_message('debug', "fillTitle: exit.");
     }
 
+    /**
+     * Returns the MatchRecord specified by the matchId.
+     * 
+     * @param integer $matchId
+     * @return Entities\MatchRecord 
+     */
     public function find($matchId) {
         log_message('debug', "find: enter.");
         $match = $this->em->find('Entities\MatchRecord', $matchId);
@@ -247,13 +253,18 @@ class MatchDao extends CI_Model {
         }
 
         log_message('debug', "find: exit.");
-        return $match->toArray();
+        return $match;
     }
 
+    /**
+     * Returns all the MatchRecords satisfies the given search options.
+     * 
+     * @param array $options
+     * @return array of Entities\MatchRecord 
+     */
     public function findAll($options) {
         log_message('debug', "findAll: enter.");
 
-//        $since = $options['since'];
         $firstOffset = $options['firstOffset'];
         $limit = $options['limit'];
         $sportId = $options['sportId'];
@@ -270,13 +281,6 @@ class MatchDao extends CI_Model {
             $limit = 200;   // maximum limit is 200.
         }
 
-//        if ($since == null) {
-//            $since = new DateTime();
-//            $since = $since->sub(new DateInterval('P1M'));   // a month ago.
-//        } else {
-//            $since = $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $since, new DateTimeZone("GMT"));
-//        }
-
         $dql = 'SELECT m';
         if ($memberId != null) {
             $dql .= ', a, b';
@@ -285,17 +289,10 @@ class MatchDao extends CI_Model {
         if ($memberId != null) {
             $dql .= ' JOIN m.membersA a JOIN m.membersB b';
         }
-        if (/*$since != null ||*/ $sportId != null || $ownerId != null || $memberId != null) {
+        if ($sportId != null || $ownerId != null || $memberId != null) {
             $dql .= ' WHERE';
 
             $first = true;
-//            if ($since != null) {
-//                if (!$first) {
-//                    $dql .= ' AND';
-//                }
-//                $dql .= ' m.lastUpdated >= ' . $since;
-//                $first = false;
-//            }
             if ($sportId != null) {
                 if (!$first) {
                     $dql .= ' AND';
@@ -323,15 +320,9 @@ class MatchDao extends CI_Model {
         $q->setMaxResults($limit);
         $q->setFirstResult($firstOffset);
         $result = $q->getResult();
-        $allMatches = array();
-        if (is_array($result)) {
-            foreach ($result as $match) {
-                array_push($allMatches, $match->toArray());
-            }
-        }
 
         log_message('debug', "findAll: exit.");
-        return $allMatches;
+        return $result;
     }
 
     public function deleteMatch($matchId, $userId) {
