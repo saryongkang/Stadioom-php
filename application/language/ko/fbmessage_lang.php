@@ -1,12 +1,12 @@
 <?php
 $lang['fbmessage_didntplay'] = "정말 멋진 경기였어!";
 
-$lang['fbmessage_won_singular'] = "실력을 더 쌓고 다시 도전하시지!";
-$lang['fbmessage_won_plural'] = "역시 우리팀이 최고!";
-$lang['fbmessage_lost_singular'] = "내가 지다니...";
-$lang['fbmessage_lost_plural'] = "다음엔 이길거야...";
+$lang['fbmessage_won_singular'] = "나와 자웅을 겨루기엔 5년은 일러!";
+$lang['fbmessage_won_plural'] = "역시 우리는 강해!! 오늘도 승수를 올렸군.";
+$lang['fbmessage_lost_singular'] = "말도 안돼!! 내가 지다니...";
+$lang['fbmessage_lost_plural'] = "모두가 무언가에 홀린것만 같았어...";
 $lang['fbmessage_tied_singular'] = "제법인데! 다음엔 꼭 승부를 가리자!";
-$lang['fbmessage_tied_plural'] = "오랫만에 적수를 만났군!";
+$lang['fbmessage_tied_plural'] = "오랫만에 상대다운 상대를 만났군!";
 
 $lang['fbmessage_caption_won_singular'] = "%1\$s(이)가 %3\$s 경기에서 %2\$s를 눌렀습니다.";
 $lang['fbmessage_caption_won_plural'] = "%1\$s팀이 %3\$s 경기에서 %2\$s팀보다 한 수 위임을 증명했습니다.";
