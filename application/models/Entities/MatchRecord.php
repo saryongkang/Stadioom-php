@@ -564,4 +564,29 @@ class MatchRecord
         return $array;
     }
 
+//    /**
+//     * @var integer $myTeam
+//     */
+//    private $myTeam;
+//
+//
+//    /**
+//     * Set myTeam
+//     *
+//     * @param integer $myTeam
+//     */
+//    public function setMyTeam($myTeam)
+//    {
+//        $this->myTeam = $myTeam;
+//    }
+//
+//    /**
+//     * Get myTeam
+//     *
+//     * @return integer $myTeam
+//     */
+//    public function getMyTeam()
+//    {
+//        return $this->myTeam;
+//    }
 }

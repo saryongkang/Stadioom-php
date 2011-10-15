@@ -3,12 +3,23 @@
 class UserDao extends CI_Model {
 
     private $em;
+    private $datetimeFormat;
+    private $timezone;
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('doctrine');
 
         $this->em = $this->doctrine->em;
+        $this->datetimeFormat = $this->config->item("date_time_format");
+        $this->timezone = new DateTimeZone("GMT");
+    }
+    
+    public function dateToStr($dateTime) {
+        return $dateTime->format($this->datetimeFormat);
+    }
+
+    public function strToDate($string) {
+        return new DateTime($string, $this->timezone);
     }
 
     public function fbtest($fbInfo) {
@@ -809,28 +820,76 @@ class UserDao extends CI_Model {
         return $userFb;
     }
 
-    /**
-     * Returns the latest matches the specfied user has played or registered.
-     * (ordered by the last updated time (DESC).)
-     * 
-     * @param integer $userId The ID of the user who's played or registered the matches.
-     * @param integer $firstOffset The offset of the first element.
-     * @param integer $maxResult The maximum number of result.
-     * @return array of Entities\MatchRecord 
-     */
-    public function getLatestMatches($userId, $firstOffset, $maxResult) {
-        log_message('debug', "getLatestMatches: enter.");
-        $dql = "SELECT m, a, b";
+//    /**
+//     * Returns the latest matches the specfied user has played or registered.
+//     * (ordered by the last updated time (DESC).)
+//     * 
+//     * @param integer $userId The ID of the user who's played or registered the matches.
+//     * @param integer $firstOffset The offset of the first element.
+//     * @param integer $maxResult The maximum number of result.
+//     * @return array of Entities\MatchRecord 
+//     */
+//    public function getLatestMatches($userId, $firstOffset, $maxResult) {
+//        log_message('debug', "getLatestMatches: enter.");
+//        $dql = "SELECT m, a, b";
+//        $dql .= " FROM Entities\MatchRecord m";
+//        $dql .= " JOIN m.membersA a JOIN m.membersB b";
+//        $dql .= " WHERE m.ownerId = " . $userId . " OR a.id = " . $userId . " OR b.id = " . $userId;
+//        $dql .= " ORDER BY m.lastUpdated DESC";
+//        $q = $this->em->createQuery($dql);
+//        $q->setFirstResult($firstOffset);
+//        $q->setMaxResults($maxResult);
+//        $result = $q->getResult();
+//
+//        log_message('debug', "getLatestMatches: exit.");
+//        return $result;
+//    }
+    
+    public function getLatestMatch($userId) {
+        log_message('debug', "getLatestMatch: enter.");
+        $dql = "SELECT m";
         $dql .= " FROM Entities\MatchRecord m";
         $dql .= " JOIN m.membersA a JOIN m.membersB b";
         $dql .= " WHERE m.ownerId = " . $userId . " OR a.id = " . $userId . " OR b.id = " . $userId;
-        $dql .= ' ORDER BY m.lastUpdated DESC';
+        $dql .= " ORDER BY m.lastUpdated DESC";
         $q = $this->em->createQuery($dql);
-        $q->setFirstResult($firstOffset);
-        $q->setMaxResults($maxResult);
+        $q->setMaxResults(1);
+        $lastMatch = $q->getResult();
+        log_message('debug', count($lastMatch));
+        if (count($lastMatch) > 0) {
+            log_message('debug', $lastMatch[0]->getId());
+            $lastMatch = $this->em->find("Entities\MatchRecord", $lastMatch[0]->getId());
+        } else {
+            $lastMatch = null;
+        }
+
+        log_message('debug', "getLatestMatch: exit.");
+        return array($lastMatch);
+    }
+
+    public function getLatestMatches($userId, $startDate = null, $endDate = null) {
+        log_message('debug', "getLatestMatchesByDate: enter.");
+        if ($startDate == null) {
+            $now = new DateTime();  // since 2 weeks ago.
+            $startDate = $now->sub(new DateInterval('P14D'));
+        }
+        if ($endDate == null) {
+            $endDate = new DateTime();
+        }
+        
+        log_message('debug', $this->dateToStr($startDate));
+        log_message('debug', $this->dateToStr($endDate));
+
+        $dql = "SELECT m";
+        $dql .= " FROM Entities\MatchRecord m";
+        $dql .= " JOIN m.membersA a JOIN m.membersB b";
+        $dql .= " WHERE (m.lastUpdated BETWEEN '" . $this->dateToStr($startDate) . "' AND '" . $this->dateToStr($endDate) . "') AND  (m.ownerId = " . $userId . " OR a.id = " . $userId . " OR b.id = " . $userId . ")";
+        $dql .= " ORDER BY m.lastUpdated DESC";
+        log_message('debug', $dql);
+        $q = $this->em->createQuery($dql);
         $result = $q->getResult();
 
-        log_message('debug', "getLatestMatches: exit.");
+        log_message('debug', "getLatestMatchesByDate: exit.");
         return $result;
     }
 
@@ -932,6 +991,7 @@ class UserDao extends CI_Model {
         $q->setMaxResults($maxResult);
         return $q->getResult();
     }
+
 }
 
 ?>

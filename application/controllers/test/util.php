@@ -6,9 +6,15 @@ class Util extends Stadioom_REST_Controller {
     const logSomething = "logSomething";
     
     private $evm;
+    private $em;
     
     function __construct() {
         parent::__construct();
+        $this->load->library('doctrine');
+        $this->em = $this->doctrine->em;
+
+        $this->load->model('dao/UserDao');
+        
         force_ssl();
 //        if (function_exists('force_ssl'))
 //            remove_ssl();
@@ -52,6 +58,48 @@ class Util extends Stadioom_REST_Controller {
 
     public function logSomething(\Doctrine\Common\EventArgs $e) {
         log_message('debug', "Help~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! It's an error.");
+    }
+    
+    public function latest_get() {
+        $now = new DateTime();
+        $from = $now->sub(new DateInterval('P5D'));
+        $now = new DateTime();
+        $to = $now->sub(new DateInterval('P4D'));
+        
+        $matches = $this->UserDao->getLatestMatches(2);
+
+//        $matches = $this->UserDao->getLatestMatches2(2, $from, $now);
+        
+//        foreach($matches as $match) {
+//            echo $match->getId() . " " . $match->getTitle() . '<br>';
+//        }
+        $allMatches = array();
+        foreach ($matches as $match) {
+            array_push($allMatches, $match->toArray());
+        }
+        $this->responseOk(array('data' => $allMatches));
+
+        foreach ($matches as $match) {
+            echo $match->getId() . " " . $match->getTitle() . '<br>';
+        }
+    }
+    public function latest1_get() {
+        $match = $this->UserDao->getLatestMatch(2);
+
+//        $matches = $this->UserDao->getLatestMatches2(2, $from, $now);
+        
+//        foreach($matches as $match) {
+//            echo $match->getId() . " " . $match->getTitle() . '<br>';
+//        }
+        $allMatches = array();
+//        foreach ($matches as $match) {
+            array_push($allMatches, $match->toArray());
+//        }
+        $this->responseOk(array('data' => $allMatches));
+
+        foreach ($matches as $match) {
+            echo $match->getId() . " " . $match->getTitle() . '<br>';
+        }
     }
 }
 

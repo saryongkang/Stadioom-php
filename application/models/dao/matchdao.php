@@ -113,6 +113,7 @@ class MatchDao extends CI_Model {
 
         // TODO validate memberIdsA and memberIdsB
         // validates members in memberFbIdsA
+//        $myTeam = 0;
         if (is_array($memberFbIdsA)) {
             foreach ($memberFbIdsA as $fbId) {
         log_message('debug', "findByFbId.");
@@ -157,6 +158,9 @@ class MatchDao extends CI_Model {
 
         log_message('debug', "add member to A: " . $user->getId());
                 $match->addMembersA($user);
+//                if ($user->getId() == $match->getOwnerId()) {
+//                    $myTeam = 1;
+//                }
             }
         }
         // validates members in memberFbIdsB
@@ -198,8 +202,14 @@ class MatchDao extends CI_Model {
 
         log_message('debug', "add member to B: " . $user->getId());
                 $match->addMembersB($user);
+//                if ($user->getId() == $match->getOwnerId()) {
+//                    $myTeam = 2;
+//                }
             }
         }
+        
+//        log_message('debug', "my team: " . $myTeam);
+//        $match->setMyTeam($myTeam);
 
         log_message('debug', "fillMembers: exit.");
         $this->em->flush();

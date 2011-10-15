@@ -6,6 +6,14 @@ require(APPPATH . '/libraries/REST_Controller.php');
  * Common REST controller for Stadioom REST APIs.
  */
 class Stadioom_REST_Controller extends REST_Controller {
+    protected $datetimeFormat;
+    protected $timezone;
+    
+    public function __construct() {
+        parent::__construct();
+        $this->datetimeFormat = $this->config->item("date_time_format");
+        $this->timezone = new DateTimeZone("GMT");
+    }
 
     private function ex2Array($e) {
         return array('error_code' => $e->getCode(), 'error_msg' => $e->getMessage());
@@ -67,7 +75,14 @@ class Stadioom_REST_Controller extends REST_Controller {
         }
         return $filteredArray;
     }
+    
+    protected function dateToStr($dateTime) {
+        return $dateTime->format($this->datetimeFormat);
+    }
 
+    protected function strToDate($string) {
+        return new DateTime($string, $this->timezone);
+    }
 }
 
 class Test_REST_Controller extends Stadioom_REST_Controller {
