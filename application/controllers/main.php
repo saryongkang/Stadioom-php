@@ -43,6 +43,7 @@ class Main extends FBAuth_Controller {
                 $firstPlayer= array();
                 $isPlayerInTeam= false;
                 $numberOfPlayers = sizeof($players);
+                error_log($numberOfPlayers);
                 for ($i=0; $i<($numberOfPlayers); $i++){
                     $player =$players[$i];
                     //$player = $this->UserDao->find($player->getId());

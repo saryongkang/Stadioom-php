@@ -110,18 +110,21 @@ class Match extends FBAuth_Controller {
                 $numberOfPlayers = sizeof($players);
                 for ($i=0; $i<($numberOfPlayers); $i++){
                     $player =$players[$i];
+                    $printDiv =true;
                     //$player = $this->UserDao->find($player->getId());
-                    if($i==0);
+                    if($i==0)
                     {
                         //$firstPlayer['id']=$player->getId();
                         $firstPlayer['id']=$player->getId();
                         $firstPlayer['fbId']=$player->getFbId();
                         //$firstPlayer['fbId']=$this->UserDao->find($player->getId())->getFbId();
                         $firstPlayer['name']=$player->getName();
+                        $printDiv=false;
                     }
 
                     if ($player->getId()==$data['session']['user']['id']){
                         $isPlayerInTeam=true;
+                        $printDiv=false;
                     }
                     $playersDetailDiv .='<div class="playerInfo"><img src="https://graph.facebook.com/'.$player->getFbId().'/picture" /> '.$player->getName().'</div>';
                 }
