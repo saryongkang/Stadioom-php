@@ -84,7 +84,7 @@ class Util extends Stadioom_REST_Controller {
         }
     }
     public function latest1_get() {
-        $match = $this->UserDao->getLatestMatch(2);
+        $matches = $this->UserDao->getLatestMatch(2);
 
 //        $matches = $this->UserDao->getLatestMatches2(2, $from, $now);
         
@@ -92,12 +92,12 @@ class Util extends Stadioom_REST_Controller {
 //            echo $match->getId() . " " . $match->getTitle() . '<br>';
 //        }
         $allMatches = array();
-//        foreach ($matches as $match) {
-            array_push($allMatches, $match->toArray());
-//        }
-        $this->responseOk(array('data' => $allMatches));
-
         foreach ($matches as $match) {
+//            array_push($allMatches, $match->toArray());
+//        }
+//        $this->responseOk(array('data' => $allMatches));
+
+//        foreach ($matches as $match) {
             echo $match->getId() . " " . $match->getTitle() . '<br>';
         }
     }

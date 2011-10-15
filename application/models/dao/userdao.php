@@ -847,7 +847,7 @@ class UserDao extends CI_Model {
     
     public function getLatestMatch($userId) {
         log_message('debug', "getLatestMatch: enter.");
-        $dql = "SELECT m";
+        $dql = "SELECT m, a, b";
         $dql .= " FROM Entities\MatchRecord m";
         $dql .= " JOIN m.membersA a JOIN m.membersB b";
         $dql .= " WHERE m.ownerId = " . $userId . " OR a.id = " . $userId . " OR b.id = " . $userId;
@@ -880,7 +880,7 @@ class UserDao extends CI_Model {
         log_message('debug', $this->dateToStr($startDate));
         log_message('debug', $this->dateToStr($endDate));
 
-        $dql = "SELECT m";
+        $dql = "SELECT m, a, b";
         $dql .= " FROM Entities\MatchRecord m";
         $dql .= " JOIN m.membersA a JOIN m.membersB b";
         $dql .= " WHERE (m.lastUpdated BETWEEN '" . $this->dateToStr($startDate) . "' AND '" . $this->dateToStr($endDate) . "') AND  (m.ownerId = " . $userId . " OR a.id = " . $userId . " OR b.id = " . $userId . ")";
