@@ -853,7 +853,6 @@ class UserDao extends CI_Model {
         $dql .= " WHERE m.ownerId = " . $userId . " OR a.id = " . $userId . " OR b.id = " . $userId;
         $dql .= " ORDER BY m.lastUpdated DESC";
         $q = $this->em->createQuery($dql);
-        $q->setMaxResults(1);
         $lastMatch = $q->getResult();
         log_message('debug', count($lastMatch));
         if (count($lastMatch) > 0) {
