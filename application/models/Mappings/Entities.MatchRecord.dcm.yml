@@ -43,6 +43,9 @@ Entities\MatchRecord:
     scoreB: #score of team B
       type: integer
       nullable: true
+#    myTeam: # index of my team. 0(didn't played), 1(team A), 2(team B)
+#      type: integer
+#      nullable: false
     location:
       type: string
       length: 100
@@ -70,6 +73,7 @@ Entities\MatchRecord:
         inverseJoinColumns:
           user_id:
             referencedColumnName: id
+      cascade: [all]
     membersB:
       targetEntity: User
       joinTable:
@@ -80,6 +84,7 @@ Entities\MatchRecord:
         inverseJoinColumns:
           user_id:
             referencedColumnName: id
+      cascade: [all]
   lifecycleCallbacks:
     prePersist: [prePersist]
     preUpdate: [preUpdate]
