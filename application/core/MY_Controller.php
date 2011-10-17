@@ -101,7 +101,7 @@ class FBAuth_Controller extends MY_Controller{
                     break;
 
                 }else{
-                    redirect('/home', 'refresh');
+                    redirect(base_url().'home', 'refresh');
                 }
 
               } catch ( FacebookApiException $e) {
@@ -120,7 +120,7 @@ class FBAuth_Controller extends MY_Controller{
                     
                     $this->load->library('session');
                     $this->session->sess_destroy();
-                    redirect('/home', 'refresh');
+                    redirect(base_url().'home', 'refresh');
                 }
                 
               }
@@ -128,7 +128,7 @@ class FBAuth_Controller extends MY_Controller{
 
         }else{
             //echo "There is no FB User logged in / Redirect to Login";
-            redirect('/home', 'refresh');
+            redirect(base_url().'home', 'refresh');
         }
 
     }//end Login function

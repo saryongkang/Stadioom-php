@@ -12,7 +12,7 @@
           &nbsp;
       </div>
       <div class="span7 showgrid">
-            <a href="<?php echo $loginUrl; ?>"><img src="assets/images/fb-connect-large.png" /> </a>
+            <a href="<?php echo $loginUrl; ?>"><img src="/assets/images/fb-connect-large.png" /> </a>
       </div>
   </div> <!-- row -->
 

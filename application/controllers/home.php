@@ -23,7 +23,7 @@ class Home extends CI_Controller {
         $fbLoginData = array(
             //'scope' => 'email,user_likes,user_interests,user_hometown,user_location,user_birthday,user_activities,publish_stream,offline_access',
             'scope' => 'email,user_birthday,publish_stream'.$extraScope ,
-            'redirect_uri' => $this->config->item('base_ssl_url').'/'
+            'redirect_uri' => $this->config->item('base_ssl_url')
         );
         
         $data['loginUrl'] = $this->fb_connect->getLoginUrl($fbLoginData);   
