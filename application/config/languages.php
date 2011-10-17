@@ -3,5 +3,5 @@
 $config['languages']['ko'] = '한국어';
 $config['languages']['en'] = 'English';
 $config['languages']['es'] = 'Español';
+$config['languages']['ja'] = 'Español';
 ?>
-w
