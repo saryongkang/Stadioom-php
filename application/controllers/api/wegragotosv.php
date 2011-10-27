@@ -30,13 +30,23 @@ class WegraGoToSv extends Test_REST_Controller {
         $result = $this->sendPost($this->config->item('base_url') . "api/brand", array('accessToken' => $accessToken, 'stringId' => 'stadioom', 'name' => 'Stadioom®', 'desc' => 'The product you are using now.', 'priority' => 100, 'url' => 'https://stadioom.com', 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
 
         // make sports
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'baseball', 'name' => 'Baseball', 'desc' => 'Baseball.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
         $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'basketball', 'name' => 'Basketball', 'desc' => 'Basketball.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'cricket', 'name' => 'Cricket', 'desc' => 'Cricket.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'fieldhockey', 'name' => 'Field Hockey', 'desc' => 'Field Hockey.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'americanf', 'name' => 'American Football', 'desc' => 'American Football.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'icehockey', 'name' => 'Ice Hockey', 'desc' => 'Ice Hockey.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'rugby', 'name' => 'Rugby', 'desc' => 'Rugby.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
         $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'soccer', 'name' => 'Soccer', 'desc' => 'Also known as Football (not American Football).', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'softball', 'name' => 'Softball', 'desc' => 'Softball.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'squash', 'name' => 'Squash', 'desc' => 'Squash.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'tabletennis', 'name' => 'Table Tennis', 'desc' => 'Table Tennis a.k.a. Ping Pong.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
         $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'tennis', 'name' => 'Tennis', 'desc' => 'Tennis.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
+        $result = $this->sendPost($this->config->item('base_url') . "api/sport", array('accessToken' => $accessToken, 'stringId' => 'volleyball', 'name' => 'Volley Ball', 'desc' => 'Valley Ball.', 'priority' => 100, 'firstRevision' => 1, 'latestRevision' => 1, 'updateFlag' => '1'));
 
         // link them
-        $result = $this->sendPost($this->config->item('base_url') . "api/brand/sports", array('accessToken' => $accessToken, 'brandId' => 1, 'sportIds' => array(1, 2, 3)));
-        $result = $this->sendPost($this->config->item('base_url') . "api/brand/sports", array('accessToken' => $accessToken, 'brandId' => 2, 'sportIds' => array(1, 2, 3)));
+        $result = $this->sendPost($this->config->item('base_url') . "api/brand/sports", array('accessToken' => $accessToken, 'brandId' => 1, 'sportIds' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)));
+        $result = $this->sendPost($this->config->item('base_url') . "api/brand/sports", array('accessToken' => $accessToken, 'brandId' => 2, 'sportIds' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)));
     }
 
     public function clearUsers_get() {
