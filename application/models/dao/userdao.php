@@ -13,7 +13,7 @@ class UserDao extends CI_Model {
         $this->datetimeFormat = $this->config->item("date_time_format");
         $this->timezone = new DateTimeZone("GMT");
     }
-    
+
     public function dateToStr($dateTime) {
         return $dateTime->format($this->datetimeFormat);
     }
@@ -844,7 +844,7 @@ class UserDao extends CI_Model {
 //        log_message('debug', "getLatestMatches: exit.");
 //        return $result;
 //    }
-    
+
     public function getLatestMatch($userId) {
         log_message('debug', "getLatestMatch: enter.");
         $dql = "SELECT m, a, b";
@@ -863,7 +863,11 @@ class UserDao extends CI_Model {
         }
 
         log_message('debug', "getLatestMatch: exit.");
-        return array($lastMatch);
+        if ($lastMatch == null) {
+            return null;
+        } else {
+            return array($lastMatch);
+        }
     }
 
     public function getLatestMatches($userId, $startDate = null, $endDate = null) {
@@ -875,7 +879,7 @@ class UserDao extends CI_Model {
         if ($endDate == null) {
             $endDate = new DateTime();
         }
-        
+
         log_message('debug', $this->dateToStr($startDate));
         log_message('debug', $this->dateToStr($endDate));
 
