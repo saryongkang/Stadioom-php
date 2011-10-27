@@ -61,6 +61,23 @@ class Sport extends Stadioom_REST_Controller {
 
                 // TODO returns list ordered by priority.
                 $allSports = $this->SportDao->getAllOrderedByPriority();
+                
+                // REMIND (Wegra) temporal code for old iPhone application.
+                $this->load->library('user_agent');
+                if (!$this->agent->is_browser()) {
+                    $filteredSports = array();
+                    foreach($allSports as $sport) {
+                        $stringId = $sport->getStringId();
+                        if ($stringId == "basketball"
+                                || $stringId == "soccer"
+                                || $stringId == "tennis") {
+                            $filteredSports[] = $sport;
+                        }
+                    }
+                    $allSports = $filteredSports;
+                }
+                // END of temporal code.
+                
                 $array = array();
                 foreach ($allSports as $sport) {
                     array_push($array, $this->filter($sport->toArray(), $this->filterKeys4Sport));
